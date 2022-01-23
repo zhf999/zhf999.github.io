@@ -24,7 +24,7 @@
 <meta property="og:description" content="Scrapy入门一.基础指令使用命令提示符，cd到想要操作的目录 scrapy startproject name在该目录下创建项目 scrapy genspider name domain使用前需要先cd到下一级目录  domain参数不需要带http或者https的头，也不需要引号  scrapy crawl name启动名字为name的爬虫  二.开始在name.py中进行编辑爬虫开启后会把">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-23T12:38:51.000Z">
-<meta property="article:modified_time" content="2022-01-23T13:05:18.449Z">
+<meta property="article:modified_time" content="2022-01-23T13:48:26.521Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="前端">
 <meta property="article:tag" content="爬虫">
@@ -433,20 +433,20 @@
                   
                 
                 
-  <div id="waline"></div>
+  <div id="valine"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#waline', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@waline/client@1/dist/Waline.min.js', function() {
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
         var options = Object.assign(
-          {"serverURL":"https://nextjs-njtw5icxx-zhf999.vercel.app","path":"window.location.pathname","placeholder":null,"meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","avatar":"retro","avatarCDN":"https://seccdn.libravatar.org/avatar/","avatarForce":false,"wordLimit":0,"pageSize":10,"highlight":true},
+          {"appId":"w0iHyrdg8nAXCVVW6dGcK4cp-gzGzoHsz","appKey":"YzV4ncLT9uoIbLPHSqzjjEJn","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
           {
-            el: '#waline',
+            el: "#valine",
             path: window.location.pathname
           }
         )
-        new Waline(options);
-        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
-          Fluid.plugins.initFancyBox('#waline .vcontent img:not(.vemoji)');
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
         })
       });
     });
