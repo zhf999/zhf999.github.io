@@ -16,18 +16,18 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="HTML解析大法：一.正则表达式1.模块主要函数123456789import re#创建正则表达式对象re.compile(pattern)#在字符串中寻找模式，返回match对象或Nonere.search(pattern,string)#从字符串开头匹配，返回match或Nonere.match(pattern,string)#返回列表re.findall(pattern,string)">
+    <meta name="description" content="HTML解析大法：  一.正则表达式  1.模块主要函数 123456789import re#创建正则表达式对象re.compile(pattern)#在字符串中寻找模式，返回match对象或Nonere.search(pattern,string)#从字符串开头匹配，返回match或Nonere.match(pattern,string)#返回列表re.findall(pattern,str">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTML解析大法">
 <meta property="og:url" content="http://example.com/2022/01/17/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="HTML解析大法：一.正则表达式1.模块主要函数123456789import re#创建正则表达式对象re.compile(pattern)#在字符串中寻找模式，返回match对象或Nonere.search(pattern,string)#从字符串开头匹配，返回match或Nonere.match(pattern,string)#返回列表re.findall(pattern,string)">
+<meta property="og:description" content="HTML解析大法：  一.正则表达式  1.模块主要函数 123456789import re#创建正则表达式对象re.compile(pattern)#在字符串中寻找模式，返回match对象或Nonere.search(pattern,string)#从字符串开头匹配，返回match或Nonere.match(pattern,string)#返回列表re.findall(pattern,str">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-17T15:15:39.000Z">
-<meta property="article:modified_time" content="2022-01-23T13:48:32.617Z">
+<meta property="article:modified_time" content="2022-03-04T16:23:20.799Z">
 <meta property="article:author" content="周洪锋">
-<meta property="article:tag" content="前端">
 <meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="前端">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -113,6 +113,18 @@
               <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
               </a>
             </li>
           
@@ -252,107 +264,151 @@
             <h1 style="display: none">HTML解析大法</h1>
             
             <div class="markdown-body">
-              <h1 id="HTML解析大法："><a href="#HTML解析大法：" class="headerlink" title="HTML解析大法："></a>HTML解析大法：</h1><h2 id="一-正则表达式"><a href="#一-正则表达式" class="headerlink" title="一.正则表达式"></a>一.正则表达式</h2><h3 id="1-模块主要函数"><a href="#1-模块主要函数" class="headerlink" title="1.模块主要函数"></a>1.模块主要函数</h3><figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br><span class="hljs-comment">#创建正则表达式对象</span><br>re.<span class="hljs-built_in">compile</span>(pattern)<br><span class="hljs-comment">#在字符串中寻找模式，返回match对象或None</span><br>re.search(pattern,string)<br><span class="hljs-comment">#从字符串开头匹配，返回match或None</span><br>re.match(pattern,string)<br><span class="hljs-comment">#返回列表</span><br>re.findall(pattern,string)<br></code></pre></td></tr></table></figure>
-
-<h3 id="2-使用正则表达式对象"><a href="#2-使用正则表达式对象" class="headerlink" title="2.使用正则表达式对象"></a>2.使用正则表达式对象</h3><p>使用<code>re.compile</code>将正则表达式编译成正则表达式对象，即可使用对象的方法（与上文search、match、findall用法大同小异）</p>
-<h3 id="3-子模式与Match对象"><a href="#3-子模式与Match对象" class="headerlink" title="3.子模式与Match对象"></a>3.子模式与Match对象</h3><p>Match对象主要方法有**group()<strong>（返回模式子内容），</strong>groups()<strong>（返回模式字内容元组），</strong>groupdict()**（返回字典）</p>
+              <h1 id="html解析大法"><a class="markdownIt-Anchor" href="#html解析大法"></a> HTML解析大法：</h1>
+<h2 id="一正则表达式"><a class="markdownIt-Anchor" href="#一正则表达式"></a> 一.正则表达式</h2>
+<h3 id="1模块主要函数"><a class="markdownIt-Anchor" href="#1模块主要函数"></a> 1.模块主要函数</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></div></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br><span class="hljs-comment">#创建正则表达式对象</span><br>re.<span class="hljs-built_in">compile</span>(pattern)<br><span class="hljs-comment">#在字符串中寻找模式，返回match对象或None</span><br>re.search(pattern,string)<br><span class="hljs-comment">#从字符串开头匹配，返回match或None</span><br>re.match(pattern,string)<br><span class="hljs-comment">#返回列表</span><br>re.findall(pattern,string)<br></code></pre></td></tr></table></figure>
+<h3 id="2使用正则表达式对象"><a class="markdownIt-Anchor" href="#2使用正则表达式对象"></a> 2.使用正则表达式对象</h3>
+<p>使用<code>re.compile</code>将正则表达式编译成正则表达式对象，即可使用对象的方法（与上文search、match、findall用法大同小异）</p>
+<h3 id="3子模式与match对象"><a class="markdownIt-Anchor" href="#3子模式与match对象"></a> 3.子模式与Match对象</h3>
+<p>Match对象主要方法有<strong>group()</strong>（返回模式子内容），<strong>groups()</strong>（返回模式字内容元组），<strong>groupdict()</strong>（返回字典）</p>
 <p><strong>特别地，使用(?P&lt;name&gt;)可以为子模式命名</strong></p>
-<h2 id="二-BeautifulSoup"><a href="#二-BeautifulSoup" class="headerlink" title="二.BeautifulSoup"></a>二.BeautifulSoup</h2><h3 id="1-对象种类"><a href="#1-对象种类" class="headerlink" title="1.对象种类"></a>1.对象种类</h3><h4 id="Tag"><a href="#Tag" class="headerlink" title="Tag"></a>Tag</h4><p>即HTML中尖括号扩起来的部分。其有两个重要的属性：<strong>name</strong>和<strong>attributes</strong><br><strong>name</strong>属性：<br>每个Tag的名字，包括<strong>title、a、h1</strong>等等。<strong>name</strong>属性可以被修改。<br> <strong>attributes</strong>属性：<br>每个Tag中包含等号，等号两边的内容（像字典一样）就是是attribute，可以使用类似python操作字典的方法操作属性，建议使用get。</p>
-<h4 id="②NavigableString"><a href="#②NavigableString" class="headerlink" title="②NavigableString"></a>②NavigableString</h4><p>对Tag对象使用.<strong>string</strong>获得其中文字<br>####③BeautifulSoup<br>与Tag对象类似，只不过可以把<strong>BeautifulSoup</strong>对象看成整体的Tag</p>
-<h4 id="④comment"><a href="#④comment" class="headerlink" title="④comment"></a>④comment</h4><p>即HTML中的注释部分。在使用.<strong>string</strong>时会同时提取注释，所以使用时可以先判断类型：</p>
+<h2 id="二beautifulsoup"><a class="markdownIt-Anchor" href="#二beautifulsoup"></a> 二.BeautifulSoup</h2>
+<h3 id="1对象种类"><a class="markdownIt-Anchor" href="#1对象种类"></a> 1.对象种类</h3>
+<h4 id="tag"><a class="markdownIt-Anchor" href="#tag"></a> Tag</h4>
+<p>即HTML中尖括号扩起来的部分。其有两个重要的属性：<strong>name</strong>和<strong>attributes</strong><br />
+<strong>name</strong>属性：<br />
+每个Tag的名字，包括<strong>title、a、h1</strong>等等。<strong>name</strong>属性可以被修改。<br />
+<strong>attributes</strong>属性：<br />
+每个Tag中包含等号，等号两边的内容（像字典一样）就是是attribute，可以使用类似python操作字典的方法操作属性，建议使用get。</p>
+<h4 id="2navigablestring"><a class="markdownIt-Anchor" href="#2navigablestring"></a> ②NavigableString</h4>
+<p>对Tag对象使用.<strong>string</strong>获得其中文字<br />
+####③BeautifulSoup<br />
+与Tag对象类似，只不过可以把<strong>BeautifulSoup</strong>对象看成整体的Tag</p>
+<h4 id="4comment"><a class="markdownIt-Anchor" href="#4comment"></a> ④comment</h4>
+<p>即HTML中的注释部分。在使用.<strong>string</strong>时会同时提取注释，所以使用时可以先判断类型：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(soup.a.string) == bs4.element.comment:<br>    <span class="hljs-built_in">print</span>(soupa.a.string)<br></code></pre></td></tr></table></figure>
-
-<h3 id="2-BeautifulSoup的树结构"><a href="#2-BeautifulSoup的树结构" class="headerlink" title="2.BeautifulSoup的树结构"></a>2.BeautifulSoup的树结构</h3><h4 id="子节点"><a href="#子节点" class="headerlink" title="子节点"></a>子节点</h4><p>.<strong>content</strong>以及.<strong>children</strong>都可返回直接子节点，不同的是前者返回的是列表。<br>.<strong>descendants</strong>可以返回所有的子孙节点（返回的是可迭代对象）。</p>
-<h4 id="父节点"><a href="#父节点" class="headerlink" title="父节点"></a>父节点</h4><p>.<strong>parents</strong>返回父节点的可迭代对象。</p>
-<h4 id="兄弟节点"><a href="#兄弟节点" class="headerlink" title="兄弟节点"></a>兄弟节点</h4><p>.<strong>next_sibling</strong>和.<strong>previous_sibing</strong>返回前一个和后一个兄弟节点。</p>
-<h3 id="find-all方法"><a href="#find-all方法" class="headerlink" title="find_all方法"></a>find_all方法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">find_all(name, attrs, recursive, text, **kwarg)<br></code></pre></td></tr></table></figure>
-<h4 id="name参数："><a href="#name参数：" class="headerlink" title="name参数："></a>name参数：</h4><p>寻找名字为name的标记</p>
-<h4 id="kwargs"><a href="#kwargs" class="headerlink" title="kwargs"></a>kwargs</h4><p>查找参数符合条件的标记<br>例如：<code>find_all(&#39;a&#39;,class_=&#39;post-title&#39;)</code>寻找参数class为post-title的标记</p>
-<h4 id="text"><a href="#text" class="headerlink" title="text"></a>text</h4><p>搜索文档中的字符串内容。</p>
-<h4 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h4><p>限制搜索结果的个数。</p>
-<h4 id="recursive"><a href="#recursive" class="headerlink" title="recursive"></a>recursive</h4><p>默认为true，若为false，则只寻找当前节点的直接子节点。</p>
-<h2 id="三-lxml的xpath解析"><a href="#三-lxml的xpath解析" class="headerlink" title="三.lxml的xpath解析"></a>三.lxml的xpath解析</h2><p>lxml库的使用方法</p>
+<h3 id="2beautifulsoup的树结构"><a class="markdownIt-Anchor" href="#2beautifulsoup的树结构"></a> 2.BeautifulSoup的树结构</h3>
+<h4 id="子节点"><a class="markdownIt-Anchor" href="#子节点"></a> 子节点</h4>
+<p>.<strong>content</strong>以及.<strong>children</strong>都可返回直接子节点，不同的是前者返回的是列表。<br />
+.<strong>descendants</strong>可以返回所有的子孙节点（返回的是可迭代对象）。</p>
+<h4 id="父节点"><a class="markdownIt-Anchor" href="#父节点"></a> 父节点</h4>
+<p>.<strong>parents</strong>返回父节点的可迭代对象。</p>
+<h4 id="兄弟节点"><a class="markdownIt-Anchor" href="#兄弟节点"></a> 兄弟节点</h4>
+<p>.<strong>next_sibling</strong>和.<strong>previous_sibing</strong>返回前一个和后一个兄弟节点。</p>
+<h3 id="find_all方法"><a class="markdownIt-Anchor" href="#find_all方法"></a> find_all方法</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">find_all(name, attrs, recursive, text, **kwarg)<br></code></pre></td></tr></table></figure>
+<h4 id="name参数"><a class="markdownIt-Anchor" href="#name参数"></a> name参数：</h4>
+<p>寻找名字为name的标记</p>
+<h4 id="kwargs"><a class="markdownIt-Anchor" href="#kwargs"></a> kwargs</h4>
+<p>查找参数符合条件的标记<br />
+例如：<code>find_all('a',class_='post-title')</code>寻找参数class为post-title的标记</p>
+<h4 id="text"><a class="markdownIt-Anchor" href="#text"></a> text</h4>
+<p>搜索文档中的字符串内容。</p>
+<h4 id="limit"><a class="markdownIt-Anchor" href="#limit"></a> limit</h4>
+<p>限制搜索结果的个数。</p>
+<h4 id="recursive"><a class="markdownIt-Anchor" href="#recursive"></a> recursive</h4>
+<p>默认为true，若为false，则只寻找当前节点的直接子节点。</p>
+<h2 id="三lxml的xpath解析"><a class="markdownIt-Anchor" href="#三lxml的xpath解析"></a> 三.lxml的xpath解析</h2>
+<p>lxml库的使用方法</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">rest = etree.HTML(html)<br></code></pre></td></tr></table></figure>
-<h3 id="XPath节点"><a href="#XPath节点" class="headerlink" title="XPath节点"></a>XPath节点</h3><p>XPath的节点关系类似BeautifulSoup，都是树的结构，此处不再赘述。</p>
-<h3 id="XPath语法"><a href="#XPath语法" class="headerlink" title="XPath语法"></a>XPath语法</h3><table>
+<h3 id="xpath节点"><a class="markdownIt-Anchor" href="#xpath节点"></a> XPath节点</h3>
+<p>XPath的节点关系类似BeautifulSoup，都是树的结构，此处不再赘述。</p>
+<h3 id="xpath语法"><a class="markdownIt-Anchor" href="#xpath语法"></a> XPath语法</h3>
+<table>
 <thead>
 <tr>
 <th>表达式</th>
-<th align="center">描述</th>
+<th style="text-align:center">描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>nodename</td>
-<td align="center">选取此节点的所有子节点</td>
+<td style="text-align:center">选取此节点的所有子节点</td>
 </tr>
 <tr>
 <td>/</td>
-<td align="center">从根节点选取</td>
+<td style="text-align:center">从根节点选取</td>
 </tr>
 <tr>
 <td>//</td>
-<td align="center">选择任意位置的某个节点</td>
+<td style="text-align:center">选择任意位置的某个节点</td>
 </tr>
 <tr>
 <td>.</td>
-<td align="center">选取当前节点</td>
+<td style="text-align:center">选取当前节点</td>
 </tr>
 <tr>
-<td>..</td>
-<td align="center">选取当前节点的父节点</td>
+<td>…</td>
+<td style="text-align:center">选取当前节点的父节点</td>
 </tr>
 <tr>
 <td>@</td>
-<td align="center">选取</td>
+<td style="text-align:center">选取</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <table>
 <thead>
 <tr>
 <th>谓语</th>
-<th align="center">描述</th>
+<th style="text-align:center">描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>/classroom/student[1]</td>
-<td align="center">选取classroom子元素的第一个student元素</td>
+<td style="text-align:center">选取classroom子元素的第一个student元素</td>
 </tr>
 <tr>
 <td>/classroom/student[last()]</td>
-<td align="center">选取classroom子元素中的最后一个student元素</td>
+<td style="text-align:center">选取classroom子元素中的最后一个student元素</td>
 </tr>
 <tr>
 <td>/classroom/student[position()&lt;6]</td>
-<td align="center">选取classroom子元素的前五个元素</td>
+<td style="text-align:center">选取classroom子元素的前五个元素</td>
 </tr>
 <tr>
 <td>//name[@lang]</td>
-<td align="center">选取name元素，其必须有lang属性</td>
+<td style="text-align:center">选取name元素，其必须有lang属性</td>
 </tr>
 <tr>
-<td>//name[@lang=’en’]</td>
-<td align="center">选取name元素，其lang属性的值必须为en</td>
+<td>//name[@lang=‘en’]</td>
+<td style="text-align:center">选取name元素，其lang属性的值必须为en</td>
 </tr>
 <tr>
 <td>//student[age&gt;20]</td>
-<td align="center">选取所有student，其age属性必须大于20</td>
+<td style="text-align:center">选取所有student，其age属性必须大于20</td>
 </tr>
-</tbody></table>
-<p>除此之外Xpath还可以在表达式中使用/text()来提取其中的字符（类似bs的.string）<br>Selector对象还有extract()方法，获取其中的文字。</p>
-<p>###偷懒小技巧<br>在浏览器的审查元素中可以右键对元素的XPath进行复制（仅适用于提取单个元素的情况）</p>
+</tbody>
+</table>
+<p>除此之外Xpath还可以在表达式中使用/text()来提取其中的字符（类似bs的.string）<br />
+Selector对象还有extract()方法，获取其中的文字。</p>
+<p>###偷懒小技巧<br />
+在浏览器的审查元素中可以右键对元素的XPath进行复制（仅适用于提取单个元素的情况）</p>
 
             </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
                 
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%89%8D%E7%AB%AF/%E7%88%AC%E8%99%AB/">爬虫</a>
+                    
+                  </div>
+                
                 
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
-                    
                       <a class="hover-with-bg" href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
                     
                   </div>
                 
@@ -360,7 +416,7 @@
               
                 <p class="note note-warning">
                   
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！ 在评论区留言时留下你的邮箱，被回复时会收到邮件提醒噢！
                   
                 </p>
               
@@ -431,12 +487,6 @@
 </div>
 
 <!-- Custom -->
-
-  <div class="col-lg-7 mx-auto nopadding-x-md">
-    <div class="container custom post-custom mx-auto">
-      在评论区留言时留下你的邮箱，被回复时会收到邮件提醒噢
-    </div>
-  </div>
 
 
     
@@ -556,6 +606,13 @@
 
 
 
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
 
 
 
