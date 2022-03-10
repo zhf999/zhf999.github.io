@@ -422,4 +422,73 @@ Selector对象还有extract()方法，获取其中的文字。</p>
         <tag>计算机组成原理</tag>
       </tags>
   </entry>
+  <entry>
+    <title>C语言上机事半功倍的小技巧</title>
+    <url>/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<h1 id="零-前言"><a class="markdownIt-Anchor" href="#零-前言"></a> 零、前言</h1>
+<p>本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。<strong>如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。</strong></p>
+<h1 id="一-实用的内置函数"><a class="markdownIt-Anchor" href="#一-实用的内置函数"></a> 一、实用的内置函数</h1>
+<h2 id="1-排序函数"><a class="markdownIt-Anchor" href="#1-排序函数"></a> 1、排序函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-comment">//快速排序（不稳定）</span><br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br><span class="hljs-comment">//稳定排序</span><br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br></code></pre></td></tr></table></figure>
+<p>sort函数有三个参数，前两个参数是指针，代表需要排序的区间（左闭右开），第三个参数是<em>函数指针</em>，<strong>可填可不填</strong>，不填就默认递增排序。sort函数无返回值，是对于数组做原地排序。<br />
+例如，上述代码就是对a数组的第1个到第n个元素排序（笔者习惯数组下标从1开始）。如果习惯的下标是从0开始，那就是</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a,a+n);<br></code></pre></td></tr></table></figure>
+<p>更普遍的，sort(a+p,a+q)就是将a[p]~a[q-1]排序。</p>
+<h3 id="递减的排序怎么办"><a class="markdownIt-Anchor" href="#递减的排序怎么办"></a> 递减的排序怎么办？</h3>
+<p>解决办法有两个：<br />
+1、将待排序数组全部取相反数，按默认的递增排序后再取一次相反数即可。<br />
+<font color=red>2、编写cmp函数</font><br />
+这里可能比较复杂，看不懂就可以不用看了。<br />
+首先，声明一个cmp函数（名字未必要是cmp，符合C语言规范即可）</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> X,<span class="hljs-keyword">int</span> Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X&gt;Y;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>然后将cmp函数指针作为sort的第三个参数即可。</p>
+<blockquote>
+<p>函数指针是指针的一种，只写函数名，就是该函数的函数指针。<br />
+bool是C++的数据类型，只有1和0（true和false）两种取值。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br></code></pre></td></tr></table></figure>
+<p>还可以对自定义的结构体设定排序关键字:</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Student X, Student Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X.grade &gt; Y.grade;<br>&#125;<br>[...]<br><span class="hljs-built_in">sort</span>(students+<span class="hljs-number">1</span>, students+<span class="hljs-number">1</span>+n, cmp);<br></code></pre></td></tr></table></figure>
+<p>对学生按照成绩从高到低排序。</p>
+<blockquote>
+<p>稳定排序和不稳定排序<br />
+稳定排序指的是：当数据中存在两个相同的值时，排序后不会改变相对位置。例如A和B成绩都是90分，A原先在B前面，排序后不会出现A跑到B后面的情况，这就是稳定排序。<br />
+考试中两种都可以用，问题不大。</p>
+</blockquote>
+<h2 id="2-字符判断的函数"><a class="markdownIt-Anchor" href="#2-字符判断的函数"></a> 2、字符判断的函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cctype&gt;</span></span><br><span class="hljs-comment">//上面的是C++的头文件，C语言头文件为#include&lt;ctype.h&gt;</span><br><span class="hljs-comment">//其实只要文件名结尾是.cpp，就没什么区别</span><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isdigit</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是数字（&#x27;0&#x27;~&#x27;9&#x27;)</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isalpha</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是英文字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是大写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">islower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是小写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">toupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为大写后的字符</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">tolower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为小写后的字符</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>以上bool的返回值，在C语言中是int</p>
+</blockquote>
+<h2 id="3-字符串函数"><a class="markdownIt-Anchor" href="#3-字符串函数"></a> 3、字符串函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-comment">//C语言中是string.h</span><br><br><span class="hljs-comment">//非常常用的一个函数（个人觉得）</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> * <span class="hljs-title">memset</span> <span class="hljs-params">( <span class="hljs-keyword">void</span> * ptr, <span class="hljs-keyword">int</span> value, <span class="hljs-keyword">size_t</span> num)</span></span>;<span class="hljs-comment">//以字节方式填充一个数组</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">strcmp</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str1, <span class="hljs-keyword">char</span>* str2)</span></span>;<span class="hljs-comment">//以字典序比较两个函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">strlen</span> <span class="hljs-params">(<span class="hljs-keyword">char</span> * str )</span></span>;<br></code></pre></td></tr></table></figure>
+<p>其实字符串内置的函数很多，但是太难记了，个人人为实用的就以上几个。<br />
+接下来重点说一下memset这个函数。<br />
+memset第一个参数是一个指针，可以是字符串的头指针也可以是任何数组的指针；第二个参数是想要设置每个字节的值；第三个参数是想要填充的字节个数,第三个参数一般设置为sizeof(ptr)。<br />
+举个栗子：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(str,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/0&#x27;</span><br><span class="hljs-built_in">memset</span>(str,<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/a&#x27;</span><br><br><span class="hljs-keyword">int</span> num[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为0</span><br><span class="hljs-comment">//以下要注意！！！！</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">5</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//并不是将num全部设置为5，因为int在c语言中占4个字节</span><br><span class="hljs-comment">//但是可以这样：</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0x3f</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为一个非常大的数</span><br></code></pre></td></tr></table></figure>
+<p><font color=red>总之，memset在设置字符时，可以直接赋值。而对于int或者其他类型的，并不是特别适用。但是如果想将int数组初始化为0或者无穷大，可以考虑使用memset。</font></p>
+<h1 id="二-语法小技巧"><a class="markdownIt-Anchor" href="#二-语法小技巧"></a> 二、语法小技巧</h1>
+<h2 id="1-for循环"><a class="markdownIt-Anchor" href="#1-for循环"></a> 1、for循环</h2>
+<p>for循环其实可以这么写：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>还可以这么写(慎用):</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _for(i,a,b) for( int i=(a); i&lt;(b); ++i)</span><br><br>_for(i,<span class="hljs-number">1</span>,n);<br></code></pre></td></tr></table></figure>
+<h2 id="2-判断语句避免翻车的方法"><a class="markdownIt-Anchor" href="#2-判断语句避免翻车的方法"></a> 2、判断语句避免翻车的方法</h2>
+<p>有人if判断语句会这么写</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(a==<span class="hljs-number">1</span>) <span class="hljs-comment">//很容易写成a=1，且不易察觉</span><br>&#123;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是如果换一种写法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(<span class="hljs-number">1</span>==a)<br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样如果不小心漏了一个等号，编译器就会报错，提醒我们。</p>
+<h2 id="3-利用好全局变量"><a class="markdownIt-Anchor" href="#3-利用好全局变量"></a> 3、利用好全局变量</h2>
+<p>将全局变量定义在main函数外，其初始值会全部被设置为0，利用这一特点可以省去初始化的工夫。此外，数组定义在main函数外，其空间可以更大（int类型最大好像是10000*10000来着）</p>
+<h1 id="三-没了"><a class="markdownIt-Anchor" href="#三-没了"></a> 三、没了</h1>
+<p>可能有人3.10下午就要上机了，先写这么多，想起来再补吧。<br />
+考试是可以应付的，但是希望读者能扬弃本文内容，将来形成良好的代码习惯。<br />
+<font color=orange size=7>祝考试顺利</font></p>
+]]></content>
+      <tags>
+        <tag>C语言</tag>
+      </tags>
+  </entry>
 </search>
