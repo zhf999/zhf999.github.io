@@ -1,0 +1,605 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、何为STL  STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。 ————摘自C语言中文网   二、容器 以下代码中的T可以是任何一中数据类型,可以是自定义类型，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++之STL简易食用指南">
+<meta property="og:url" content="http://example.com/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="一、何为STL  STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。 ————摘自C语言中文网   二、容器 以下代码中的T可以是任何一中数据类型,可以是自定义类型，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-10T05:51:24.000Z">
+<meta property="article:modified_time" content="2022-03-10T07:28:11.807Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>C++之STL简易食用指南 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="C++之STL简易食用指南">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      周洪锋
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-10 13:51" pubdate>
+        2022年3月10日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C++之STL简易食用指南</h1>
+            
+            <div class="markdown-body">
+              <h1 id="一-何为stl"><a class="markdownIt-Anchor" href="#一-何为stl"></a> 一、何为STL</h1>
+<blockquote>
+<p><em>STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。</em><br />
+————摘自C语言中文网</p>
+</blockquote>
+<h1 id="二-容器"><a class="markdownIt-Anchor" href="#二-容器"></a> 二、容器</h1>
+<p><font color=orange>以下代码中的T可以是任何一中数据类型,可以是自定义类型，甚至可以嵌套。</font></p>
+<h2 id="1-栈"><a class="markdownIt-Anchor" href="#1-栈"></a> 1、栈</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stack&gt;</span></span><br><br><span class="hljs-comment">//声明：</span><br>stack&lt;T&gt;mystack;<br><br><span class="hljs-comment">//常用方法：</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//压栈</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出栈</span><br>T mystack.<span class="hljs-built_in">top</span>(); <span class="hljs-comment">//返回栈顶的元素</span><br><span class="hljs-keyword">int</span> mystack.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回栈中元素个数</span><br><span class="hljs-keyword">bool</span> mystack.<span class="hljs-built_in">empty</span>(); <span class="hljs-comment">//判断栈是否为空</span><br></code></pre></td></tr></table></figure>
+<h2 id="2-队列"><a class="markdownIt-Anchor" href="#2-队列"></a> 2、队列</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><br><span class="hljs-comment">//声明</span><br>queue&lt;T&gt;myqueue;<br><br><span class="hljs-comment">//常用方法</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//入队</span><br>T myqueue.<span class="hljs-built_in">front</span>(); <span class="hljs-comment">//返回队头元素</span><br>T myqueue.<span class="hljs-built_in">back</span>(); <span class="hljs-comment">//返回队尾元素</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出队</span><br><span class="hljs-keyword">int</span> myqueue.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回队列中元素个数</span><br><span class="hljs-keyword">bool</span> myqueue.<span class="hljs-built_in">isempty</span>(); <span class="hljs-comment">//判断队列是否为空</span><br></code></pre></td></tr></table></figure>
+<h3 id="双端队列deque"><a class="markdownIt-Anchor" href="#双端队列deque"></a> 双端队列deque</h3>
+<p>双端队列可以在队列的两端进行存取操作，包含在头文件deque中，声明方法与普通队列类似。<br />
+接下来使用表格形式来展示部分常用的方法</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th style="text-align:center">用处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>front()</td>
+<td style="text-align:center">返回第一个元素</td>
+</tr>
+<tr>
+<td>back()</td>
+<td style="text-align:center">返回最后一个元素</td>
+</tr>
+<tr>
+<td>push_back()</td>
+<td style="text-align:center">在序列的尾部添加一个元素</td>
+</tr>
+<tr>
+<td>push_front()</td>
+<td style="text-align:center">在序列的头部添加一个元素</td>
+</tr>
+<tr>
+<td>pop_back()</td>
+<td style="text-align:center">移除容器尾部的元素</td>
+</tr>
+<tr>
+<td>pop_front()</td>
+<td style="text-align:center">移除容器头部的元素</td>
+</tr>
+</tbody>
+</table>
+<p>deque和vector的作用十分类似，但实际上deque更适合频繁的入队、出队操作。</p>
+<h3 id="优先队列priority_queue"><a class="markdownIt-Anchor" href="#优先队列priority_queue"></a> 优先队列priority_queue</h3>
+<p>普通的队列是一个先进先出的序列，而优先队列会在队内根据优先级对元素进行排序，是一种<em>先进最高级先出</em>的队列。其本质上是一个堆,每次出队时，会将队列内优先级最高的元素弹出。</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th style="text-align:center">用处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top</td>
+<td style="text-align:center">访问队头元素</td>
+</tr>
+<tr>
+<td>empty</td>
+<td style="text-align:center">队列是否为空</td>
+</tr>
+<tr>
+<td>size</td>
+<td style="text-align:center">返回队列内元素个数</td>
+</tr>
+<tr>
+<td>push</td>
+<td style="text-align:center">插入元素到队尾 (并排序)</td>
+</tr>
+<tr>
+<td>pop</td>
+<td style="text-align:center">弹出队头元素</td>
+</tr>
+</tbody>
+</table>
+<p>除了front改为top外，其他方法没有什么区别。<br />
+优先队列比较复杂的是声明操作,其定义为：<br />
+priority_queue&lt;Type, Container, Functional&gt;<br />
+Type是模板类型，Container是容器，Functional是仿函数（一般写为greater<T>或less<T>）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><span class="hljs-comment">//下面这个声明新建一个将int从小到大排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,greater&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br><span class="hljs-comment">//下面这个声明新建一个将int从大到小排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq2;<br><span class="hljs-comment">//！！！注意，部分编译器会将“&gt;&gt;”认成右移运算符，所以需要加一个空格以区分</span><br></code></pre></td></tr></table></figure>
+<h4 id="在优先队列中使用自定义类"><a class="markdownIt-Anchor" href="#在优先队列中使用自定义类"></a> 在优先队列中使用自定义类</h4>
+<p>在实际运用中很经常遇到的情况是对含有多个属性的记录进行排序，这时候就要使用自定义类（结构体）。而如果直接将上述代码中的int改为自定义结构体，实际上是会报错的。因为我们并没有为结构体定义如何比较他们的大小（也就是优先级），两个学生，谁的优先级更高，到底是由身高、体重还是成绩决定呢？<br />
+所以，在使用自定义类（结构体）时，需要先进行运算符重载（只需要重载小于号）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">int</span> grade,height;<br>    <span class="hljs-built_in">Student</span>(<span class="hljs-keyword">int</span> grade, <span class="hljs-keyword">int</span> height)<br>    &#123;<br>        <span class="hljs-keyword">this</span>.grade=grade;<br>        <span class="hljs-keyword">this</span>.height=height;<br>    &#125;<br>    <span class="hljs-comment">//下面是重载运算符的部分</span><br>    <span class="hljs-keyword">bool</span> <span class="hljs-keyword">operator</span> &lt; (<span class="hljs-keyword">const</span> Student&amp; a) <span class="hljs-keyword">const</span><br>    &#123;<br>        <span class="hljs-comment">//若成绩一样就用身高</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.grade==a.grade)<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.height&lt;a.height;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.grade&lt;a.grade;<br>    &#125;<br>&#125;<br><br>[...]<br><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br></code></pre></td></tr></table></figure>
+<p>这样就可以声明一个优先队列，队列优先弹出成绩高的学生，若成绩一样，就优先弹出身高高的学生。<br />
+当然，也可以通过自定义仿函数的方法来定义优先级，本着实用主义的原则，会其中一种方法就可以，这里不再赘述。</p>
+<h2 id="3-映射map"><a class="markdownIt-Anchor" href="#3-映射map"></a> 3、映射map</h2>
+<p>map的定义类似python中的字典，是一个键值对映射，包含两个模板参数key和value。map的内部实现是一棵红黑树，所以<strong>key必须定义小于号运算符</strong>。map也可以被当做哈希表使用。由于map内部已经定义“[]”运算符，所以元素的存取可以通过下标来实现，十分方便。<br />
+举个最常用的例子：统计单词重复出现的次数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//健是字符串，值是整型</span><br>map&lt;string,<span class="hljs-keyword">int</span>&gt;words;<br>[...]<br>string article[<span class="hljs-number">101</span>];<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    map[article[i]]++;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>需要注意的是，当使用“[]”操作没有找到对应的键时，map会自动创建一个值为0的键值对，积累之后，可能会产生大量的无意义记录，占用空间，并且影响运行速度。所以建议在使用下标获取值之前，事先使用map.find()找到该元素（该方法返回一个迭代器，若不存在，则会返回map.end()）。</p>
+<h1 id="二-算法"><a class="markdownIt-Anchor" href="#二-算法"></a> 二、算法</h1>
+<p>算法在上一篇《C语言的上机小技巧》已经说的差不多了，这里不再赘述。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%86%85/">课内</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%86%85/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C++</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！ 在评论区留言时留下你的邮箱，被回复时会收到邮件提醒噢！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/">
+                        <span class="hidden-mobile">C语言上机事半功倍的小技巧</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"w0iHyrdg8nAXCVVW6dGcK4cp-gzGzoHsz","appKey":"YzV4ncLT9uoIbLPHSqzjjEJn","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"archive></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

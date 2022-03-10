@@ -16,15 +16,15 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="零、前言 本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。  一、实用的内置函数  1、排序函数 12345678&#x2F;&#x2F;头文件#include&lt;alg">
+    <meta name="description" content="零、前言 本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。  UPD: 2022-03-10 13:44: 增加了algorithm的其他函数和命名空间s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C语言上机事半功倍的小技巧">
 <meta property="og:url" content="http://example.com/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="零、前言 本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。  一、实用的内置函数  1、排序函数 12345678&#x2F;&#x2F;头文件#include&lt;alg">
+<meta property="og:description" content="零、前言 本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。  UPD: 2022-03-10 13:44: 增加了algorithm的其他函数和命名空间s">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-10T02:11:53.000Z">
-<meta property="article:modified_time" content="2022-03-10T03:22:23.929Z">
+<meta property="article:modified_time" content="2022-03-10T05:47:58.318Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="C语言">
 <meta name="twitter:card" content="summary_large_image">
@@ -214,7 +214,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.6k 字
+      3.3k 字
     </span>
   
 
@@ -223,7 +223,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      22 分钟
+      28 分钟
     </span>
   
 
@@ -265,6 +265,10 @@
             <div class="markdown-body">
               <h1 id="零-前言"><a class="markdownIt-Anchor" href="#零-前言"></a> 零、前言</h1>
 <p>本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。<strong>如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。</strong></p>
+<blockquote>
+<p>UPD:<br />
+2022-03-10 13:44: 增加了algorithm的其他函数和命名空间std中的函数。</p>
+</blockquote>
 <h1 id="一-实用的内置函数"><a class="markdownIt-Anchor" href="#一-实用的内置函数"></a> 一、实用的内置函数</h1>
 <h2 id="1-排序函数"><a class="markdownIt-Anchor" href="#1-排序函数"></a> 1、排序函数</h2>
 <figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-comment">//快速排序（不稳定）</span><br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br><span class="hljs-comment">//稳定排序</span><br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br></code></pre></td></tr></table></figure>
@@ -293,12 +297,28 @@ bool是C++的数据类型，只有1和0（true和false）两种取值。</p>
 稳定排序指的是：当数据中存在两个相同的值时，排序后不会改变相对位置。例如A和B成绩都是90分，A原先在B前面，排序后不会出现A跑到B后面的情况，这就是稳定排序。<br />
 考试中两种都可以用，问题不大。</p>
 </blockquote>
-<h2 id="2-字符判断的函数"><a class="markdownIt-Anchor" href="#2-字符判断的函数"></a> 2、字符判断的函数</h2>
+<h2 id="2-algorithm头文件中的其他函数"><a class="markdownIt-Anchor" href="#2-algorithm头文件中的其他函数"></a> 2、algorithm头文件中的其他函数</h2>
+<h3 id="11-倒序函数"><a class="markdownIt-Anchor" href="#11-倒序函数"></a> 1.1、倒序函数</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">reverse</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//将目标区间内的值倒置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">例如： 数组&#123;1,1,4,5,1,4&#125;被倒置后会变成&#123;4,1,5,4,1,1&#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>使用方法和sort十分类似，区间也是左闭右开。<br />
+<font color=green>实际上，C++和许多语言的内置函数默认都是左闭右开的</font></p>
+<h3 id="12-取最大值-最小值的函数"><a class="markdownIt-Anchor" href="#12-取最大值-最小值的函数"></a> 1.2、取最大值、最小值的函数</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">max_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最大值</span><br><span class="hljs-built_in">min_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最小值</span><br></code></pre></td></tr></table></figure>
+<h2 id="3-命名空间std中的函数"><a class="markdownIt-Anchor" href="#3-命名空间std中的函数"></a> 3、命名空间std中的函数</h2>
+<p>要使用命名空间std中的函数，你需要像这样做：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;...&gt;</span></span><br>[...]<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std; <span class="hljs-comment">//在引用完头文件后加上这句话</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>主要有以下三个函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">max</span>(a,b); <span class="hljs-comment">//返回a和b中的较大者</span><br><span class="hljs-built_in">min</span>(a,b); <span class="hljs-comment">//返回a和b中的较小者</span><br><span class="hljs-built_in">swap</span>(a,b); <span class="hljs-comment">//将a和b的值交换</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，以上所有的函数都是C++特有的，使用时请保证文件扩展名为.cpp<br />
+且上面的所有函数都是模板函数，这意味着可以任何数据类型都可以使用（前提是为该数据类型定义了大于、小于预算符），例如，排序函数可以对int数组排序，也可以对double、float甚至字符排序。</p>
+</blockquote>
+<h2 id="4-字符判断的函数"><a class="markdownIt-Anchor" href="#4-字符判断的函数"></a> 4、字符判断的函数</h2>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cctype&gt;</span></span><br><span class="hljs-comment">//上面的是C++的头文件，C语言头文件为#include&lt;ctype.h&gt;</span><br><span class="hljs-comment">//其实只要文件名结尾是.cpp，就没什么区别</span><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isdigit</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是数字（&#x27;0&#x27;~&#x27;9&#x27;)</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isalpha</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是英文字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是大写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">islower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是小写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">toupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为大写后的字符</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">tolower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为小写后的字符</span><br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>以上bool的返回值，在C语言中是int</p>
 </blockquote>
-<h2 id="3-字符串函数"><a class="markdownIt-Anchor" href="#3-字符串函数"></a> 3、字符串函数</h2>
+<h2 id="5-字符串函数"><a class="markdownIt-Anchor" href="#5-字符串函数"></a> 5、字符串函数</h2>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-comment">//C语言中是string.h</span><br><br><span class="hljs-comment">//非常常用的一个函数（个人觉得）</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> * <span class="hljs-title">memset</span> <span class="hljs-params">( <span class="hljs-keyword">void</span> * ptr, <span class="hljs-keyword">int</span> value, <span class="hljs-keyword">size_t</span> num)</span></span>;<span class="hljs-comment">//以字节方式填充一个数组</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">strcmp</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str1, <span class="hljs-keyword">char</span>* str2)</span></span>;<span class="hljs-comment">//以字典序比较两个函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">strlen</span> <span class="hljs-params">(<span class="hljs-keyword">char</span> * str )</span></span>;<br></code></pre></td></tr></table></figure>
 <p>其实字符串内置的函数很多，但是太难记了，个人人为实用的就以上几个。<br />
 接下来重点说一下memset这个函数。<br />
@@ -330,6 +350,15 @@ memset第一个参数是一个指针，可以是字符串的头指针也可以�
             <div>
               <div class="post-metas mb-3">
                 
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%86%85/">课内</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AF%BE%E5%86%85/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                    
+                  </div>
+                
                 
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
@@ -350,6 +379,12 @@ memset第一个参数是一个指针，可以是字符串的头指针也可以�
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++之STL简易食用指南</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
