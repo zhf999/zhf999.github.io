@@ -1,635 +1,271 @@
-<?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>scrapy爬虫框架学习笔记</title>
-    <url>/2022/01/23/scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="scrapy入门"><a class="markdownIt-Anchor" href="#scrapy入门"></a> Scrapy入门</h1>
-<h2 id="一基础指令"><a class="markdownIt-Anchor" href="#一基础指令"></a> 一.基础指令</h2>
-<p><strong>使用命令提示符，cd到想要操作的目录</strong></p>
-<h3 id="scrapy-startproject-name"><a class="markdownIt-Anchor" href="#scrapy-startproject-name"></a> scrapy startproject name</h3>
-<p>在该目录下创建项目</p>
-<h3 id="scrapy-genspider-name-domain"><a class="markdownIt-Anchor" href="#scrapy-genspider-name-domain"></a> scrapy genspider name domain</h3>
-<p><strong>使用前需要先cd到下一级目录</strong></p>
-<blockquote>
-<p>domain参数不需要带http或者https的头，也不需要引号</p>
-</blockquote>
-<h3 id="scrapy-crawl-name"><a class="markdownIt-Anchor" href="#scrapy-crawl-name"></a> scrapy crawl name</h3>
-<p>启动名字为name的爬虫</p>
-<hr />
-<h2 id="二开始"><a class="markdownIt-Anchor" href="#二开始"></a> 二.开始</h2>
-<h3 id="在namepy中进行编辑"><a class="markdownIt-Anchor" href="#在namepy中进行编辑"></a> 在name.py中进行编辑</h3>
-<p>爬虫开启后会把html传到name.py中的parse方法，可以在parse中进行网页解析。<br />
-解析可以使用scrapy自带的方法，也可以脱离框架使用BeautifulSoup、XPath、CSS等。</p>
-<h3 id="日志信息的屏蔽"><a class="markdownIt-Anchor" href="#日志信息的屏蔽"></a> 日志信息的屏蔽</h3>
-<p>如果没有对日志信息屏蔽，会产生大量信息，影响调试。可以在settings.py中加入以下代码，将等级warning以下的日志信息全部屏蔽</p>
-<h2 id="-code0-"><a class="markdownIt-Anchor" href="#-code0-"></a> <figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">LOG_LEVEL = <span class="hljs-string">&quot;WARNING&quot;</span><br></code></pre></td></tr></table></figure></h2>
-<h2 id="三将数据传输到pipe中"><a class="markdownIt-Anchor" href="#三将数据传输到pipe中"></a> 三.将数据传输到pipe中</h2>
-<p><strong>使用yield关键字</strong><br />
-yield可以将数据逐个转入，可以使用的数据类型是Request,BaseItem,dict或者None。（不可以直接返回列表！！）</p>
-<h3 id="在此之前"><a class="markdownIt-Anchor" href="#在此之前"></a> 在此之前</h3>
-<p>使用pipe需要先在设置中开启pipeline，在setting.py中取消列代码的注释：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">ITEM_PIPELINES = &#123;<br>   <span class="hljs-string">&#x27;firstscrapy.pipelines.FirstscrapyPipeline&#x27;</span>: <span class="hljs-number">300</span>,<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>字典中的键表示pipeline的名字，值表示这个pipeline的权重，数据会先结果权重小的pipeline再经过权重大的。</p>
-<h3 id="为什么要有多个pipeline"><a class="markdownIt-Anchor" href="#为什么要有多个pipeline"></a> 为什么要有多个pipeline</h3>
-<ul>
-<li>一个项目可能有多个爬虫，爬取不同的网站产生不同的数据，所以需要多个pipeline对数据进行处理。</li>
-<li>当然也可以使用一个pipeline，通过对item加一个<strong>come_from</strong>的键来判断该是数据的来源</li>
-</ul>
-<h3 id="pipelineprocess_item方法的第三个参数spider"><a class="markdownIt-Anchor" href="#pipelineprocess_item方法的第三个参数spider"></a> pipeline.process_item方法的第三个参数spider</h3>
-<p>spider参数即为创建的爬虫中的类，其有name属性（<a href="http://xn--myspider-8q7m267h5d8cri7b52f.py">详见创建的myspider.py</a>），可以通过name来判断数据的来源，从而对不同数据进行处理。</p>
-<hr />
-<h2 id="四logging的使用"><a class="markdownIt-Anchor" href="#四logging的使用"></a> 四.logging的使用</h2>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging<br>logging.warning(item)<br></code></pre></td></tr></table></figure>
-<p>将item以warning的方式打印出来。与print不同的地方是，logging可以以更高的等级打印，而且可以将打印的内容保存到本地，方便后续的调试，为开发提供了方便。<br />
-这里使用warning是因为之前在settings.py中设置了打印的等级为warning，只有warning级别的日志才能被打印在命令提示符里。</p>
-<h3 id="指明输出日志的来源"><a class="markdownIt-Anchor" href="#指明输出日志的来源"></a> 指明输出日志的来源</h3>
-<hr />
-<hr />
-<h1 id="组装request对象"><a class="markdownIt-Anchor" href="#组装request对象"></a> 组装Request对象</h1>
-<p><strong>语法</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">yield</span> scrapy.Rquest(next_page_url, call_back=self.parse)<br></code></pre></td></tr></table></figure>
-<p><strong>在settings中设置User-Agent：</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">USER-AGENT = <span class="hljs-string">&#x27;Mozilla/5.0&#x27;</span><br></code></pre></td></tr></table></figure>
-<h2 id="完整的scrapyrequest对象"><a class="markdownIt-Anchor" href="#完整的scrapyrequest对象"></a> 完整的scrapy.Request()对象</h2>
-<p>scrapy.Request(url[,callback,method=‘GET’,headers,body,cookies,meta,dont_filter=False])</p>
-<ul>
-<li>注意事项
-<ul>
-<li>callback：制定传入的url参数交给哪个解析函数去处理</li>
-<li>meta：实现在不同解析函数中传递数据，meta默认会携带部分信息，如下载延迟，请求深度等等。<strong>meta以字典形式定义</strong>，存取数据均与字典操作相同。</li>
-<li>dont_filter：让scrapy不再对url去重，即一个url地址可能访问多次。</li>
-<li>cookies只能储存在函数的参数中，将cookies用字符串形式放在headers中传入将不起作用。</li>
-</ul>
-</li>
-</ul>
-<hr />
-<hr />
-<p>直接使用上面的语句，输出的日志前面总是带有一个[root]标识，这表示了日志的来源，实际上，我们希望每一句日志都能体现出其来源，所以要使用下面的语句。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">logger = logging.getlogger(__name__)<br></code></pre></td></tr></table></figure>
-<p>该函数实例化一个logging，就可以使用下面的语句输出</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">logger.warning(item)<br></code></pre></td></tr></table></figure>
-<p>就可以在输出的日志前面加上[项目.spiders.爬虫名]的提示信息</p>
-<h3 id="日志的保存"><a class="markdownIt-Anchor" href="#日志的保存"></a> 日志的保存</h3>
-<p>在settings.py中设置</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">LOG_FILE = <span class="hljs-string">&quot;./log.log&quot;</span><br></code></pre></td></tr></table></figure>
-<p>第一个.号表示当前目录，储存后的文件为log.log。<br />
-修改设置后日志不会在命令提示符中输出。</p>
-<hr />
-<hr />
-<h1 id="选择器html解析器"><a class="markdownIt-Anchor" href="#选择器html解析器"></a> 选择器（html解析器）</h1>
-<blockquote>
-<p>scrapy拥有自己的一套数据提取机制，成为选择器（selector），因为它们通过特定的xpath或者css表达式来选择HTML文件中的某个部分。scrapy选择器构建于lxml库之上，这意味着它们在速度和解析准确性上非常相似，用法也和之前讲的lxml解析基本相似。当然也可以脱离这些体系，使用bs4库进行解析。</p>
-</blockquote>
-<hr />
-<h2 id="selector的用法"><a class="markdownIt-Anchor" href="#selector的用法"></a> selector的用法</h2>
-<h3 id="1xpath"><a class="markdownIt-Anchor" href="#1xpath"></a> 1.xpath()：</h3>
-<p>传入Xpath表达式，返回该表达式所对应的所有节点的selector list<strong>列表</strong></p>
-<h3 id="2css"><a class="markdownIt-Anchor" href="#2css"></a> 2.css()</h3>
-<p>传入css表达式，返回该表达式所对应的所有节点的selector list<strong>列表</strong></p>
-<h3 id="3extract"><a class="markdownIt-Anchor" href="#3extract"></a> 3.extract()</h3>
-<p>序列化该节点为Unicode字符串并返回list<strong>列表</strong></p>
-<h3 id="re"><a class="markdownIt-Anchor" href="#re"></a> re()</h3>
-<p>根据传入的正则表达式对数据进行提取，返回Unicode字符串列表，regex可以是一个已经编译的正则表达式，也可以是一个即将被编译的正则表达式字符串</p>
-<hr />
-<h2 id="更好地配对"><a class="markdownIt-Anchor" href="#更好地配对"></a> 更好地配对</h2>
-<p>方法的调用很简单，更多的时间是花在Xpath和css表达式的构造。scrapy提供了一种简便的方法来查看表达式是否正确、是否真的起作用。<br />
-另起一个命令行窗口，在其中输入</p>
-<h2 id="-code8-记得要加双引号然后输入responsexpath或者responsecss就可以抽取出当前网站的标签返回的是unicode格式"><a class="markdownIt-Anchor" href="#-code8-记得要加双引号然后输入responsexpath或者responsecss就可以抽取出当前网站的标签返回的是unicode格式"></a> <figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">scrapy </span><span class="hljs-keyword">shell </span><span class="hljs-string">&quot;/爬取网站的网址&quot;</span><br></code></pre></td></tr></table></figure><br />
-<strong>记得要加双引号</strong><br />
-然后输入response.xpath(&quot;…&quot;)或者response.css(&quot;…&quot;)就可以抽取出当前网站的标签（返回的是Unicode格式）。</h2>
-<hr />
-<h1 id="通过post请求登录"><a class="markdownIt-Anchor" href="#通过post请求登录"></a> 通过POST请求登录</h1>
-<h2 id="一-通过formrequest类来发送请求类似request"><a class="markdownIt-Anchor" href="#一-通过formrequest类来发送请求类似request"></a> 一、通过FormRequest类来发送请求（类似Request）</h2>
-<p>首先查看network中发送请求的请求头，获取请求头中的类似用户名、密码的键值对<br />
-特别要注意cookie、token等值，要在源代码中找到对应的值，在python的字典中填入。</p>
-<h2 id="二-更方便的方法"><a class="markdownIt-Anchor" href="#二-更方便的方法"></a> 二、更方便的方法</h2>
-<p>FormRequest类有一个from_request的方法，可以自动寻找网页中的表单。</p>
-<h3 id="参数"><a class="markdownIt-Anchor" href="#参数"></a> 参数：</h3>
-<ul>
-<li>response</li>
-<li>formdata 字典</li>
-<li>callback</li>
-</ul>
-<h2 id="如果response中有两个表单怎么办"><a class="markdownIt-Anchor" href="#如果response中有两个表单怎么办"></a> #如果response中有两个表单怎么办？</h2>
-<p>可以查看该方法的源代码，通过给其传入xpath、css等参数来定位表单。</p>
-<h2 id="三-直接通过request类来发送请求不过要将其中的method参数改为post"><a class="markdownIt-Anchor" href="#三-直接通过request类来发送请求不过要将其中的method参数改为post"></a> 三、直接通过Request类来发送请求，不过要将其中的method参数改为POST</h2>
-<hr />
-<hr />
-<h1 id="中间件"><a class="markdownIt-Anchor" href="#中间件"></a> 中间件</h1>
-<h2 id="下载中间件"><a class="markdownIt-Anchor" href="#下载中间件"></a> 下载中间件</h2>
-<h3 id="使用方法和pipeline类似在文件中定义一个类然后在setting中开启"><a class="markdownIt-Anchor" href="#使用方法和pipeline类似在文件中定义一个类然后在setting中开启"></a> 使用方法和pipeline类似，在文件中定义一个类，然后在setting中开启</h3>
-<h3 id="默认方法"><a class="markdownIt-Anchor" href="#默认方法"></a> 默认方法</h3>
-<p><strong>process_request(self,request,spider)</strong><br />
-当每个request通过下载中间件时，该方法被调用，可以用来修改请求头等信息（请求时调用）。该方法只能返回None。<br />
-返回值：</p>
-<ul>
-<li>若返回None，Scrapy将继续处理该Request，执行其他的中间件的相应方法，直到合适的下载器处理函数被调用，该Request被执行</li>
-<li>若返回Response对象，Scrapy不会调用其他的方法，而直接返回该response。</li>
-<li>若返回Request对象，Scrapy将停止调用其他中间件的process_request，并重新调度返回的Request。</li>
-</ul>
-<p><strong>process_response(self,request,response,spider)</strong><br />
-当下载器完成http请求，传递响应给引擎时调用（获得请求时调用）。该方法必须return request或者response。<br />
-返回值：</p>
-<ul>
-<li>当返回Response对象时，会将该response交给其他中间件的proce_response处理</li>
-<li>当返回Request对象是，则中间件链停止，返回的Request会被重新调度并下载。</li>
-</ul>
-<h3 id="process_request还可以用于添加代理"><a class="markdownIt-Anchor" href="#process_request还可以用于添加代理"></a> process_request还可以用于添加代理</h3>
-<p>用法：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">request.meta[<span class="hljs-string">&quot;proxy&quot;</span>] = <span class="hljs-string">&quot;http://124.115.126.76:808&quot;</span><br><span class="hljs-comment">#代理的形式为：协议+ip地址+端口</span><br></code></pre></td></tr></table></figure>
-<hr />
-<hr />
-<h1 id="定义item"><a class="markdownIt-Anchor" href="#定义item"></a> 定义Item</h1>
-<h2 id="在文件itemspy中编辑"><a class="markdownIt-Anchor" href="#在文件itemspy中编辑"></a> 在文件items.py中编辑</h2>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FirstscrapyItem</span>(<span class="hljs-params">scrapy.Item</span>):</span><br>    <span class="hljs-comment"># define the fields for your item here like:</span><br>    <span class="hljs-comment"># name = scrapy.Field()</span><br>    <span class="hljs-keyword">pass</span><br></code></pre></td></tr></table></figure>
-<p>该类继承自scrapy.Item类，实际上，该类的操作方法和字典一样，不同之处在于，该类使用时需要在items.py中使用<code>scrapy.Field()</code>“声明”一个键值对，再在解析函数中实例化对象来使用。<br />
-<strong>这么做的好处</strong></p>
-<ul>
-<li>目前已知的好处就是防止手抖将键的名字写错，因为当解析函数中键的名字写错时函数会引发异常。</li>
-<li>把数据交给pipeline时，可以用<code>isinstance()</code>来判断数据属于哪个Item，以便进行不同的处理</li>
-</ul>
-<h2 id="在mongdodb中使用item时的注意事项"><a class="markdownIt-Anchor" href="#在mongdodb中使用item时的注意事项"></a> 在mongdoDB中使用Item时的注意事项</h2>
-<p>由于mongdoDB只支持字典操作，所以要使用dict()函数将Item对象转化为字典类型再储存入数据库中</p>
-<hr />
-<hr />
-<h1 id="scrapy中的crawlspider类"><a class="markdownIt-Anchor" href="#scrapy中的crawlspider类"></a> Scrapy中的CrawlSpider类</h1>
-<h2 id="创建crawlspider爬虫"><a class="markdownIt-Anchor" href="#创建crawlspider爬虫"></a> 创建CrawlSpider爬虫</h2>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">scrapy genspider -t crawl name domain<br></code></pre></td></tr></table></figure>
-<p>创建后会发现新建爬虫的父类变成了CrawlSpider，并且出现了一个rules的元组，即为规则。<br />
-rules元组冲包含了Rule类，包含以下参数</p>
-<ul>
-<li>LinkExtractor，即为链接提取器
-<ul>
-<li>allow 一个正则表达式</li>
-</ul>
-</li>
-<li>callback 提取出的url地址会交给callback处理</li>
-<li>follow 当前url地址的响应是否重新经过rules来提取（开启后相当于一个递归，通常在翻页时使用）</li>
-</ul>
-<p><strong>当然，也可以不使用rules规则，而在parse_item中yield出一个Request类，并定义一个解析方法来对网页进行解析。</strong></p>
-<h2 id="优缺点"><a class="markdownIt-Anchor" href="#优缺点"></a> 优缺点：</h2>
-<p>该类为程序员提供了一个创建爬虫的更简便的方式，可以用更少的代码量完成同样的操作，但缺点是无法在解析方法之间传递数据（没有meta参数用于传递）</p>
-<p>LinkExtractor参数补充：</p>
-<ul>
-<li>allow 满足正则表达式的url会被提取</li>
-<li>deny 满足正则表达式的url都不会被提取（优先级高于allow）</li>
-<li>allow_domains 会被提取的链接的domain</li>
-<li>deny_domains 不会被提取的链接的domain</li>
-<li>restrict_xpaths 使用xpath表达式，和allow共同作用过滤链接，该xpath满足的url地址都会被提取</li>
-</ul>
-<p>spider.Rule常见参数</p>
-<ul>
-<li>Link_extractor：</li>
-<li>callback：</li>
-<li>follow:</li>
-<li>process_link:为一个函数对象，当从Link_extractor中过滤出一个url时会调用这个函数来处理url（一般用于过滤url）</li>
-<li>process_request:一个函数对象，当提取到一个request时会调用该函数（一般用于过滤request）</li>
-</ul>
-<hr />
-<hr />
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>爬虫</category>
-      </categories>
-      <tags>
-        <tag>爬虫</tag>
-        <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HTML解析大法</title>
-    <url>/2022/01/17/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="html解析大法"><a class="markdownIt-Anchor" href="#html解析大法"></a> HTML解析大法：</h1>
-<h2 id="一正则表达式"><a class="markdownIt-Anchor" href="#一正则表达式"></a> 一.正则表达式</h2>
-<h3 id="1模块主要函数"><a class="markdownIt-Anchor" href="#1模块主要函数"></a> 1.模块主要函数</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br><span class="hljs-comment">#创建正则表达式对象</span><br>re.<span class="hljs-built_in">compile</span>(pattern)<br><span class="hljs-comment">#在字符串中寻找模式，返回match对象或None</span><br>re.search(pattern,string)<br><span class="hljs-comment">#从字符串开头匹配，返回match或None</span><br>re.match(pattern,string)<br><span class="hljs-comment">#返回列表</span><br>re.findall(pattern,string)<br></code></pre></td></tr></table></figure>
-<h3 id="2使用正则表达式对象"><a class="markdownIt-Anchor" href="#2使用正则表达式对象"></a> 2.使用正则表达式对象</h3>
-<p>使用<code>re.compile</code>将正则表达式编译成正则表达式对象，即可使用对象的方法（与上文search、match、findall用法大同小异）</p>
-<h3 id="3子模式与match对象"><a class="markdownIt-Anchor" href="#3子模式与match对象"></a> 3.子模式与Match对象</h3>
-<p>Match对象主要方法有<strong>group()</strong>（返回模式子内容），<strong>groups()</strong>（返回模式字内容元组），<strong>groupdict()</strong>（返回字典）</p>
-<p><strong>特别地，使用(?P&lt;name&gt;)可以为子模式命名</strong></p>
-<h2 id="二beautifulsoup"><a class="markdownIt-Anchor" href="#二beautifulsoup"></a> 二.BeautifulSoup</h2>
-<h3 id="1对象种类"><a class="markdownIt-Anchor" href="#1对象种类"></a> 1.对象种类</h3>
-<h4 id="tag"><a class="markdownIt-Anchor" href="#tag"></a> Tag</h4>
-<p>即HTML中尖括号扩起来的部分。其有两个重要的属性：<strong>name</strong>和<strong>attributes</strong><br />
-<strong>name</strong>属性：<br />
-每个Tag的名字，包括<strong>title、a、h1</strong>等等。<strong>name</strong>属性可以被修改。<br />
-<strong>attributes</strong>属性：<br />
-每个Tag中包含等号，等号两边的内容（像字典一样）就是是attribute，可以使用类似python操作字典的方法操作属性，建议使用get。</p>
-<h4 id="2navigablestring"><a class="markdownIt-Anchor" href="#2navigablestring"></a> ②NavigableString</h4>
-<p>对Tag对象使用.<strong>string</strong>获得其中文字<br />
-####③BeautifulSoup<br />
-与Tag对象类似，只不过可以把<strong>BeautifulSoup</strong>对象看成整体的Tag</p>
-<h4 id="4comment"><a class="markdownIt-Anchor" href="#4comment"></a> ④comment</h4>
-<p>即HTML中的注释部分。在使用.<strong>string</strong>时会同时提取注释，所以使用时可以先判断类型：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(soup.a.string) == bs4.element.comment:<br>    <span class="hljs-built_in">print</span>(soupa.a.string)<br></code></pre></td></tr></table></figure>
-<h3 id="2beautifulsoup的树结构"><a class="markdownIt-Anchor" href="#2beautifulsoup的树结构"></a> 2.BeautifulSoup的树结构</h3>
-<h4 id="子节点"><a class="markdownIt-Anchor" href="#子节点"></a> 子节点</h4>
-<p>.<strong>content</strong>以及.<strong>children</strong>都可返回直接子节点，不同的是前者返回的是列表。<br />
-.<strong>descendants</strong>可以返回所有的子孙节点（返回的是可迭代对象）。</p>
-<h4 id="父节点"><a class="markdownIt-Anchor" href="#父节点"></a> 父节点</h4>
-<p>.<strong>parents</strong>返回父节点的可迭代对象。</p>
-<h4 id="兄弟节点"><a class="markdownIt-Anchor" href="#兄弟节点"></a> 兄弟节点</h4>
-<p>.<strong>next_sibling</strong>和.<strong>previous_sibing</strong>返回前一个和后一个兄弟节点。</p>
-<h3 id="find_all方法"><a class="markdownIt-Anchor" href="#find_all方法"></a> find_all方法</h3>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">find_all(name, attrs, recursive, text, **kwarg)<br></code></pre></td></tr></table></figure>
-<h4 id="name参数"><a class="markdownIt-Anchor" href="#name参数"></a> name参数：</h4>
-<p>寻找名字为name的标记</p>
-<h4 id="kwargs"><a class="markdownIt-Anchor" href="#kwargs"></a> kwargs</h4>
-<p>查找参数符合条件的标记<br />
-例如：<code>find_all('a',class_='post-title')</code>寻找参数class为post-title的标记</p>
-<h4 id="text"><a class="markdownIt-Anchor" href="#text"></a> text</h4>
-<p>搜索文档中的字符串内容。</p>
-<h4 id="limit"><a class="markdownIt-Anchor" href="#limit"></a> limit</h4>
-<p>限制搜索结果的个数。</p>
-<h4 id="recursive"><a class="markdownIt-Anchor" href="#recursive"></a> recursive</h4>
-<p>默认为true，若为false，则只寻找当前节点的直接子节点。</p>
-<h2 id="三lxml的xpath解析"><a class="markdownIt-Anchor" href="#三lxml的xpath解析"></a> 三.lxml的xpath解析</h2>
-<p>lxml库的使用方法</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">rest = etree.HTML(html)<br></code></pre></td></tr></table></figure>
-<h3 id="xpath节点"><a class="markdownIt-Anchor" href="#xpath节点"></a> XPath节点</h3>
-<p>XPath的节点关系类似BeautifulSoup，都是树的结构，此处不再赘述。</p>
-<h3 id="xpath语法"><a class="markdownIt-Anchor" href="#xpath语法"></a> XPath语法</h3>
-<table>
-<thead>
-<tr>
-<th>表达式</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>nodename</td>
-<td style="text-align:center">选取此节点的所有子节点</td>
-</tr>
-<tr>
-<td>/</td>
-<td style="text-align:center">从根节点选取</td>
-</tr>
-<tr>
-<td>//</td>
-<td style="text-align:center">选择任意位置的某个节点</td>
-</tr>
-<tr>
-<td>.</td>
-<td style="text-align:center">选取当前节点</td>
-</tr>
-<tr>
-<td>…</td>
-<td style="text-align:center">选取当前节点的父节点</td>
-</tr>
-<tr>
-<td>@</td>
-<td style="text-align:center">选取</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>谓语</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>/classroom/student[1]</td>
-<td style="text-align:center">选取classroom子元素的第一个student元素</td>
-</tr>
-<tr>
-<td>/classroom/student[last()]</td>
-<td style="text-align:center">选取classroom子元素中的最后一个student元素</td>
-</tr>
-<tr>
-<td>/classroom/student[position()&lt;6]</td>
-<td style="text-align:center">选取classroom子元素的前五个元素</td>
-</tr>
-<tr>
-<td>//name[@lang]</td>
-<td style="text-align:center">选取name元素，其必须有lang属性</td>
-</tr>
-<tr>
-<td>//name[@lang=‘en’]</td>
-<td style="text-align:center">选取name元素，其lang属性的值必须为en</td>
-</tr>
-<tr>
-<td>//student[age&gt;20]</td>
-<td style="text-align:center">选取所有student，其age属性必须大于20</td>
-</tr>
-</tbody>
-</table>
-<p>除此之外Xpath还可以在表达式中使用/text()来提取其中的字符（类似bs的.string）<br />
-Selector对象还有extract()方法，获取其中的文字。</p>
-<p>###偷懒小技巧<br />
-在浏览器的审查元素中可以右键对元素的XPath进行复制（仅适用于提取单个元素的情况）</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-        <category>爬虫</category>
-      </categories>
-      <tags>
-        <tag>爬虫</tag>
-        <tag>前端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机中的数据编码</title>
-    <url>/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/</url>
-    <content><![CDATA[<h1 id="计算机中的数据编码"><a class="markdownIt-Anchor" href="#计算机中的数据编码"></a> 计算机中的数据编码</h1>
-<h2 id="一-进制及其转化"><a class="markdownIt-Anchor" href="#一-进制及其转化"></a> 一、进制及其转化</h2>
-<p>冯诺依曼计算机体系中，为了在物理上表示方便，采用了二进制编码的形式。由于进制等内容较为简单，中学、大学知识中有均提及，此处不再赘述。<strong>本文只讨论纯整数编码</strong></p>
-<h2 id="二-原码"><a class="markdownIt-Anchor" href="#二-原码"></a> 二、原码</h2>
-<p>原码是最简单的一种编码形式，由1位符号位和n-1位数据位构成。以<strong>4位</strong>码位为例，第一位是符号位，0表示正数，1表示负数，其余位由于表示该数值的绝对值。<br />
-可以用以下数学公式来表示<br />
-<s>暂时还没学会lateX，先上个手写的</s></p>
-<p><img src="/img/data_code/yuanma_fml.PNG" alt="原码表达公式" /></p>
-<p>这是数学上的公式表示，显然不够直观，接下来在数轴（仍然是码位为4的情况）上表示数值与编码的关系。<br />
-<strong>其中数轴下方是编码（为直观起见，转化成十进制），数轴上方是在计算机中代表的实际数值</strong></p>
-<p><img src="/img/data_code/yuanma_line.PNG" alt="原码在数轴上的呈现" /><br />
-可以看到，如果将数轴平分为两部分[0,7]与[8,15]，则左半轴均为正数，右半轴均为负数。这便是原码区分正负数的方法。</p>
-<h1 id="三-反码"><a class="markdownIt-Anchor" href="#三-反码"></a> 三、反码</h1>
-<p>反码在数学上的定义为：<br />
-<img src="/img/data_code/fanma_fml.PNG" alt="反码表达公式" /><br />
-易从公式中看出，当X的值小于等于0时2的n次方-1实际上就是一串全1的编码，而一串全1的编码按位减去X即为对X按位求非。<br />
-由以上可以得出一个反码的更直观定义，即：</p>
-<blockquote>
-<p>当X为正数时X的反码即为它本身，X为负数时X的反码为X的原码的<strong>非符号位</strong>按位求非。</p>
-</blockquote>
-<p>这便是“反码”中“反”字的来源。</p>
-<p>下面是反码在数轴上的分布：<br />
-<img src="/img/data_code/fanma_line.PNG" alt="反码在数轴上的呈现" /><br />
-不难发现，反码与原码的区别就是反码在右半轴的分布与原码恰好对称。</p>
-<p>在《计算机组成与系统结构[裘雪红]》一书中，对反码有如下描述：</p>
-<blockquote>
-<p>反码通常用来作为由原码求补码或者由补码求原码的中间过渡。</p>
-</blockquote>
-<p>可见，反码在计算机中实际的使用场景应该很少。</p>
-<h1 id="四-补码"><a class="markdownIt-Anchor" href="#四-补码"></a> 四、补码</h1>
-<p>补码在数学上的定义为：<br />
-<img src="/img/data_code/buma_fml.PNG" alt="补码表达公式" /><br />
-不难发现，负数与其自身的补码相加后就等于2的n次方，这种关系可以与角度中的互补类比，如30°与150°互补，这便是“补码”中“补”字的来源。<br />
-值得一提的是，由于编码位数为n位，所以该编码是<strong>mod 2的n次方</strong>意义下的，所以负数与其自身补码相加实际上发生了溢出，实际上的值变为了0。<br />
-补码也可以有如下的定义：</p>
-<blockquote>
-<p>正数的补码即为其原码本身，负数的补码为其反码+1</p>
-</blockquote>
-<p>补码在数轴上的分布如下图所示<br />
-<img src="/img/data_code/buma_fml.PNG" alt="补码在数轴上的呈现" /><br />
-可以看出，补码在右半轴的分布相对于反码右移了一个单位。</p>
-<h2 id="1求补运算"><a class="markdownIt-Anchor" href="#1求补运算"></a> 1.求补运算</h2>
-<p>计算机中还存在一中与补码的求法十分相似的运算，称为求补运算，十分容易和“求补码”混淆。其运算过程如下：</p>
-<blockquote>
-<p>将编码按位取反（包括符号位），然后+1</p>
-</blockquote>
-<p>求补运算与“求补码”的区别如下：</p>
-<ul>
-<li>求补运算将符号位也取反，而“求补码”只需要将数据位取反</li>
-<li>求补运算对正负数都有效，而整数求补码后仍是它本身</li>
-<li>任何数求补后都会变成其相反数</li>
-</ul>
-<p><strong>求补运算在计算机的数值计算中十分常用</strong></p>
-<h2 id="2补码的特性"><a class="markdownIt-Anchor" href="#2补码的特性"></a> 2.补码的特性</h2>
-<ul>
-<li>与原码和反码不同，补码不存在“正零”和“负零”的区别。</li>
-<li>[X-Y]补=[X]补+[-Y]补=[X]补+（[Y]补）求补，这一特性使得补码在计算机的运算中非常常用。</li>
-</ul>
-<p><img src="/img/data_code/buma_cal.PNG" alt="补码的加减特性" /></p>
-<h2 id="3变形补码双符号位补码"><a class="markdownIt-Anchor" href="#3变形补码双符号位补码"></a> 3.变形补码（双符号位补码）</h2>
-<p>在实际计算中，为了判断加减的结果是否溢出，常常设置两个符号位。若加减结果的两个符号位不相等（01或10），则发生了溢出；如果符号相等，则不发生溢出。</p>
-<h3 id="变形补码的实质"><a class="markdownIt-Anchor" href="#变形补码的实质"></a> 变形补码的实质</h3>
-<p>不难发现，由于多出来的一位符号位，n位变形补码的数据范围只有补码的一半，将其在数轴上画出后：<br />
-<img src="/img/data_code/bianxingbm.PNG" alt="补码与变形补码" /><br />
-从图中可以看出，符号位为01和10的情况在数轴上是存在的，我们或许可以强行将其看成补码，则可以获取其代表的值。但变形补码的意义在于判断计算结果的溢出，所以我们将变形补码的范围压缩到数轴最左边和最右边分别1/4部分，将中间一部分视为“禁区”，当计算结果进入中间时，计算机就抛出“溢出”的计算结果。<br />
-<strong>可见，变形补码是舍弃一部分数据范围以保证数据没有发生溢出</strong></p>
-<p>这也是在《计组》后续的章节中，恢复余数法中间步骤出现了01的符号位而不影响计算的原因<br />
-<img src="/img/data_code/bxbm_cal.PNG" alt="用恢复余数法计算除法的步骤" /><br />
-<strong>这里的变形补码是中间的计算结果，可以将其看成有效的数值参与下一步计算，但是若结果出现了01或10的符号位，则是不符合规范的，发生了溢出。</strong></p>
-<h1 id="四-移码"><a class="markdownIt-Anchor" href="#四-移码"></a> 四、移码</h1>
-<p>移码是数值在模2的n次方意义下平移后的结果。如上图数轴所示，想要比较以上三种编码的数值的大小，均无法通过编码来比较。而移码有着“单调”的特点，即随着编码的增大，编码所代表的数值也增大。<br />
-移码的定义：2的n次方+X<br />
-可以证明，移码与补码之间存在关系：<strong>移码和补码的符号位是相反的</strong></p>
-<h2 id="移码的使用场景举例"><a class="markdownIt-Anchor" href="#移码的使用场景举例"></a> 移码的使用场景举例</h2>
-<p>在IEEE754标准中，其指数使用的是移码。不过这里的移码有所不同<br />
-，移动的位数是127（单精度）/1023（双精度），这里为什么是127/1023而不是128/1024？很多人可能没有深究这里的原因。<br />
-其实原因很简单，IEEE754标准中对尾数要求规格化，即小数点后第一位必须为1，且规定把这个1给省略。这里移码比正常少位移一位，就是考虑到这里的这个1。如果位移128位，尾数的表达就是0.1xxxx，如果位移127位，尾数的表达就是1.xxxxx，<strong>这样一来，增大了浮点数可以表达的范围</strong>。</p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>计组</category>
-      </categories>
-      <tags>
-        <tag>计算机组成原理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言上机事半功倍的小技巧</title>
-    <url>/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<h1 id="零-前言"><a class="markdownIt-Anchor" href="#零-前言"></a> 零、前言</h1>
-<p>本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。<strong>如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。</strong></p>
-<blockquote>
-<p>UPD:<br />
-2022-03-10 13:44: 增加了algorithm的其他函数和命名空间std中的函数。</p>
-</blockquote>
-<h1 id="一-实用的内置函数"><a class="markdownIt-Anchor" href="#一-实用的内置函数"></a> 一、实用的内置函数</h1>
-<h2 id="1-排序函数"><a class="markdownIt-Anchor" href="#1-排序函数"></a> 1、排序函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-comment">//快速排序（不稳定）</span><br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br><span class="hljs-comment">//稳定排序</span><br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br></code></pre></td></tr></table></figure>
-<p>sort函数有三个参数，前两个参数是指针，代表需要排序的区间（左闭右开），第三个参数是<em>函数指针</em>，<strong>可填可不填</strong>，不填就默认递增排序。sort函数无返回值，是对于数组做原地排序。<br />
-例如，上述代码就是对a数组的第1个到第n个元素排序（笔者习惯数组下标从1开始）。如果习惯的下标是从0开始，那就是</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a,a+n);<br></code></pre></td></tr></table></figure>
-<p>更普遍的，sort(a+p,a+q)就是将a[p]~a[q-1]排序。</p>
-<h3 id="递减的排序怎么办"><a class="markdownIt-Anchor" href="#递减的排序怎么办"></a> 递减的排序怎么办？</h3>
-<p>解决办法有两个：<br />
-1、将待排序数组全部取相反数，按默认的递增排序后再取一次相反数即可。<br />
-<font color=red>2、编写cmp函数</font><br />
-这里可能比较复杂，看不懂就可以不用看了。<br />
-首先，声明一个cmp函数（名字未必要是cmp，符合C语言规范即可）</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> X,<span class="hljs-keyword">int</span> Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X&gt;Y;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>然后将cmp函数指针作为sort的第三个参数即可。</p>
-<blockquote>
-<p>函数指针是指针的一种，只写函数名，就是该函数的函数指针。<br />
-bool是C++的数据类型，只有1和0（true和false）两种取值。</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br></code></pre></td></tr></table></figure>
-<p>还可以对自定义的结构体设定排序关键字:</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Student X, Student Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X.grade &gt; Y.grade;<br>&#125;<br>[...]<br><span class="hljs-built_in">sort</span>(students+<span class="hljs-number">1</span>, students+<span class="hljs-number">1</span>+n, cmp);<br></code></pre></td></tr></table></figure>
-<p>对学生按照成绩从高到低排序。</p>
-<blockquote>
-<p>稳定排序和不稳定排序<br />
-稳定排序指的是：当数据中存在两个相同的值时，排序后不会改变相对位置。例如A和B成绩都是90分，A原先在B前面，排序后不会出现A跑到B后面的情况，这就是稳定排序。<br />
-考试中两种都可以用，问题不大。</p>
-</blockquote>
-<h2 id="2-algorithm头文件中的其他函数"><a class="markdownIt-Anchor" href="#2-algorithm头文件中的其他函数"></a> 2、algorithm头文件中的其他函数</h2>
-<h3 id="11-倒序函数"><a class="markdownIt-Anchor" href="#11-倒序函数"></a> 1.1、倒序函数</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">reverse</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//将目标区间内的值倒置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">例如： 数组&#123;1,1,4,5,1,4&#125;被倒置后会变成&#123;4,1,5,4,1,1&#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-<p>使用方法和sort十分类似，区间也是左闭右开。<br />
-<font color=green>实际上，C++和许多语言的内置函数默认都是左闭右开的</font></p>
-<h3 id="12-取最大值-最小值的函数"><a class="markdownIt-Anchor" href="#12-取最大值-最小值的函数"></a> 1.2、取最大值、最小值的函数</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">max_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最大值</span><br><span class="hljs-built_in">min_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最小值</span><br></code></pre></td></tr></table></figure>
-<h2 id="3-命名空间std中的函数"><a class="markdownIt-Anchor" href="#3-命名空间std中的函数"></a> 3、命名空间std中的函数</h2>
-<p>要使用命名空间std中的函数，你需要像这样做：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;...&gt;</span></span><br>[...]<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std; <span class="hljs-comment">//在引用完头文件后加上这句话</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>主要有以下三个函数</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">max</span>(a,b); <span class="hljs-comment">//返回a和b中的较大者</span><br><span class="hljs-built_in">min</span>(a,b); <span class="hljs-comment">//返回a和b中的较小者</span><br><span class="hljs-built_in">swap</span>(a,b); <span class="hljs-comment">//将a和b的值交换</span><br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>注意，以上所有的函数都是C++特有的，使用时请保证文件扩展名为.cpp<br />
-且上面的所有函数都是模板函数，这意味着可以任何数据类型都可以使用（前提是为该数据类型定义了大于、小于预算符），例如，排序函数可以对int数组排序，也可以对double、float甚至字符排序。</p>
-</blockquote>
-<h2 id="4-字符判断的函数"><a class="markdownIt-Anchor" href="#4-字符判断的函数"></a> 4、字符判断的函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cctype&gt;</span></span><br><span class="hljs-comment">//上面的是C++的头文件，C语言头文件为#include&lt;ctype.h&gt;</span><br><span class="hljs-comment">//其实只要文件名结尾是.cpp，就没什么区别</span><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isdigit</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是数字（&#x27;0&#x27;~&#x27;9&#x27;)</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isalpha</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是英文字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是大写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">islower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是小写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">toupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为大写后的字符</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">tolower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为小写后的字符</span><br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>以上bool的返回值，在C语言中是int</p>
-</blockquote>
-<h2 id="5-字符串函数"><a class="markdownIt-Anchor" href="#5-字符串函数"></a> 5、字符串函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-comment">//C语言中是string.h</span><br><br><span class="hljs-comment">//非常常用的一个函数（个人觉得）</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> * <span class="hljs-title">memset</span> <span class="hljs-params">( <span class="hljs-keyword">void</span> * ptr, <span class="hljs-keyword">int</span> value, <span class="hljs-keyword">size_t</span> num)</span></span>;<span class="hljs-comment">//以字节方式填充一个数组</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">strcmp</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str1, <span class="hljs-keyword">char</span>* str2)</span></span>;<span class="hljs-comment">//以字典序比较两个函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">strlen</span> <span class="hljs-params">(<span class="hljs-keyword">char</span> * str )</span></span>;<br></code></pre></td></tr></table></figure>
-<p>其实字符串内置的函数很多，但是太难记了，个人人为实用的就以上几个。<br />
-接下来重点说一下memset这个函数。<br />
-memset第一个参数是一个指针，可以是字符串的头指针也可以是任何数组的指针；第二个参数是想要设置每个字节的值；第三个参数是想要填充的字节个数,第三个参数一般设置为sizeof(ptr)。<br />
-举个栗子：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(str,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/0&#x27;</span><br><span class="hljs-built_in">memset</span>(str,<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/a&#x27;</span><br><br><span class="hljs-keyword">int</span> num[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为0</span><br><span class="hljs-comment">//以下要注意！！！！</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">5</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//并不是将num全部设置为5，因为int在c语言中占4个字节</span><br><span class="hljs-comment">//但是可以这样：</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0x3f</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为一个非常大的数</span><br></code></pre></td></tr></table></figure>
-<p><font color=red>总之，memset在设置字符时，可以直接赋值。而对于int或者其他类型的，并不是特别适用。但是如果想将int数组初始化为0或者无穷大，可以考虑使用memset。</font></p>
-<h1 id="二-语法小技巧"><a class="markdownIt-Anchor" href="#二-语法小技巧"></a> 二、语法小技巧</h1>
-<h2 id="1-for循环"><a class="markdownIt-Anchor" href="#1-for循环"></a> 1、for循环</h2>
-<p>for循环其实可以这么写：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>还可以这么写(慎用):</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _for(i,a,b) for( int i=(a); i&lt;(b); ++i)</span><br><br>_for(i,<span class="hljs-number">1</span>,n);<br></code></pre></td></tr></table></figure>
-<h2 id="2-判断语句避免翻车的方法"><a class="markdownIt-Anchor" href="#2-判断语句避免翻车的方法"></a> 2、判断语句避免翻车的方法</h2>
-<p>有人if判断语句会这么写</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(a==<span class="hljs-number">1</span>) <span class="hljs-comment">//很容易写成a=1，且不易察觉</span><br>&#123;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
-<p>但是如果换一种写法</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(<span class="hljs-number">1</span>==a)<br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>这样如果不小心漏了一个等号，编译器就会报错，提醒我们。</p>
-<h2 id="3-利用好全局变量"><a class="markdownIt-Anchor" href="#3-利用好全局变量"></a> 3、利用好全局变量</h2>
-<p>将全局变量定义在main函数外，其初始值会全部被设置为0，利用这一特点可以省去初始化的工夫。此外，数组定义在main函数外，其空间可以更大（int类型最大好像是10000*10000来着）</p>
-<h1 id="三-没了"><a class="markdownIt-Anchor" href="#三-没了"></a> 三、没了</h1>
-<p>可能有人3.10下午就要上机了，先写这么多，想起来再补吧。<br />
-考试是可以应付的，但是希望读者能扬弃本文内容，将来形成良好的代码习惯。<br />
-<font color=orange size=7>祝考试顺利</font></p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++之STL简易食用指南</title>
-    <url>/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="一-何为stl"><a class="markdownIt-Anchor" href="#一-何为stl"></a> 一、何为STL</h1>
-<blockquote>
-<p><em>STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。</em><br />
-————摘自C语言中文网</p>
-</blockquote>
-<h1 id="二-容器"><a class="markdownIt-Anchor" href="#二-容器"></a> 二、容器</h1>
-<p><font color=orange>以下代码中的T可以是任何一中数据类型,可以是自定义类型，甚至可以嵌套。</font></p>
-<h2 id="1-栈"><a class="markdownIt-Anchor" href="#1-栈"></a> 1、栈</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stack&gt;</span></span><br><br><span class="hljs-comment">//声明：</span><br>stack&lt;T&gt;mystack;<br><br><span class="hljs-comment">//常用方法：</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//压栈</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出栈</span><br>T mystack.<span class="hljs-built_in">top</span>(); <span class="hljs-comment">//返回栈顶的元素</span><br><span class="hljs-keyword">int</span> mystack.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回栈中元素个数</span><br><span class="hljs-keyword">bool</span> mystack.<span class="hljs-built_in">empty</span>(); <span class="hljs-comment">//判断栈是否为空</span><br></code></pre></td></tr></table></figure>
-<h2 id="2-队列"><a class="markdownIt-Anchor" href="#2-队列"></a> 2、队列</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><br><span class="hljs-comment">//声明</span><br>queue&lt;T&gt;myqueue;<br><br><span class="hljs-comment">//常用方法</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//入队</span><br>T myqueue.<span class="hljs-built_in">front</span>(); <span class="hljs-comment">//返回队头元素</span><br>T myqueue.<span class="hljs-built_in">back</span>(); <span class="hljs-comment">//返回队尾元素</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出队</span><br><span class="hljs-keyword">int</span> myqueue.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回队列中元素个数</span><br><span class="hljs-keyword">bool</span> myqueue.<span class="hljs-built_in">isempty</span>(); <span class="hljs-comment">//判断队列是否为空</span><br></code></pre></td></tr></table></figure>
-<h3 id="双端队列deque"><a class="markdownIt-Anchor" href="#双端队列deque"></a> 双端队列deque</h3>
-<p>双端队列可以在队列的两端进行存取操作，包含在头文件deque中，声明方法与普通队列类似。<br />
-接下来使用表格形式来展示部分常用的方法</p>
-<table>
-<thead>
-<tr>
-<th>方法名</th>
-<th style="text-align:center">用处</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>front()</td>
-<td style="text-align:center">返回第一个元素</td>
-</tr>
-<tr>
-<td>back()</td>
-<td style="text-align:center">返回最后一个元素</td>
-</tr>
-<tr>
-<td>push_back()</td>
-<td style="text-align:center">在序列的尾部添加一个元素</td>
-</tr>
-<tr>
-<td>push_front()</td>
-<td style="text-align:center">在序列的头部添加一个元素</td>
-</tr>
-<tr>
-<td>pop_back()</td>
-<td style="text-align:center">移除容器尾部的元素</td>
-</tr>
-<tr>
-<td>pop_front()</td>
-<td style="text-align:center">移除容器头部的元素</td>
-</tr>
-</tbody>
-</table>
-<p>deque和vector的作用十分类似，但实际上deque更适合频繁的入队、出队操作。</p>
-<h3 id="优先队列priority_queue"><a class="markdownIt-Anchor" href="#优先队列priority_queue"></a> 优先队列priority_queue</h3>
-<p>普通的队列是一个先进先出的序列，而优先队列会在队内根据优先级对元素进行排序，是一种<em>先进最高级先出</em>的队列。其本质上是一个堆,每次出队时，会将队列内优先级最高的元素弹出。</p>
-<table>
-<thead>
-<tr>
-<th>方法名</th>
-<th style="text-align:center">用处</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>top</td>
-<td style="text-align:center">访问队头元素</td>
-</tr>
-<tr>
-<td>empty</td>
-<td style="text-align:center">队列是否为空</td>
-</tr>
-<tr>
-<td>size</td>
-<td style="text-align:center">返回队列内元素个数</td>
-</tr>
-<tr>
-<td>push</td>
-<td style="text-align:center">插入元素到队尾 (并排序)</td>
-</tr>
-<tr>
-<td>pop</td>
-<td style="text-align:center">弹出队头元素</td>
-</tr>
-</tbody>
-</table>
-<p>除了front改为top外，其他方法没有什么区别。<br />
-优先队列比较复杂的是声明操作,其定义为：<br />
-priority_queue&lt;Type, Container, Functional&gt;<br />
-Type是模板类型，Container是容器，Functional是仿函数（一般写为greater<T>或less<T>）</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><span class="hljs-comment">//下面这个声明新建一个将int从小到大排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,greater&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br><span class="hljs-comment">//下面这个声明新建一个将int从大到小排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq2;<br><span class="hljs-comment">//！！！注意，部分编译器会将“&gt;&gt;”认成右移运算符，所以需要加一个空格以区分</span><br></code></pre></td></tr></table></figure>
-<h4 id="在优先队列中使用自定义类"><a class="markdownIt-Anchor" href="#在优先队列中使用自定义类"></a> 在优先队列中使用自定义类</h4>
-<p>在实际运用中很经常遇到的情况是对含有多个属性的记录进行排序，这时候就要使用自定义类（结构体）。而如果直接将上述代码中的int改为自定义结构体，实际上是会报错的。因为我们并没有为结构体定义如何比较他们的大小（也就是优先级），两个学生，谁的优先级更高，到底是由身高、体重还是成绩决定呢？<br />
-所以，在使用自定义类（结构体）时，需要先进行运算符重载（只需要重载小于号）：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">int</span> grade,height;<br>    <span class="hljs-built_in">Student</span>(<span class="hljs-keyword">int</span> grade, <span class="hljs-keyword">int</span> height)<br>    &#123;<br>        <span class="hljs-keyword">this</span>.grade=grade;<br>        <span class="hljs-keyword">this</span>.height=height;<br>    &#125;<br>    <span class="hljs-comment">//下面是重载运算符的部分</span><br>    <span class="hljs-keyword">bool</span> <span class="hljs-keyword">operator</span> &lt; (<span class="hljs-keyword">const</span> Student&amp; a) <span class="hljs-keyword">const</span><br>    &#123;<br>        <span class="hljs-comment">//若成绩一样就用身高</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.grade==a.grade)<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.height&lt;a.height;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.grade&lt;a.grade;<br>    &#125;<br>&#125;<br><br>[...]<br><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br></code></pre></td></tr></table></figure>
-<p>这样就可以声明一个优先队列，队列优先弹出成绩高的学生，若成绩一样，就优先弹出身高高的学生。<br />
-当然，也可以通过自定义仿函数的方法来定义优先级，本着实用主义的原则，会其中一种方法就可以，这里不再赘述。</p>
-<h2 id="3-映射map"><a class="markdownIt-Anchor" href="#3-映射map"></a> 3、映射map</h2>
-<p>map的定义类似python中的字典，是一个键值对映射，包含两个模板参数key和value。map的内部实现是一棵红黑树，所以<strong>key必须定义小于号运算符</strong>。map也可以被当做哈希表使用。由于map内部已经定义“[]”运算符，所以元素的存取可以通过下标来实现，十分方便。<br />
-举个最常用的例子：统计单词重复出现的次数</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//健是字符串，值是整型</span><br>map&lt;string,<span class="hljs-keyword">int</span>&gt;words;<br>[...]<br>string article[<span class="hljs-number">101</span>];<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    map[article[i]]++;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>需要注意的是，当使用“[]”操作没有找到对应的键时，map会自动创建一个值为0的键值对，积累之后，可能会产生大量的无意义记录，占用空间，并且影响运行速度。所以建议在使用下标获取值之前，事先使用map.find()找到该元素（该方法返回一个迭代器，若不存在，则会返回map.end()）。</p>
-<h1 id="二-算法"><a class="markdownIt-Anchor" href="#二-算法"></a> 二、算法</h1>
-<p>算法在上一篇《C语言的上机小技巧》已经说的差不多了，这里不再赘述。</p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数论基础</title>
-    <url>/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h1 id="零-概述"><a class="markdownIt-Anchor" href="#零-概述"></a> 零、概述</h1>
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="零、概述 由于高中学习算法时对数论这个领域的抽象概念十分难以接受，所以基本没有学习多少数论知识，近日在哔哩哔哩大学看到一个相关的视频，于是便重新开始学习。本文算是对高中没学的知识的一个补充。 若没有特别说明，本文所有字母均代表整数  一、裴蜀定理   又称贝祖定理(Bézout’s lemma)  a,b{a},{b}a,b为不全为零的整数，则且gcd(a,b)&#x3D;dgcd(a,b)&#x3D;dgcd(a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数论基础">
+<meta property="og:url" content="http://example.com/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="零、概述 由于高中学习算法时对数论这个领域的抽象概念十分难以接受，所以基本没有学习多少数论知识，近日在哔哩哔哩大学看到一个相关的视频，于是便重新开始学习。本文算是对高中没学的知识的一个补充。 若没有特别说明，本文所有字母均代表整数  一、裴蜀定理   又称贝祖定理(Bézout’s lemma)  a,b{a},{b}a,b为不全为零的整数，则且gcd(a,b)&#x3D;dgcd(a,b)&#x3D;dgcd(a">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-18T14:39:29.000Z">
+<meta property="article:modified_time" content="2022-03-18T16:28:21.490Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="数论">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>数论基础 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="数论基础">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-author" aria-hidden="true"></i>
+      周洪锋
+    </span>
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-03-18 22:39" pubdate>
+        2022年3月18日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      26 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">数论基础</h1>
+            
+            <div class="markdown-body">
+              <h1 id="零-概述"><a class="markdownIt-Anchor" href="#零-概述"></a> 零、概述</h1>
 <p>由于高中学习算法时对数论这个领域的抽象概念十分难以接受，所以基本没有学习多少数论知识，近日在哔哩哔哩大学看到一个相关的视频，于是便重新开始学习。本文算是对高中没学的知识的一个补充。<br />
 <font color=orange>若没有特别说明，本文所有字母均代表整数</font></p>
 <h1 id="一-裴蜀定理-font-colorgrey-size4-又称贝祖定理bézouts-lemmafont"><a class="markdownIt-Anchor" href="#一-裴蜀定理-font-colorgrey-size4-又称贝祖定理bézouts-lemmafont"></a> 一、裴蜀定理 <font color=grey size=4 >  又称贝祖定理(Bézout’s lemma)</font></h1>
@@ -711,16 +347,249 @@ y=x&#x27;-\lfloor\frac{a}{b}\rfloor*y
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mopen">⌊</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">b</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">⌋</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
 <p>所以，当我们利用欧几里得算法计算最大公约数时，我们可以“顺便”递推求出上面这个不定方程的解。<br />
 扩展欧几里得算法的C\C++ 代码实现如下：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> LL;<br><span class="hljs-comment">//注意，后两个参数使用的是引用</span><br><span class="hljs-function">LL <span class="hljs-title">exgcd</span><span class="hljs-params">(LL a,LL b,LL &amp;x,LL &amp;y)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)<br>	&#123;<br>		x=<span class="hljs-number">1</span>;<br>		y=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">return</span> a;<br>	&#125;<br>	LL d=<span class="hljs-built_in">exgcd</span>(b,a%b,x,y);<br>	LL temp=x;<br>	x=y;<br>	y=temp-a/b*y;<br>	<span class="hljs-keyword">return</span> d;<br>&#125;<br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>算法</category>
-        <category>数论</category>
-      </categories>
-      <tags>
-        <tag>ACM</tag>
-        <tag>数论</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-</search>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></div></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> LL;<br><span class="hljs-comment">//注意，后两个参数使用的是引用</span><br><span class="hljs-function">LL <span class="hljs-title">exgcd</span><span class="hljs-params">(LL a,LL b,LL &amp;x,LL &amp;y)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)<br>	&#123;<br>		x=<span class="hljs-number">1</span>;<br>		y=<span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">return</span> a;<br>	&#125;<br>	LL d=<span class="hljs-built_in">exgcd</span>(b,a%b,x,y);<br>	LL temp=x;<br>	x=y;<br>	y=temp-a/b*y;<br>	<span class="hljs-keyword">return</span> d;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E8%AE%BA/">数论</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/ACM/">ACM</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E8%AE%BA/">数论</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！ 在评论区留言时留下你的邮箱，被回复时会收到邮件提醒噢！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/">
+                        <span class="hidden-mobile">C++之STL简易食用指南</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"w0iHyrdg8nAXCVVW6dGcK4cp-gzGzoHsz","appKey":"YzV4ncLT9uoIbLPHSqzjjEJn","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"archive></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- KaTeX -->
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0/dist/katex.min.css" />
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
