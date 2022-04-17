@@ -112,99 +112,6 @@ Type是模板类型，Container是容器，Functional是仿函数（一般写为
       </tags>
   </entry>
   <entry>
-    <title>C语言上机事半功倍的小技巧</title>
-    <url>/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<h1 id="零-前言"><a class="markdownIt-Anchor" href="#零-前言"></a> 零、前言</h1>
-<p>本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。<strong>如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。</strong></p>
-<blockquote>
-<p>UPD:<br />
-2022-03-10 13:44: 增加了algorithm的其他函数和命名空间std中的函数。</p>
-</blockquote>
-<h1 id="一-实用的内置函数"><a class="markdownIt-Anchor" href="#一-实用的内置函数"></a> 一、实用的内置函数</h1>
-<h2 id="1-排序函数"><a class="markdownIt-Anchor" href="#1-排序函数"></a> 1、排序函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-comment">//快速排序（不稳定）</span><br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br><span class="hljs-comment">//稳定排序</span><br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br></code></pre></td></tr></table></figure>
-<p>sort函数有三个参数，前两个参数是指针，代表需要排序的区间（左闭右开），第三个参数是<em>函数指针</em>，<strong>可填可不填</strong>，不填就默认递增排序。sort函数无返回值，是对于数组做原地排序。<br />
-例如，上述代码就是对a数组的第1个到第n个元素排序（笔者习惯数组下标从1开始）。如果习惯的下标是从0开始，那就是</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a,a+n);<br></code></pre></td></tr></table></figure>
-<p>更普遍的，sort(a+p,a+q)就是将a[p]~a[q-1]排序。</p>
-<h3 id="递减的排序怎么办"><a class="markdownIt-Anchor" href="#递减的排序怎么办"></a> 递减的排序怎么办？</h3>
-<p>解决办法有两个：<br />
-1、将待排序数组全部取相反数，按默认的递增排序后再取一次相反数即可。<br />
-<font color=red>2、编写cmp函数</font><br />
-这里可能比较复杂，看不懂就可以不用看了。<br />
-首先，声明一个cmp函数（名字未必要是cmp，符合C语言规范即可）</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> X,<span class="hljs-keyword">int</span> Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X&gt;Y;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>然后将cmp函数指针作为sort的第三个参数即可。</p>
-<blockquote>
-<p>函数指针是指针的一种，只写函数名，就是该函数的函数指针。<br />
-bool是C++的数据类型，只有1和0（true和false）两种取值。</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br></code></pre></td></tr></table></figure>
-<p>还可以对自定义的结构体设定排序关键字:</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Student X, Student Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X.grade &gt; Y.grade;<br>&#125;<br>[...]<br><span class="hljs-built_in">sort</span>(students+<span class="hljs-number">1</span>, students+<span class="hljs-number">1</span>+n, cmp);<br></code></pre></td></tr></table></figure>
-<p>对学生按照成绩从高到低排序。</p>
-<blockquote>
-<p>稳定排序和不稳定排序<br />
-稳定排序指的是：当数据中存在两个相同的值时，排序后不会改变相对位置。例如A和B成绩都是90分，A原先在B前面，排序后不会出现A跑到B后面的情况，这就是稳定排序。<br />
-考试中两种都可以用，问题不大。</p>
-</blockquote>
-<h2 id="2-algorithm头文件中的其他函数"><a class="markdownIt-Anchor" href="#2-algorithm头文件中的其他函数"></a> 2、algorithm头文件中的其他函数</h2>
-<h3 id="11-倒序函数"><a class="markdownIt-Anchor" href="#11-倒序函数"></a> 1.1、倒序函数</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">reverse</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//将目标区间内的值倒置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">例如： 数组&#123;1,1,4,5,1,4&#125;被倒置后会变成&#123;4,1,5,4,1,1&#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-<p>使用方法和sort十分类似，区间也是左闭右开。<br />
-<font color=green>实际上，C++和许多语言的内置函数默认都是左闭右开的</font></p>
-<h3 id="12-取最大值-最小值的函数"><a class="markdownIt-Anchor" href="#12-取最大值-最小值的函数"></a> 1.2、取最大值、最小值的函数</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">max_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最大值</span><br><span class="hljs-built_in">min_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最小值</span><br></code></pre></td></tr></table></figure>
-<h2 id="3-命名空间std中的函数"><a class="markdownIt-Anchor" href="#3-命名空间std中的函数"></a> 3、命名空间std中的函数</h2>
-<p>要使用命名空间std中的函数，你需要像这样做：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;...&gt;</span></span><br>[...]<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std; <span class="hljs-comment">//在引用完头文件后加上这句话</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>主要有以下三个函数</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">max</span>(a,b); <span class="hljs-comment">//返回a和b中的较大者</span><br><span class="hljs-built_in">min</span>(a,b); <span class="hljs-comment">//返回a和b中的较小者</span><br><span class="hljs-built_in">swap</span>(a,b); <span class="hljs-comment">//将a和b的值交换</span><br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>注意，以上所有的函数都是C++特有的，使用时请保证文件扩展名为.cpp<br />
-且上面的所有函数都是模板函数，这意味着可以任何数据类型都可以使用（前提是为该数据类型定义了大于、小于预算符），例如，排序函数可以对int数组排序，也可以对double、float甚至字符排序。</p>
-</blockquote>
-<h2 id="4-字符判断的函数"><a class="markdownIt-Anchor" href="#4-字符判断的函数"></a> 4、字符判断的函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cctype&gt;</span></span><br><span class="hljs-comment">//上面的是C++的头文件，C语言头文件为#include&lt;ctype.h&gt;</span><br><span class="hljs-comment">//其实只要文件名结尾是.cpp，就没什么区别</span><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isdigit</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是数字（&#x27;0&#x27;~&#x27;9&#x27;)</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isalpha</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是英文字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是大写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">islower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是小写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">toupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为大写后的字符</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">tolower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为小写后的字符</span><br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>以上bool的返回值，在C语言中是int</p>
-</blockquote>
-<h2 id="5-字符串函数"><a class="markdownIt-Anchor" href="#5-字符串函数"></a> 5、字符串函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-comment">//C语言中是string.h</span><br><br><span class="hljs-comment">//非常常用的一个函数（个人觉得）</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> * <span class="hljs-title">memset</span> <span class="hljs-params">( <span class="hljs-keyword">void</span> * ptr, <span class="hljs-keyword">int</span> value, <span class="hljs-keyword">size_t</span> num)</span></span>;<span class="hljs-comment">//以字节方式填充一个数组</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">strcmp</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str1, <span class="hljs-keyword">char</span>* str2)</span></span>;<span class="hljs-comment">//以字典序比较两个函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">strlen</span> <span class="hljs-params">(<span class="hljs-keyword">char</span> * str )</span></span>;<br></code></pre></td></tr></table></figure>
-<p>其实字符串内置的函数很多，但是太难记了，个人人为实用的就以上几个。<br />
-接下来重点说一下memset这个函数。<br />
-memset第一个参数是一个指针，可以是字符串的头指针也可以是任何数组的指针；第二个参数是想要设置每个字节的值；第三个参数是想要填充的字节个数,第三个参数一般设置为sizeof(ptr)。<br />
-举个栗子：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(str,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/0&#x27;</span><br><span class="hljs-built_in">memset</span>(str,<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/a&#x27;</span><br><br><span class="hljs-keyword">int</span> num[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为0</span><br><span class="hljs-comment">//以下要注意！！！！</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">5</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//并不是将num全部设置为5，因为int在c语言中占4个字节</span><br><span class="hljs-comment">//但是可以这样：</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0x3f</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为一个非常大的数</span><br></code></pre></td></tr></table></figure>
-<p><font color=red>总之，memset在设置字符时，可以直接赋值。而对于int或者其他类型的，并不是特别适用。但是如果想将int数组初始化为0或者无穷大，可以考虑使用memset。</font></p>
-<h1 id="二-语法小技巧"><a class="markdownIt-Anchor" href="#二-语法小技巧"></a> 二、语法小技巧</h1>
-<h2 id="1-for循环"><a class="markdownIt-Anchor" href="#1-for循环"></a> 1、for循环</h2>
-<p>for循环其实可以这么写：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>还可以这么写(慎用):</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _for(i,a,b) for( int i=(a); i&lt;(b); ++i)</span><br><br>_for(i,<span class="hljs-number">1</span>,n);<br></code></pre></td></tr></table></figure>
-<h2 id="2-判断语句避免翻车的方法"><a class="markdownIt-Anchor" href="#2-判断语句避免翻车的方法"></a> 2、判断语句避免翻车的方法</h2>
-<p>有人if判断语句会这么写</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(a==<span class="hljs-number">1</span>) <span class="hljs-comment">//很容易写成a=1，且不易察觉</span><br>&#123;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
-<p>但是如果换一种写法</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(<span class="hljs-number">1</span>==a)<br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>这样如果不小心漏了一个等号，编译器就会报错，提醒我们。</p>
-<h2 id="3-利用好全局变量"><a class="markdownIt-Anchor" href="#3-利用好全局变量"></a> 3、利用好全局变量</h2>
-<p>将全局变量定义在main函数外，其初始值会全部被设置为0，利用这一特点可以省去初始化的工夫。此外，数组定义在main函数外，其空间可以更大（int类型最大好像是10000*10000来着）</p>
-<h1 id="三-没了"><a class="markdownIt-Anchor" href="#三-没了"></a> 三、没了</h1>
-<p>可能有人3.10下午就要上机了，先写这么多，想起来再补吧。<br />
-考试是可以应付的，但是希望读者能扬弃本文内容，将来形成良好的代码习惯。<br />
-<font color=orange size=7>祝考试顺利</font></p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HTML解析大法</title>
     <url>/2022/01/17/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/</url>
     <content><![CDATA[<h1 id="html解析大法"><a class="markdownIt-Anchor" href="#html解析大法"></a> HTML解析大法：</h1>
@@ -341,11 +248,103 @@ Selector对象还有extract()方法，获取其中的文字。</p>
       </tags>
   </entry>
   <entry>
-    <title>C/C++字符串处理常用技w巧</title>
+    <title>C语言上机事半功倍的小技巧</title>
+    <url>/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<h1 id="零-前言"><a class="markdownIt-Anchor" href="#零-前言"></a> 零、前言</h1>
+<p>本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。<strong>如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。</strong></p>
+<blockquote>
+<p>UPD:<br />
+2022-03-10 13:44: 增加了algorithm的其他函数和命名空间std中的函数。</p>
+</blockquote>
+<h1 id="一-实用的内置函数"><a class="markdownIt-Anchor" href="#一-实用的内置函数"></a> 一、实用的内置函数</h1>
+<h2 id="1-排序函数"><a class="markdownIt-Anchor" href="#1-排序函数"></a> 1、排序函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-comment">//快速排序（不稳定）</span><br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br><span class="hljs-comment">//稳定排序</span><br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br></code></pre></td></tr></table></figure>
+<p>sort函数有三个参数，前两个参数是指针，代表需要排序的区间（左闭右开），第三个参数是<em>函数指针</em>，<strong>可填可不填</strong>，不填就默认递增排序。sort函数无返回值，是对于数组做原地排序。<br />
+例如，上述代码就是对a数组的第1个到第n个元素排序（笔者习惯数组下标从1开始）。如果习惯的下标是从0开始，那就是</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a,a+n);<br></code></pre></td></tr></table></figure>
+<p>更普遍的，sort(a+p,a+q)就是将a[p]~a[q-1]排序。</p>
+<h3 id="递减的排序怎么办"><a class="markdownIt-Anchor" href="#递减的排序怎么办"></a> 递减的排序怎么办？</h3>
+<p>解决办法有两个：<br />
+1、将待排序数组全部取相反数，按默认的递增排序后再取一次相反数即可。<br />
+<font color=red>2、编写cmp函数</font><br />
+这里可能比较复杂，看不懂就可以不用看了。<br />
+首先，声明一个cmp函数（名字未必要是cmp，符合C语言规范即可）</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> X,<span class="hljs-keyword">int</span> Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X&gt;Y;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>然后将cmp函数指针作为sort的第三个参数即可。</p>
+<blockquote>
+<p>函数指针是指针的一种，只写函数名，就是该函数的函数指针。<br />
+bool是C++的数据类型，只有1和0（true和false）两种取值。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br></code></pre></td></tr></table></figure>
+<p>还可以对自定义的结构体设定排序关键字:</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Student X, Student Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X.grade &gt; Y.grade;<br>&#125;<br>[...]<br><span class="hljs-built_in">sort</span>(students+<span class="hljs-number">1</span>, students+<span class="hljs-number">1</span>+n, cmp);<br></code></pre></td></tr></table></figure>
+<p>对学生按照成绩从高到低排序。</p>
+<blockquote>
+<p>稳定排序和不稳定排序<br />
+稳定排序指的是：当数据中存在两个相同的值时，排序后不会改变相对位置。例如A和B成绩都是90分，A原先在B前面，排序后不会出现A跑到B后面的情况，这就是稳定排序。<br />
+考试中两种都可以用，问题不大。</p>
+</blockquote>
+<h2 id="2-algorithm头文件中的其他函数"><a class="markdownIt-Anchor" href="#2-algorithm头文件中的其他函数"></a> 2、algorithm头文件中的其他函数</h2>
+<h3 id="11-倒序函数"><a class="markdownIt-Anchor" href="#11-倒序函数"></a> 1.1、倒序函数</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">reverse</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//将目标区间内的值倒置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">例如： 数组&#123;1,1,4,5,1,4&#125;被倒置后会变成&#123;4,1,5,4,1,1&#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>使用方法和sort十分类似，区间也是左闭右开。<br />
+<font color=green>实际上，C++和许多语言的内置函数默认都是左闭右开的</font></p>
+<h3 id="12-取最大值-最小值的函数"><a class="markdownIt-Anchor" href="#12-取最大值-最小值的函数"></a> 1.2、取最大值、最小值的函数</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">max_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最大值</span><br><span class="hljs-built_in">min_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最小值</span><br></code></pre></td></tr></table></figure>
+<h2 id="3-命名空间std中的函数"><a class="markdownIt-Anchor" href="#3-命名空间std中的函数"></a> 3、命名空间std中的函数</h2>
+<p>要使用命名空间std中的函数，你需要像这样做：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;...&gt;</span></span><br>[...]<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std; <span class="hljs-comment">//在引用完头文件后加上这句话</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>主要有以下三个函数</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">max</span>(a,b); <span class="hljs-comment">//返回a和b中的较大者</span><br><span class="hljs-built_in">min</span>(a,b); <span class="hljs-comment">//返回a和b中的较小者</span><br><span class="hljs-built_in">swap</span>(a,b); <span class="hljs-comment">//将a和b的值交换</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，以上所有的函数都是C++特有的，使用时请保证文件扩展名为.cpp<br />
+且上面的所有函数都是模板函数，这意味着可以任何数据类型都可以使用（前提是为该数据类型定义了大于、小于预算符），例如，排序函数可以对int数组排序，也可以对double、float甚至字符排序。</p>
+</blockquote>
+<h2 id="4-字符判断的函数"><a class="markdownIt-Anchor" href="#4-字符判断的函数"></a> 4、字符判断的函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cctype&gt;</span></span><br><span class="hljs-comment">//上面的是C++的头文件，C语言头文件为#include&lt;ctype.h&gt;</span><br><span class="hljs-comment">//其实只要文件名结尾是.cpp，就没什么区别</span><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isdigit</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是数字（&#x27;0&#x27;~&#x27;9&#x27;)</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isalpha</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是英文字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是大写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">islower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是小写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">toupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为大写后的字符</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">tolower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为小写后的字符</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>以上bool的返回值，在C语言中是int</p>
+</blockquote>
+<h2 id="5-字符串函数"><a class="markdownIt-Anchor" href="#5-字符串函数"></a> 5、字符串函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-comment">//C语言中是string.h</span><br><br><span class="hljs-comment">//非常常用的一个函数（个人觉得）</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> * <span class="hljs-title">memset</span> <span class="hljs-params">( <span class="hljs-keyword">void</span> * ptr, <span class="hljs-keyword">int</span> value, <span class="hljs-keyword">size_t</span> num)</span></span>;<span class="hljs-comment">//以字节方式填充一个数组</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">strcmp</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str1, <span class="hljs-keyword">char</span>* str2)</span></span>;<span class="hljs-comment">//以字典序比较两个函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">strlen</span> <span class="hljs-params">(<span class="hljs-keyword">char</span> * str )</span></span>;<br></code></pre></td></tr></table></figure>
+<p>其实字符串内置的函数很多，但是太难记了，个人人为实用的就以上几个。<br />
+接下来重点说一下memset这个函数。<br />
+memset第一个参数是一个指针，可以是字符串的头指针也可以是任何数组的指针；第二个参数是想要设置每个字节的值；第三个参数是想要填充的字节个数,第三个参数一般设置为sizeof(ptr)。<br />
+举个栗子：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(str,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/0&#x27;</span><br><span class="hljs-built_in">memset</span>(str,<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/a&#x27;</span><br><br><span class="hljs-keyword">int</span> num[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为0</span><br><span class="hljs-comment">//以下要注意！！！！</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">5</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//并不是将num全部设置为5，因为int在c语言中占4个字节</span><br><span class="hljs-comment">//但是可以这样：</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0x3f</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为一个非常大的数</span><br></code></pre></td></tr></table></figure>
+<p><font color=red>总之，memset在设置字符时，可以直接赋值。而对于int或者其他类型的，并不是特别适用。但是如果想将int数组初始化为0或者无穷大，可以考虑使用memset。</font></p>
+<h1 id="二-语法小技巧"><a class="markdownIt-Anchor" href="#二-语法小技巧"></a> 二、语法小技巧</h1>
+<h2 id="1-for循环"><a class="markdownIt-Anchor" href="#1-for循环"></a> 1、for循环</h2>
+<p>for循环其实可以这么写：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>还可以这么写(慎用):</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _for(i,a,b) for( int i=(a); i&lt;(b); ++i)</span><br><br>_for(i,<span class="hljs-number">1</span>,n);<br></code></pre></td></tr></table></figure>
+<h2 id="2-判断语句避免翻车的方法"><a class="markdownIt-Anchor" href="#2-判断语句避免翻车的方法"></a> 2、判断语句避免翻车的方法</h2>
+<p>有人if判断语句会这么写</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(a==<span class="hljs-number">1</span>) <span class="hljs-comment">//很容易写成a=1，且不易察觉</span><br>&#123;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是如果换一种写法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(<span class="hljs-number">1</span>==a)<br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样如果不小心漏了一个等号，编译器就会报错，提醒我们。</p>
+<h2 id="3-利用好全局变量"><a class="markdownIt-Anchor" href="#3-利用好全局变量"></a> 3、利用好全局变量</h2>
+<p>将全局变量定义在main函数外，其初始值会全部被设置为0，利用这一特点可以省去初始化的工夫。此外，数组定义在main函数外，其空间可以更大（int类型最大好像是10000*10000来着）</p>
+<h1 id="三-没了"><a class="markdownIt-Anchor" href="#三-没了"></a> 三、没了</h1>
+<p>可能有人3.10下午就要上机了，先写这么多，想起来再补吧。<br />
+考试是可以应付的，但是希望读者能扬弃本文内容，将来形成良好的代码习惯。<br />
+<font color=orange size=7>祝考试顺利</font></p>
+]]></content>
+      <categories>
+        <category>课内</category>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C/C++字符串处理常用技巧</title>
     <url>/2022/04/16/C-C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E6%8A%80%E5%B7%A7/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
 <p>由于在做题时，经常纠结到底该使用C还是C<ins>风格的字符串，而且对读入方式也比较纠结，所以写一篇blog来总结一下C/C</ins>中字符串处理的技巧。</p>
-<p>[TOC]</p>
 <h1 id="c语言"><a class="markdownIt-Anchor" href="#c语言"></a> C语言</h1>
 <p>与其说C语言的字符串是字符串，不如说是字符数组，C语言中对字符串的操作也大多依托于指针。</p>
 <h2 id="声明字符串"><a class="markdownIt-Anchor" href="#声明字符串"></a> 声明字符串</h2>
@@ -800,95 +799,6 @@ x \equiv a_n(mod \quad m_n)
       </tags>
   </entry>
   <entry>
-    <title>计算机中的数据编码</title>
-    <url>/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/</url>
-    <content><![CDATA[<h1 id="计算机中的数据编码"><a class="markdownIt-Anchor" href="#计算机中的数据编码"></a> 计算机中的数据编码</h1>
-<h2 id="一-进制及其转化"><a class="markdownIt-Anchor" href="#一-进制及其转化"></a> 一、进制及其转化</h2>
-<p>冯诺依曼计算机体系中，为了在物理上表示方便，采用了二进制编码的形式。由于进制等内容较为简单，中学、大学知识中有均提及，此处不再赘述。<strong>本文只讨论纯整数编码</strong></p>
-<h2 id="二-原码"><a class="markdownIt-Anchor" href="#二-原码"></a> 二、原码</h2>
-<p>原码是最简单的一种编码形式，由1位符号位和n-1位数据位构成。以<strong>4位</strong>码位为例，第一位是符号位，0表示正数，1表示负数，其余位由于表示该数值的绝对值。<br />
-可以用以下数学公式来表示<br />
-<s>暂时还没学会lateX，先上个手写的</s></p>
-<p><img src="/img/data_code/yuanma_fml.PNG" alt="原码表达公式" /></p>
-<p>这是数学上的公式表示，显然不够直观，接下来在数轴（仍然是码位为4的情况）上表示数值与编码的关系。<br />
-<strong>其中数轴下方是编码（为直观起见，转化成十进制），数轴上方是在计算机中代表的实际数值</strong></p>
-<p><img src="/img/data_code/yuanma_line.PNG" alt="原码在数轴上的呈现" /><br />
-可以看到，如果将数轴平分为两部分[0,7]与[8,15]，则左半轴均为正数，右半轴均为负数。这便是原码区分正负数的方法。</p>
-<h1 id="三-反码"><a class="markdownIt-Anchor" href="#三-反码"></a> 三、反码</h1>
-<p>反码在数学上的定义为：<br />
-<img src="/img/data_code/fanma_fml.PNG" alt="反码表达公式" /><br />
-易从公式中看出，当X的值小于等于0时2的n次方-1实际上就是一串全1的编码，而一串全1的编码按位减去X即为对X按位求非。<br />
-由以上可以得出一个反码的更直观定义，即：</p>
-<blockquote>
-<p>当X为正数时X的反码即为它本身，X为负数时X的反码为X的原码的<strong>非符号位</strong>按位求非。</p>
-</blockquote>
-<p>这便是“反码”中“反”字的来源。</p>
-<p>下面是反码在数轴上的分布：<br />
-<img src="/img/data_code/fanma_line.PNG" alt="反码在数轴上的呈现" /><br />
-不难发现，反码与原码的区别就是反码在右半轴的分布与原码恰好对称。</p>
-<p>在《计算机组成与系统结构[裘雪红]》一书中，对反码有如下描述：</p>
-<blockquote>
-<p>反码通常用来作为由原码求补码或者由补码求原码的中间过渡。</p>
-</blockquote>
-<p>可见，反码在计算机中实际的使用场景应该很少。</p>
-<h1 id="四-补码"><a class="markdownIt-Anchor" href="#四-补码"></a> 四、补码</h1>
-<p>补码在数学上的定义为：<br />
-<img src="/img/data_code/buma_fml.PNG" alt="补码表达公式" /><br />
-不难发现，负数与其自身的补码相加后就等于2的n次方，这种关系可以与角度中的互补类比，如30°与150°互补，这便是“补码”中“补”字的来源。<br />
-值得一提的是，由于编码位数为n位，所以该编码是<strong>mod 2的n次方</strong>意义下的，所以负数与其自身补码相加实际上发生了溢出，实际上的值变为了0。<br />
-补码也可以有如下的定义：</p>
-<blockquote>
-<p>正数的补码即为其原码本身，负数的补码为其反码+1</p>
-</blockquote>
-<p>补码在数轴上的分布如下图所示<br />
-<img src="/img/data_code/buma_fml.PNG" alt="补码在数轴上的呈现" /><br />
-可以看出，补码在右半轴的分布相对于反码右移了一个单位。</p>
-<h2 id="1求补运算"><a class="markdownIt-Anchor" href="#1求补运算"></a> 1.求补运算</h2>
-<p>计算机中还存在一中与补码的求法十分相似的运算，称为求补运算，十分容易和“求补码”混淆。其运算过程如下：</p>
-<blockquote>
-<p>将编码按位取反（包括符号位），然后+1</p>
-</blockquote>
-<p>求补运算与“求补码”的区别如下：</p>
-<ul>
-<li>求补运算将符号位也取反，而“求补码”只需要将数据位取反</li>
-<li>求补运算对正负数都有效，而整数求补码后仍是它本身</li>
-<li>任何数求补后都会变成其相反数</li>
-</ul>
-<p><strong>求补运算在计算机的数值计算中十分常用</strong></p>
-<h2 id="2补码的特性"><a class="markdownIt-Anchor" href="#2补码的特性"></a> 2.补码的特性</h2>
-<ul>
-<li>与原码和反码不同，补码不存在“正零”和“负零”的区别。</li>
-<li>[X-Y]补=[X]补+[-Y]补=[X]补+（[Y]补）求补，这一特性使得补码在计算机的运算中非常常用。</li>
-</ul>
-<p><img src="/img/data_code/buma_cal.PNG" alt="补码的加减特性" /></p>
-<h2 id="3变形补码双符号位补码"><a class="markdownIt-Anchor" href="#3变形补码双符号位补码"></a> 3.变形补码（双符号位补码）</h2>
-<p>在实际计算中，为了判断加减的结果是否溢出，常常设置两个符号位。若加减结果的两个符号位不相等（01或10），则发生了溢出；如果符号相等，则不发生溢出。</p>
-<h3 id="变形补码的实质"><a class="markdownIt-Anchor" href="#变形补码的实质"></a> 变形补码的实质</h3>
-<p>不难发现，由于多出来的一位符号位，n位变形补码的数据范围只有补码的一半，将其在数轴上画出后：<br />
-<img src="/img/data_code/bianxingbm.PNG" alt="补码与变形补码" /><br />
-从图中可以看出，符号位为01和10的情况在数轴上是存在的，我们或许可以强行将其看成补码，则可以获取其代表的值。但变形补码的意义在于判断计算结果的溢出，所以我们将变形补码的范围压缩到数轴最左边和最右边分别1/4部分，将中间一部分视为“禁区”，当计算结果进入中间时，计算机就抛出“溢出”的计算结果。<br />
-<strong>可见，变形补码是舍弃一部分数据范围以保证数据没有发生溢出</strong></p>
-<p>这也是在《计组》后续的章节中，恢复余数法中间步骤出现了01的符号位而不影响计算的原因<br />
-<img src="/img/data_code/bxbm_cal.PNG" alt="用恢复余数法计算除法的步骤" /><br />
-<strong>这里的变形补码是中间的计算结果，可以将其看成有效的数值参与下一步计算，但是若结果出现了01或10的符号位，则是不符合规范的，发生了溢出。</strong></p>
-<h1 id="四-移码"><a class="markdownIt-Anchor" href="#四-移码"></a> 四、移码</h1>
-<p>移码是数值在模2的n次方意义下平移后的结果。如上图数轴所示，想要比较以上三种编码的数值的大小，均无法通过编码来比较。而移码有着“单调”的特点，即随着编码的增大，编码所代表的数值也增大。<br />
-移码的定义：2的n次方+X<br />
-可以证明，移码与补码之间存在关系：<strong>移码和补码的符号位是相反的</strong></p>
-<h2 id="移码的使用场景举例"><a class="markdownIt-Anchor" href="#移码的使用场景举例"></a> 移码的使用场景举例</h2>
-<p>在IEEE754标准中，其指数使用的是移码。不过这里的移码有所不同<br />
-，移动的位数是127（单精度）/1023（双精度），这里为什么是127/1023而不是128/1024？很多人可能没有深究这里的原因。<br />
-其实原因很简单，IEEE754标准中对尾数要求规格化，即小数点后第一位必须为1，且规定把这个1给省略。这里移码比正常少位移一位，就是考虑到这里的这个1。如果位移128位，尾数的表达就是0.1xxxx，如果位移127位，尾数的表达就是1.xxxxx，<strong>这样一来，增大了浮点数可以表达的范围</strong>。</p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>计组</category>
-      </categories>
-      <tags>
-        <tag>计算机组成原理</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数论基础</title>
     <url>/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="零-概述"><a class="markdownIt-Anchor" href="#零-概述"></a> 零、概述</h1>
@@ -1025,6 +935,95 @@ y=y_0-\frac{k}{g}*a
         <tag>数论</tag>
         <tag>ACM</tag>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机中的数据编码</title>
+    <url>/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/</url>
+    <content><![CDATA[<h1 id="计算机中的数据编码"><a class="markdownIt-Anchor" href="#计算机中的数据编码"></a> 计算机中的数据编码</h1>
+<h2 id="一-进制及其转化"><a class="markdownIt-Anchor" href="#一-进制及其转化"></a> 一、进制及其转化</h2>
+<p>冯诺依曼计算机体系中，为了在物理上表示方便，采用了二进制编码的形式。由于进制等内容较为简单，中学、大学知识中有均提及，此处不再赘述。<strong>本文只讨论纯整数编码</strong></p>
+<h2 id="二-原码"><a class="markdownIt-Anchor" href="#二-原码"></a> 二、原码</h2>
+<p>原码是最简单的一种编码形式，由1位符号位和n-1位数据位构成。以<strong>4位</strong>码位为例，第一位是符号位，0表示正数，1表示负数，其余位由于表示该数值的绝对值。<br />
+可以用以下数学公式来表示<br />
+<s>暂时还没学会lateX，先上个手写的</s></p>
+<p><img src="/img/data_code/yuanma_fml.PNG" alt="原码表达公式" /></p>
+<p>这是数学上的公式表示，显然不够直观，接下来在数轴（仍然是码位为4的情况）上表示数值与编码的关系。<br />
+<strong>其中数轴下方是编码（为直观起见，转化成十进制），数轴上方是在计算机中代表的实际数值</strong></p>
+<p><img src="/img/data_code/yuanma_line.PNG" alt="原码在数轴上的呈现" /><br />
+可以看到，如果将数轴平分为两部分[0,7]与[8,15]，则左半轴均为正数，右半轴均为负数。这便是原码区分正负数的方法。</p>
+<h1 id="三-反码"><a class="markdownIt-Anchor" href="#三-反码"></a> 三、反码</h1>
+<p>反码在数学上的定义为：<br />
+<img src="/img/data_code/fanma_fml.PNG" alt="反码表达公式" /><br />
+易从公式中看出，当X的值小于等于0时2的n次方-1实际上就是一串全1的编码，而一串全1的编码按位减去X即为对X按位求非。<br />
+由以上可以得出一个反码的更直观定义，即：</p>
+<blockquote>
+<p>当X为正数时X的反码即为它本身，X为负数时X的反码为X的原码的<strong>非符号位</strong>按位求非。</p>
+</blockquote>
+<p>这便是“反码”中“反”字的来源。</p>
+<p>下面是反码在数轴上的分布：<br />
+<img src="/img/data_code/fanma_line.PNG" alt="反码在数轴上的呈现" /><br />
+不难发现，反码与原码的区别就是反码在右半轴的分布与原码恰好对称。</p>
+<p>在《计算机组成与系统结构[裘雪红]》一书中，对反码有如下描述：</p>
+<blockquote>
+<p>反码通常用来作为由原码求补码或者由补码求原码的中间过渡。</p>
+</blockquote>
+<p>可见，反码在计算机中实际的使用场景应该很少。</p>
+<h1 id="四-补码"><a class="markdownIt-Anchor" href="#四-补码"></a> 四、补码</h1>
+<p>补码在数学上的定义为：<br />
+<img src="/img/data_code/buma_fml.PNG" alt="补码表达公式" /><br />
+不难发现，负数与其自身的补码相加后就等于2的n次方，这种关系可以与角度中的互补类比，如30°与150°互补，这便是“补码”中“补”字的来源。<br />
+值得一提的是，由于编码位数为n位，所以该编码是<strong>mod 2的n次方</strong>意义下的，所以负数与其自身补码相加实际上发生了溢出，实际上的值变为了0。<br />
+补码也可以有如下的定义：</p>
+<blockquote>
+<p>正数的补码即为其原码本身，负数的补码为其反码+1</p>
+</blockquote>
+<p>补码在数轴上的分布如下图所示<br />
+<img src="/img/data_code/buma_fml.PNG" alt="补码在数轴上的呈现" /><br />
+可以看出，补码在右半轴的分布相对于反码右移了一个单位。</p>
+<h2 id="1求补运算"><a class="markdownIt-Anchor" href="#1求补运算"></a> 1.求补运算</h2>
+<p>计算机中还存在一中与补码的求法十分相似的运算，称为求补运算，十分容易和“求补码”混淆。其运算过程如下：</p>
+<blockquote>
+<p>将编码按位取反（包括符号位），然后+1</p>
+</blockquote>
+<p>求补运算与“求补码”的区别如下：</p>
+<ul>
+<li>求补运算将符号位也取反，而“求补码”只需要将数据位取反</li>
+<li>求补运算对正负数都有效，而整数求补码后仍是它本身</li>
+<li>任何数求补后都会变成其相反数</li>
+</ul>
+<p><strong>求补运算在计算机的数值计算中十分常用</strong></p>
+<h2 id="2补码的特性"><a class="markdownIt-Anchor" href="#2补码的特性"></a> 2.补码的特性</h2>
+<ul>
+<li>与原码和反码不同，补码不存在“正零”和“负零”的区别。</li>
+<li>[X-Y]补=[X]补+[-Y]补=[X]补+（[Y]补）求补，这一特性使得补码在计算机的运算中非常常用。</li>
+</ul>
+<p><img src="/img/data_code/buma_cal.PNG" alt="补码的加减特性" /></p>
+<h2 id="3变形补码双符号位补码"><a class="markdownIt-Anchor" href="#3变形补码双符号位补码"></a> 3.变形补码（双符号位补码）</h2>
+<p>在实际计算中，为了判断加减的结果是否溢出，常常设置两个符号位。若加减结果的两个符号位不相等（01或10），则发生了溢出；如果符号相等，则不发生溢出。</p>
+<h3 id="变形补码的实质"><a class="markdownIt-Anchor" href="#变形补码的实质"></a> 变形补码的实质</h3>
+<p>不难发现，由于多出来的一位符号位，n位变形补码的数据范围只有补码的一半，将其在数轴上画出后：<br />
+<img src="/img/data_code/bianxingbm.PNG" alt="补码与变形补码" /><br />
+从图中可以看出，符号位为01和10的情况在数轴上是存在的，我们或许可以强行将其看成补码，则可以获取其代表的值。但变形补码的意义在于判断计算结果的溢出，所以我们将变形补码的范围压缩到数轴最左边和最右边分别1/4部分，将中间一部分视为“禁区”，当计算结果进入中间时，计算机就抛出“溢出”的计算结果。<br />
+<strong>可见，变形补码是舍弃一部分数据范围以保证数据没有发生溢出</strong></p>
+<p>这也是在《计组》后续的章节中，恢复余数法中间步骤出现了01的符号位而不影响计算的原因<br />
+<img src="/img/data_code/bxbm_cal.PNG" alt="用恢复余数法计算除法的步骤" /><br />
+<strong>这里的变形补码是中间的计算结果，可以将其看成有效的数值参与下一步计算，但是若结果出现了01或10的符号位，则是不符合规范的，发生了溢出。</strong></p>
+<h1 id="四-移码"><a class="markdownIt-Anchor" href="#四-移码"></a> 四、移码</h1>
+<p>移码是数值在模2的n次方意义下平移后的结果。如上图数轴所示，想要比较以上三种编码的数值的大小，均无法通过编码来比较。而移码有着“单调”的特点，即随着编码的增大，编码所代表的数值也增大。<br />
+移码的定义：2的n次方+X<br />
+可以证明，移码与补码之间存在关系：<strong>移码和补码的符号位是相反的</strong></p>
+<h2 id="移码的使用场景举例"><a class="markdownIt-Anchor" href="#移码的使用场景举例"></a> 移码的使用场景举例</h2>
+<p>在IEEE754标准中，其指数使用的是移码。不过这里的移码有所不同<br />
+，移动的位数是127（单精度）/1023（双精度），这里为什么是127/1023而不是128/1024？很多人可能没有深究这里的原因。<br />
+其实原因很简单，IEEE754标准中对尾数要求规格化，即小数点后第一位必须为1，且规定把这个1给省略。这里移码比正常少位移一位，就是考虑到这里的这个1。如果位移128位，尾数的表达就是0.1xxxx，如果位移127位，尾数的表达就是1.xxxxx，<strong>这样一来，增大了浮点数可以表达的范围</strong>。</p>
+]]></content>
+      <categories>
+        <category>课内</category>
+        <category>计组</category>
+      </categories>
+      <tags>
+        <tag>计算机组成原理</tag>
       </tags>
   </entry>
 </search>

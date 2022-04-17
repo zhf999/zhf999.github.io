@@ -16,22 +16,22 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 由于在做题时，经常纠结到底该使用C还是C风格的字符串，而且对读入方式也比较纠结，所以写一篇blog来总结一下C&#x2F;C中字符串处理的技巧。 [TOC]  C语言 与其说C语言的字符串是字符串，不如说是字符数组，C语言中对字符串的操作也大多依托于指针。  声明字符串 1234[...]char str1[1001]; &#x2F;&#x2F;声明一个字符数组char str2[1001]&#x3D;&quot;Hello,">
+    <meta name="description" content="前言 由于在做题时，经常纠结到底该使用C还是C风格的字符串，而且对读入方式也比较纠结，所以写一篇blog来总结一下C&#x2F;C中字符串处理的技巧。  C语言 与其说C语言的字符串是字符串，不如说是字符数组，C语言中对字符串的操作也大多依托于指针。  声明字符串 1234[...]char str1[1001]; &#x2F;&#x2F;声明一个字符数组char str2[1001]&#x3D;&quot;Hello, World!">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C&#x2F;C++字符串处理常用技w巧">
+<meta property="og:title" content="C&#x2F;C++字符串处理常用技巧">
 <meta property="og:url" content="http://example.com/2022/04/16/C-C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E6%8A%80%E5%B7%A7/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="前言 由于在做题时，经常纠结到底该使用C还是C风格的字符串，而且对读入方式也比较纠结，所以写一篇blog来总结一下C&#x2F;C中字符串处理的技巧。 [TOC]  C语言 与其说C语言的字符串是字符串，不如说是字符数组，C语言中对字符串的操作也大多依托于指针。  声明字符串 1234[...]char str1[1001]; &#x2F;&#x2F;声明一个字符数组char str2[1001]&#x3D;&quot;Hello,">
+<meta property="og:description" content="前言 由于在做题时，经常纠结到底该使用C还是C风格的字符串，而且对读入方式也比较纠结，所以写一篇blog来总结一下C&#x2F;C中字符串处理的技巧。  C语言 与其说C语言的字符串是字符串，不如说是字符数组，C语言中对字符串的操作也大多依托于指针。  声明字符串 1234[...]char str1[1001]; &#x2F;&#x2F;声明一个字符数组char str2[1001]&#x3D;&quot;Hello, World!">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-04-16T10:38:14.000Z">
-<meta property="article:modified_time" content="2022-04-17T12:13:57.622Z">
+<meta property="article:modified_time" content="2022-04-17T12:18:21.303Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="C&#x2F;C++">
 <meta property="article:tag" content="编程语言">
 <meta name="twitter:card" content="summary_large_image">
   
   
-  <title>C/C++字符串处理常用技w巧 - 周洪锋的博客</title>
+  <title>C/C++字符串处理常用技巧 - 周洪锋的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -189,7 +189,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="C/C++字符串处理常用技w巧">
+            <span class="h2" id="subtitle" title="C/C++字符串处理常用技巧">
               
             </span>
 
@@ -261,12 +261,11 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">C/C++字符串处理常用技w巧</h1>
+            <h1 style="display: none">C/C++字符串处理常用技巧</h1>
             
             <div class="markdown-body">
               <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
 <p>由于在做题时，经常纠结到底该使用C还是C<ins>风格的字符串，而且对读入方式也比较纠结，所以写一篇blog来总结一下C/C</ins>中字符串处理的技巧。</p>
-<p>[TOC]</p>
 <h1 id="c语言"><a class="markdownIt-Anchor" href="#c语言"></a> C语言</h1>
 <p>与其说C语言的字符串是字符串，不如说是字符数组，C语言中对字符串的操作也大多依托于指针。</p>
 <h2 id="声明字符串"><a class="markdownIt-Anchor" href="#声明字符串"></a> 声明字符串</h2>
