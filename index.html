@@ -25,15 +25,21 @@
 <meta name="twitter:card" content="summary_large_image">
   
   
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
   <title>周洪锋的博客</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
 
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
@@ -42,21 +48,40 @@
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+
+  
 <meta name="generator" content="Hexo 6.0.0"></head>
 
 
 <body>
-  <header style="height: 100vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
       <strong>周洪锋的博客</strong>
@@ -150,6 +175,7 @@
               &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
@@ -162,34 +188,40 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="“西郊有密林，助君出重围”">
-              
-            </span>
+  
 
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
           
-            <div class="scroll-down-bar">
-              <i class="iconfont icon-arrowdown"></i>
-            </div>
+            <span id="subtitle" data-typed-text="看脚下一片黑暗，望头顶星光璀璨"></span>
           
         </div>
+
+        
       </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
     
       <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          style=margin-top:0>
+        <div id="board"
+          style="margin-top: 0">
           
           <div class="container">
             <div class="row">
@@ -203,17 +235,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/" target="_blank">
+        <a href="/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/" target="_self">
           OS实验记录
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/" target="_blank">
+      <a class="index-excerpt" href="/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/" target="_self">
+        <div>
           
           操作系统实验报告 姓名：周洪锋 	学号：20009200766	上课班级：周二、周四56节  实验一：进程的建立  实验目的  创建进程及子进程 在父子进程间实现通信   实验内容  创建进程并显示标识等进程控制块的属性信息； 显示父子进程的通信信息和相应的应答信息（进程间通信机制任选）   实验要求  显示创建的进程和控制参数； 显示进程间关系参数。   实验设计与实现 在Linux操作系统中
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -225,22 +257,41 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E8%AF%BE%E5%86%85/">课内</a>
-            
-              <a href="/categories/%E8%AF%BE%E5%86%85/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AF%BE%E5%86%85/" class="category-chain-item">课内</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AF%BE%E5%86%85/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E5%AE%9E%E9%AA%8C/">实验</a>
+              <a href="/tags/%E5%AE%9E%E9%AA%8C/">#实验</a>
             
-              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
             
           </div>
         
@@ -254,17 +305,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/04/16/C-C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E6%8A%80%E5%B7%A7/" target="_blank">
+        <a href="/2022/04/16/C-C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E6%8A%80%E5%B7%A7/" target="_self">
           C/C++字符串处理常用技巧
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/04/16/C-C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E6%8A%80%E5%B7%A7/" target="_blank">
+      <a class="index-excerpt" href="/2022/04/16/C-C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E6%8A%80%E5%B7%A7/" target="_self">
+        <div>
           
           前言 由于在做题时，经常纠结到底该使用C还是C风格的字符串，而且对读入方式也比较纠结，所以写一篇blog来总结一下C&#x2F;C中字符串处理的技巧。  C语言 与其说C语言的字符串是字符串，不如说是字符数组，C语言中对字符串的操作也大多依托于指针。  声明字符串 1234[...]char str1[1001]; &#x2F;&#x2F;声明一个字符数组char str2[1001]&#x3D;&quot;Hello, World!
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -280,9 +331,9 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/C-C/">C/C++</a>
+              <a href="/tags/C-C/">#C/C++</a>
             
-              <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">#编程语言</a>
             
           </div>
         
@@ -296,17 +347,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/03/19/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/" target="_blank">
+        <a href="/2022/03/19/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/" target="_self">
           中国剩余定理
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/19/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/" target="_blank">
+      <a class="index-excerpt" href="/2022/03/19/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/" target="_self">
+        <div>
           
           零、概述 本文介绍中国剩余定理以及其简单应用，阅读前请先了解《数论基础》  一、从问题入手  有物不知其数，三三数之剩二，五五数之剩三，七七数之剩二。问物几何？即，一个整数除以三余二，除以五余三，除以七余二，求这个整数。  《孙子算经》中首次提到了同余方程组问题，以及以上具体问题的解法，因此在中文数学文献中也会将中国剩余定理称为孙子定理。  二、数学语言表达 实际上，中国剩余定理的内容可以表达为
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -318,22 +369,41 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-            
-              <a href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E8%AE%BA/">数论</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E8%AE%BA/" class="category-chain-item">数论</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/">中国剩余定理</a>
+              <a href="/tags/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/">#中国剩余定理</a>
             
-              <a href="/tags/%E6%95%B0%E8%AE%BA/">数论</a>
+              <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
             
           </div>
         
@@ -347,17 +417,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/" target="_blank">
+        <a href="/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/" target="_self">
           数论基础
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/" target="_blank">
+      <a class="index-excerpt" href="/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/" target="_self">
+        <div>
           
           零、概述 由于高中学习算法时对数论这个领域的抽象概念十分难以接受，所以基本没有学习多少数论知识，近日在哔哩哔哩大学看到一个相关的视频，于是便重新开始学习。本文算是对高中没学的知识的一个补充。 若没有特别说明，本文所有字母均代表整数  一、裴蜀定理   又称贝祖定理(Bézout’s lemma)  a,b{a},{b}a,b为不全为零的整数，则且gcd(a,b)&#x3D;dgcd(a,b)&#x3D;dgcd(a
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -369,24 +439,43 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-            
-              <a href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E8%AE%BA/">数论</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E8%AE%BA/" class="category-chain-item">数论</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%95%B0%E8%AE%BA/">数论</a>
+              <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
             
-              <a href="/tags/ACM/">ACM</a>
+              <a href="/tags/ACM/">#ACM</a>
             
-              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
             
           </div>
         
@@ -400,17 +489,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" target="_blank">
+        <a href="/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" target="_self">
           C++之STL简易食用指南
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" target="_blank">
+      <a class="index-excerpt" href="/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" target="_self">
+        <div>
           
           一、何为STL  STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。 ————摘自C语言中文网   二、容器 以下代码中的T可以是任何一中数据类型,可以是自定义类型，
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -422,20 +511,39 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E8%AF%BE%E5%86%85/">课内</a>
-            
-              <a href="/categories/%E8%AF%BE%E5%86%85/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AF%BE%E5%86%85/" class="category-chain-item">课内</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AF%BE%E5%86%85/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="category-chain-item">数据结构</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/C/">C++</a>
+              <a href="/tags/C/">#C++</a>
             
           </div>
         
@@ -449,17 +557,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/" target="_blank">
+        <a href="/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/" target="_self">
           C语言上机事半功倍的小技巧
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/" target="_blank">
+      <a class="index-excerpt" href="/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/" target="_self">
+        <div>
           
           零、前言 本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。  UPD: 2022-03-10 13:44: 增加了algorithm的其他函数和命名空间s
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -471,20 +579,39 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E8%AF%BE%E5%86%85/">课内</a>
-            
-              <a href="/categories/%E8%AF%BE%E5%86%85/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AF%BE%E5%86%85/" class="category-chain-item">课内</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AF%BE%E5%86%85/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="category-chain-item">数据结构</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/C%E8%AF%AD%E8%A8%80/">C语言</a>
+              <a href="/tags/C%E8%AF%AD%E8%A8%80/">#C语言</a>
             
           </div>
         
@@ -498,17 +625,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/" target="_blank">
+        <a href="/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/" target="_self">
           计算机中的数据编码
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/" target="_blank">
+      <a class="index-excerpt" href="/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/" target="_self">
+        <div>
           
           计算机中的数据编码  一、进制及其转化 冯诺依曼计算机体系中，为了在物理上表示方便，采用了二进制编码的形式。由于进制等内容较为简单，中学、大学知识中有均提及，此处不再赘述。本文只讨论纯整数编码  二、原码 原码是最简单的一种编码形式，由1位符号位和n-1位数据位构成。以4位码位为例，第一位是符号位，0表示正数，1表示负数，其余位由于表示该数值的绝对值。 可以用以下数学公式来表示 暂时还没学会la
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -520,20 +647,39 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E8%AF%BE%E5%86%85/">课内</a>
-            
-              <a href="/categories/%E8%AF%BE%E5%86%85/%E8%AE%A1%E7%BB%84/">计组</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AF%BE%E5%86%85/" class="category-chain-item">课内</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AF%BE%E5%86%85/%E8%AE%A1%E7%BB%84/" class="category-chain-item">计组</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">#计算机组成原理</a>
             
           </div>
         
@@ -547,17 +693,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/01/23/scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank">
+        <a href="/2022/01/23/scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
           scrapy爬虫框架学习笔记
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/01/23/scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank">
+      <a class="index-excerpt" href="/2022/01/23/scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
+        <div>
           
           Scrapy入门  一.基础指令 使用命令提示符，cd到想要操作的目录  scrapy startproject name 在该目录下创建项目  scrapy genspider name domain 使用前需要先cd到下一级目录  domain参数不需要带http或者https的头，也不需要引号   scrapy crawl name 启动名字为name的爬虫   二.开始  在name.p
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -569,22 +715,41 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-            
-              <a href="/categories/%E5%89%8D%E7%AB%AF/%E7%88%AC%E8%99%AB/">爬虫</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%89%8D%E7%AB%AF/" class="category-chain-item">前端</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%89%8D%E7%AB%AF/%E7%88%AC%E8%99%AB/" class="category-chain-item">爬虫</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF/">#前端</a>
             
-              <a href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/">#爬虫</a>
             
           </div>
         
@@ -598,17 +763,17 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/01/17/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/" target="_blank">
+        <a href="/2022/01/17/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/" target="_self">
           HTML解析大法
         </a>
       </h1>
 
-      <p class="index-excerpt">
-        <a href="/2022/01/17/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/" target="_blank">
+      <a class="index-excerpt" href="/2022/01/17/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/" target="_self">
+        <div>
           
           HTML解析大法：  一.正则表达式  1.模块主要函数 123456789import re#创建正则表达式对象re.compile(pattern)#在字符串中寻找模式，返回match对象或Nonere.search(pattern,string)#从字符串开头匹配，返回match或Nonere.match(pattern,string)#返回列表re.findall(pattern,str
-        </a>
-      </p>
+        </div>
+      </a>
 
       <div class="index-btm post-metas">
         
@@ -620,22 +785,41 @@
           </div>
         
         
-          <div class="post-meta mr-3">
+          <div class="post-meta mr-3 d-flex align-items-center">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
-            
-              <a href="/categories/%E5%89%8D%E7%AB%AF/%E7%88%AC%E8%99%AB/">爬虫</a>
-            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%89%8D%E7%AB%AF/" class="category-chain-item">前端</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%89%8D%E7%AB%AF/%E7%88%AC%E8%99%AB/" class="category-chain-item">爬虫</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
           </div>
         
         
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF/">#前端</a>
             
-              <a href="/tags/%E7%88%AC%E8%99%AB/">爬虫</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/">#爬虫</a>
             
           </div>
         
@@ -674,35 +858,37 @@
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"archive></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
   
-
   
-</footer>
-
-
-  <!-- SCRIPTS -->
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -713,42 +899,23 @@
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
       
-        typing(title);
+        typing(text);
       
     })(window, document);
   </script>
@@ -758,18 +925,28 @@
 
 
 
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
 
 
-
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>
