@@ -24,10 +24,10 @@
 <meta property="og:description" content="零、概述 由于高中学习算法时对数论这个领域的抽象概念十分难以接受，所以基本没有学习多少数论知识，近日在哔哩哔哩大学看到一个相关的视频，于是便重新开始学习。本文算是对高中没学的知识的一个补充。 若没有特别说明，本文所有字母均代表整数  一、裴蜀定理   又称贝祖定理(Bézout’s lemma)  a,b{a},{b}a,b为不全为零的整数，则且gcd(a,b)&#x3D;dgcd(a,b)&#x3D;dgcd(a">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-18T14:39:29.000Z">
-<meta property="article:modified_time" content="2022-03-19T11:08:48.855Z">
+<meta property="article:modified_time" content="2022-06-04T15:45:25.286Z">
 <meta property="article:author" content="周洪锋">
-<meta property="article:tag" content="ACM">
 <meta property="article:tag" content="数论">
+<meta property="article:tag" content="ACM">
 <meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -465,9 +465,9 @@ y=y_0-\frac{k}{g}*a
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/ACM/">#ACM</a>
-      
         <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
+      
+        <a href="/tags/ACM/">#ACM</a>
       
         <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
       
@@ -548,23 +548,19 @@ y=y_0-\frac{k}{g}*a
             
   <article id="comments" lazyload>
     
-  <div id="valine"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
         var options = Object.assign(
-          {"appId":"TJAgw2Qv7aLcL5UApGRPbbma-gzGzoHsz","appKey":"g0q8mvhNTUPzJV1Gjzfq1sOD","path":"window.location.pathname","placeholder":"你好鸭","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://tjagw2qv.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {"clientID":"d5f43f35db263db294d9","clientSecret":"c4a1afba8efee7ae64081c9b822a601713ec96b1","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            el: "#valine",
-            path: window.location.pathname
+            id: '3644366e8c707eff670a6fd81b152345'
           }
         )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
       });
     });
   </script>

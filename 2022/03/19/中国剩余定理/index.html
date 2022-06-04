@@ -24,10 +24,10 @@
 <meta property="og:description" content="零、概述 本文介绍中国剩余定理以及其简单应用，阅读前请先了解《数论基础》  一、从问题入手  有物不知其数，三三数之剩二，五五数之剩三，七七数之剩二。问物几何？即，一个整数除以三余二，除以五余三，除以七余二，求这个整数。  《孙子算经》中首次提到了同余方程组问题，以及以上具体问题的解法，因此在中文数学文献中也会将中国剩余定理称为孙子定理。  二、数学语言表达 实际上，中国剩余定理的内容可以表达为">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-19T11:28:28.000Z">
-<meta property="article:modified_time" content="2022-03-20T13:38:11.125Z">
+<meta property="article:modified_time" content="2022-06-04T15:45:29.918Z">
 <meta property="article:author" content="周洪锋">
-<meta property="article:tag" content="数论">
 <meta property="article:tag" content="中国剩余定理">
+<meta property="article:tag" content="数论">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -455,9 +455,9 @@ x \equiv a_n(mod \quad m_n)
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
-      
         <a href="/tags/%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86/">#中国剩余定理</a>
+      
+        <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
       
     </div>
   
@@ -536,23 +536,19 @@ x \equiv a_n(mod \quad m_n)
             
   <article id="comments" lazyload>
     
-  <div id="valine"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
         var options = Object.assign(
-          {"appId":"TJAgw2Qv7aLcL5UApGRPbbma-gzGzoHsz","appKey":"g0q8mvhNTUPzJV1Gjzfq1sOD","path":"window.location.pathname","placeholder":"你好鸭","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://tjagw2qv.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {"clientID":"d5f43f35db263db294d9","clientSecret":"c4a1afba8efee7ae64081c9b822a601713ec96b1","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            el: "#valine",
-            path: window.location.pathname
+            id: '8b5e5e0e2e43c1c767af291778fcb0d0'
           }
         )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
       });
     });
   </script>

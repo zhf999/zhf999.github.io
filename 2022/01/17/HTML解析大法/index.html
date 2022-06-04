@@ -24,7 +24,7 @@
 <meta property="og:description" content="HTML解析大法：  一.正则表达式  1.模块主要函数 123456789import re#创建正则表达式对象re.compile(pattern)#在字符串中寻找模式，返回match对象或Nonere.search(pattern,string)#从字符串开头匹配，返回match或Nonere.match(pattern,string)#返回列表re.findall(pattern,str">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-17T15:15:39.000Z">
-<meta property="article:modified_time" content="2022-03-04T16:23:20.799Z">
+<meta property="article:modified_time" content="2022-06-04T15:45:47.989Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="前端">
 <meta property="article:tag" content="爬虫">
@@ -537,23 +537,19 @@ Selector对象还有extract()方法，获取其中的文字。</p>
             
   <article id="comments" lazyload>
     
-  <div id="valine"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
         var options = Object.assign(
-          {"appId":"TJAgw2Qv7aLcL5UApGRPbbma-gzGzoHsz","appKey":"g0q8mvhNTUPzJV1Gjzfq1sOD","path":"window.location.pathname","placeholder":"你好鸭","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://tjagw2qv.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {"clientID":"d5f43f35db263db294d9","clientSecret":"c4a1afba8efee7ae64081c9b822a601713ec96b1","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            el: "#valine",
-            path: window.location.pathname
+            id: 'e1a49b78bf2f256ce42f1844f776361b'
           }
         )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
       });
     });
   </script>

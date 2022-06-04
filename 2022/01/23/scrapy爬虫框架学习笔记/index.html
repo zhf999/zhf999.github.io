@@ -24,7 +24,7 @@
 <meta property="og:description" content="Scrapy入门  一.基础指令 使用命令提示符，cd到想要操作的目录  scrapy startproject name 在该目录下创建项目  scrapy genspider name domain 使用前需要先cd到下一级目录  domain参数不需要带http或者https的头，也不需要引号   scrapy crawl name 启动名字为name的爬虫   二.开始  在name.p">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-23T12:38:51.000Z">
-<meta property="article:modified_time" content="2022-03-04T16:33:36.538Z">
+<meta property="article:modified_time" content="2022-06-04T15:45:52.838Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="前端">
 <meta property="article:tag" content="爬虫">
@@ -604,23 +604,19 @@ rules元组冲包含了Rule类，包含以下参数</p>
             
   <article id="comments" lazyload>
     
-  <div id="valine"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
         var options = Object.assign(
-          {"appId":"TJAgw2Qv7aLcL5UApGRPbbma-gzGzoHsz","appKey":"g0q8mvhNTUPzJV1Gjzfq1sOD","path":"window.location.pathname","placeholder":"你好鸭","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://tjagw2qv.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {"clientID":"d5f43f35db263db294d9","clientSecret":"c4a1afba8efee7ae64081c9b822a601713ec96b1","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            el: "#valine",
-            path: window.location.pathname
+            id: '3558672d5dc1ca6268431a0d76ca3a20'
           }
         )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
       });
     });
   </script>

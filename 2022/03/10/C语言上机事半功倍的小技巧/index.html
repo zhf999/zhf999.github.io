@@ -24,7 +24,7 @@
 <meta property="og:description" content="零、前言 本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。  UPD: 2022-03-10 13:44: 增加了algorithm的其他函数和命名空间s">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-10T02:11:53.000Z">
-<meta property="article:modified_time" content="2022-03-10T05:47:58.318Z">
+<meta property="article:modified_time" content="2022-06-04T15:45:44.043Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="C语言">
 <meta name="twitter:card" content="summary_large_image">
@@ -498,23 +498,19 @@ memset第一个参数是一个指针，可以是字符串的头指针也可以�
             
   <article id="comments" lazyload>
     
-  <div id="valine"></div>
+  <div id="gitalk-container"></div>
   <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
         var options = Object.assign(
-          {"appId":"TJAgw2Qv7aLcL5UApGRPbbma-gzGzoHsz","appKey":"g0q8mvhNTUPzJV1Gjzfq1sOD","path":"window.location.pathname","placeholder":"你好鸭","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://tjagw2qv.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {"clientID":"d5f43f35db263db294d9","clientSecret":"c4a1afba8efee7ae64081c9b822a601713ec96b1","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            el: "#valine",
-            path: window.location.pathname
+            id: '3c739094d3d62de4bc2fee4d38ae0620'
           }
         )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
       });
     });
   </script>
