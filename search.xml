@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++之STL简易食用指南</title>
+    <url>/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[<h1 id="一-何为stl"><a class="markdownIt-Anchor" href="#一-何为stl"></a> 一、何为STL</h1>
+<blockquote>
+<p><em>STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。</em><br />
+————摘自C语言中文网</p>
+</blockquote>
+<h1 id="二-容器"><a class="markdownIt-Anchor" href="#二-容器"></a> 二、容器</h1>
+<p><font color=orange>以下代码中的T可以是任何一中数据类型,可以是自定义类型，甚至可以嵌套。</font></p>
+<h2 id="1-栈"><a class="markdownIt-Anchor" href="#1-栈"></a> 1、栈</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stack&gt;</span></span><br><br><span class="hljs-comment">//声明：</span><br>stack&lt;T&gt;mystack;<br><br><span class="hljs-comment">//常用方法：</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//压栈</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出栈</span><br>T mystack.<span class="hljs-built_in">top</span>(); <span class="hljs-comment">//返回栈顶的元素</span><br><span class="hljs-keyword">int</span> mystack.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回栈中元素个数</span><br><span class="hljs-keyword">bool</span> mystack.<span class="hljs-built_in">empty</span>(); <span class="hljs-comment">//判断栈是否为空</span><br></code></pre></td></tr></table></figure>
+<h2 id="2-队列"><a class="markdownIt-Anchor" href="#2-队列"></a> 2、队列</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><br><span class="hljs-comment">//声明</span><br>queue&lt;T&gt;myqueue;<br><br><span class="hljs-comment">//常用方法</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//入队</span><br>T myqueue.<span class="hljs-built_in">front</span>(); <span class="hljs-comment">//返回队头元素</span><br>T myqueue.<span class="hljs-built_in">back</span>(); <span class="hljs-comment">//返回队尾元素</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出队</span><br><span class="hljs-keyword">int</span> myqueue.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回队列中元素个数</span><br><span class="hljs-keyword">bool</span> myqueue.<span class="hljs-built_in">isempty</span>(); <span class="hljs-comment">//判断队列是否为空</span><br></code></pre></td></tr></table></figure>
+<h3 id="双端队列deque"><a class="markdownIt-Anchor" href="#双端队列deque"></a> 双端队列deque</h3>
+<p>双端队列可以在队列的两端进行存取操作，包含在头文件deque中，声明方法与普通队列类似。<br />
+接下来使用表格形式来展示部分常用的方法</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th style="text-align:center">用处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>front()</td>
+<td style="text-align:center">返回第一个元素</td>
+</tr>
+<tr>
+<td>back()</td>
+<td style="text-align:center">返回最后一个元素</td>
+</tr>
+<tr>
+<td>push_back()</td>
+<td style="text-align:center">在序列的尾部添加一个元素</td>
+</tr>
+<tr>
+<td>push_front()</td>
+<td style="text-align:center">在序列的头部添加一个元素</td>
+</tr>
+<tr>
+<td>pop_back()</td>
+<td style="text-align:center">移除容器尾部的元素</td>
+</tr>
+<tr>
+<td>pop_front()</td>
+<td style="text-align:center">移除容器头部的元素</td>
+</tr>
+</tbody>
+</table>
+<p>deque和vector的作用十分类似，但实际上deque更适合频繁的入队、出队操作。</p>
+<h3 id="优先队列priority_queue"><a class="markdownIt-Anchor" href="#优先队列priority_queue"></a> 优先队列priority_queue</h3>
+<p>普通的队列是一个先进先出的序列，而优先队列会在队内根据优先级对元素进行排序，是一种<em>先进最高级先出</em>的队列。其本质上是一个堆,每次出队时，会将队列内优先级最高的元素弹出。</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th style="text-align:center">用处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top</td>
+<td style="text-align:center">访问队头元素</td>
+</tr>
+<tr>
+<td>empty</td>
+<td style="text-align:center">队列是否为空</td>
+</tr>
+<tr>
+<td>size</td>
+<td style="text-align:center">返回队列内元素个数</td>
+</tr>
+<tr>
+<td>push</td>
+<td style="text-align:center">插入元素到队尾 (并排序)</td>
+</tr>
+<tr>
+<td>pop</td>
+<td style="text-align:center">弹出队头元素</td>
+</tr>
+</tbody>
+</table>
+<p>除了front改为top外，其他方法没有什么区别。<br />
+优先队列比较复杂的是声明操作,其定义为：<br />
+priority_queue&lt;Type, Container, Functional&gt;<br />
+Type是模板类型，Container是容器，Functional是仿函数（一般写为greater<T>或less<T>）</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><span class="hljs-comment">//下面这个声明新建一个将int从小到大排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,greater&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br><span class="hljs-comment">//下面这个声明新建一个将int从大到小排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq2;<br><span class="hljs-comment">//！！！注意，部分编译器会将“&gt;&gt;”认成右移运算符，所以需要加一个空格以区分</span><br></code></pre></td></tr></table></figure>
+<h4 id="在优先队列中使用自定义类"><a class="markdownIt-Anchor" href="#在优先队列中使用自定义类"></a> 在优先队列中使用自定义类</h4>
+<p>在实际运用中很经常遇到的情况是对含有多个属性的记录进行排序，这时候就要使用自定义类（结构体）。而如果直接将上述代码中的int改为自定义结构体，实际上是会报错的。因为我们并没有为结构体定义如何比较他们的大小（也就是优先级），两个学生，谁的优先级更高，到底是由身高、体重还是成绩决定呢？<br />
+所以，在使用自定义类（结构体）时，需要先进行运算符重载（只需要重载小于号）：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">int</span> grade,height;<br>    <span class="hljs-built_in">Student</span>(<span class="hljs-keyword">int</span> grade, <span class="hljs-keyword">int</span> height)<br>    &#123;<br>        <span class="hljs-keyword">this</span>.grade=grade;<br>        <span class="hljs-keyword">this</span>.height=height;<br>    &#125;<br>    <span class="hljs-comment">//下面是重载运算符的部分</span><br>    <span class="hljs-keyword">bool</span> <span class="hljs-keyword">operator</span> &lt; (<span class="hljs-keyword">const</span> Student&amp; a) <span class="hljs-keyword">const</span><br>    &#123;<br>        <span class="hljs-comment">//若成绩一样就用身高</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.grade==a.grade)<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.height&lt;a.height;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.grade&lt;a.grade;<br>    &#125;<br>&#125;<br><br>[...]<br><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br></code></pre></td></tr></table></figure>
+<p>这样就可以声明一个优先队列，队列优先弹出成绩高的学生，若成绩一样，就优先弹出身高高的学生。<br />
+当然，也可以通过自定义仿函数的方法来定义优先级，本着实用主义的原则，会其中一种方法就可以，这里不再赘述。</p>
+<h2 id="3-映射map"><a class="markdownIt-Anchor" href="#3-映射map"></a> 3、映射map</h2>
+<p>map的定义类似python中的字典，是一个键值对映射，包含两个模板参数key和value。map的内部实现是一棵红黑树，所以<strong>key必须定义小于号运算符</strong>。map也可以被当做哈希表使用。由于map内部已经定义“[]”运算符，所以元素的存取可以通过下标来实现，十分方便。<br />
+举个最常用的例子：统计单词重复出现的次数</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//健是字符串，值是整型</span><br>map&lt;string,<span class="hljs-keyword">int</span>&gt;words;<br>[...]<br>string article[<span class="hljs-number">101</span>];<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    map[article[i]]++;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>需要注意的是，当使用“[]”操作没有找到对应的键时，map会自动创建一个值为0的键值对，积累之后，可能会产生大量的无意义记录，占用空间，并且影响运行速度。所以建议在使用下标获取值之前，事先使用map.find()找到该元素（该方法返回一个迭代器，若不存在，则会返回map.end()）。</p>
+<h1 id="二-算法"><a class="markdownIt-Anchor" href="#二-算法"></a> 二、算法</h1>
+<p>算法在上一篇《C语言的上机小技巧》已经说的差不多了，这里不再赘述。</p>
+]]></content>
+      <categories>
+        <category>课内</category>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C/C++字符串处理常用技巧</title>
     <url>/2022/04/16/C-C-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%B8%B8%E7%94%A8%E6%8A%80%E5%B7%A7/</url>
     <content><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
@@ -130,387 +241,6 @@
       <tags>
         <tag>C/C++</tag>
         <tag>编程语言</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言上机事半功倍的小技巧</title>
-    <url>/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<h1 id="零-前言"><a class="markdownIt-Anchor" href="#零-前言"></a> 零、前言</h1>
-<p>本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。<strong>如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。</strong></p>
-<blockquote>
-<p>UPD:<br />
-2022-03-10 13:44: 增加了algorithm的其他函数和命名空间std中的函数。</p>
-</blockquote>
-<h1 id="一-实用的内置函数"><a class="markdownIt-Anchor" href="#一-实用的内置函数"></a> 一、实用的内置函数</h1>
-<h2 id="1-排序函数"><a class="markdownIt-Anchor" href="#1-排序函数"></a> 1、排序函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-comment">//快速排序（不稳定）</span><br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br><span class="hljs-comment">//稳定排序</span><br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br></code></pre></td></tr></table></figure>
-<p>sort函数有三个参数，前两个参数是指针，代表需要排序的区间（左闭右开），第三个参数是<em>函数指针</em>，<strong>可填可不填</strong>，不填就默认递增排序。sort函数无返回值，是对于数组做原地排序。<br />
-例如，上述代码就是对a数组的第1个到第n个元素排序（笔者习惯数组下标从1开始）。如果习惯的下标是从0开始，那就是</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a,a+n);<br></code></pre></td></tr></table></figure>
-<p>更普遍的，sort(a+p,a+q)就是将a[p]~a[q-1]排序。</p>
-<h3 id="递减的排序怎么办"><a class="markdownIt-Anchor" href="#递减的排序怎么办"></a> 递减的排序怎么办？</h3>
-<p>解决办法有两个：<br />
-1、将待排序数组全部取相反数，按默认的递增排序后再取一次相反数即可。<br />
-<font color=red>2、编写cmp函数</font><br />
-这里可能比较复杂，看不懂就可以不用看了。<br />
-首先，声明一个cmp函数（名字未必要是cmp，符合C语言规范即可）</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> X,<span class="hljs-keyword">int</span> Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X&gt;Y;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>然后将cmp函数指针作为sort的第三个参数即可。</p>
-<blockquote>
-<p>函数指针是指针的一种，只写函数名，就是该函数的函数指针。<br />
-bool是C++的数据类型，只有1和0（true和false）两种取值。</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br></code></pre></td></tr></table></figure>
-<p>还可以对自定义的结构体设定排序关键字:</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Student X, Student Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X.grade &gt; Y.grade;<br>&#125;<br>[...]<br><span class="hljs-built_in">sort</span>(students+<span class="hljs-number">1</span>, students+<span class="hljs-number">1</span>+n, cmp);<br></code></pre></td></tr></table></figure>
-<p>对学生按照成绩从高到低排序。</p>
-<blockquote>
-<p>稳定排序和不稳定排序<br />
-稳定排序指的是：当数据中存在两个相同的值时，排序后不会改变相对位置。例如A和B成绩都是90分，A原先在B前面，排序后不会出现A跑到B后面的情况，这就是稳定排序。<br />
-考试中两种都可以用，问题不大。</p>
-</blockquote>
-<h2 id="2-algorithm头文件中的其他函数"><a class="markdownIt-Anchor" href="#2-algorithm头文件中的其他函数"></a> 2、algorithm头文件中的其他函数</h2>
-<h3 id="11-倒序函数"><a class="markdownIt-Anchor" href="#11-倒序函数"></a> 1.1、倒序函数</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">reverse</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//将目标区间内的值倒置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">例如： 数组&#123;1,1,4,5,1,4&#125;被倒置后会变成&#123;4,1,5,4,1,1&#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
-<p>使用方法和sort十分类似，区间也是左闭右开。<br />
-<font color=green>实际上，C++和许多语言的内置函数默认都是左闭右开的</font></p>
-<h3 id="12-取最大值-最小值的函数"><a class="markdownIt-Anchor" href="#12-取最大值-最小值的函数"></a> 1.2、取最大值、最小值的函数</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">max_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最大值</span><br><span class="hljs-built_in">min_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最小值</span><br></code></pre></td></tr></table></figure>
-<h2 id="3-命名空间std中的函数"><a class="markdownIt-Anchor" href="#3-命名空间std中的函数"></a> 3、命名空间std中的函数</h2>
-<p>要使用命名空间std中的函数，你需要像这样做：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;...&gt;</span></span><br>[...]<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std; <span class="hljs-comment">//在引用完头文件后加上这句话</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>主要有以下三个函数</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">max</span>(a,b); <span class="hljs-comment">//返回a和b中的较大者</span><br><span class="hljs-built_in">min</span>(a,b); <span class="hljs-comment">//返回a和b中的较小者</span><br><span class="hljs-built_in">swap</span>(a,b); <span class="hljs-comment">//将a和b的值交换</span><br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>注意，以上所有的函数都是C++特有的，使用时请保证文件扩展名为.cpp<br />
-且上面的所有函数都是模板函数，这意味着可以任何数据类型都可以使用（前提是为该数据类型定义了大于、小于预算符），例如，排序函数可以对int数组排序，也可以对double、float甚至字符排序。</p>
-</blockquote>
-<h2 id="4-字符判断的函数"><a class="markdownIt-Anchor" href="#4-字符判断的函数"></a> 4、字符判断的函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cctype&gt;</span></span><br><span class="hljs-comment">//上面的是C++的头文件，C语言头文件为#include&lt;ctype.h&gt;</span><br><span class="hljs-comment">//其实只要文件名结尾是.cpp，就没什么区别</span><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isdigit</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是数字（&#x27;0&#x27;~&#x27;9&#x27;)</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isalpha</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是英文字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是大写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">islower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是小写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">toupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为大写后的字符</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">tolower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为小写后的字符</span><br></code></pre></td></tr></table></figure>
-<blockquote>
-<p>以上bool的返回值，在C语言中是int</p>
-</blockquote>
-<h2 id="5-字符串函数"><a class="markdownIt-Anchor" href="#5-字符串函数"></a> 5、字符串函数</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-comment">//C语言中是string.h</span><br><br><span class="hljs-comment">//非常常用的一个函数（个人觉得）</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> * <span class="hljs-title">memset</span> <span class="hljs-params">( <span class="hljs-keyword">void</span> * ptr, <span class="hljs-keyword">int</span> value, <span class="hljs-keyword">size_t</span> num)</span></span>;<span class="hljs-comment">//以字节方式填充一个数组</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">strcmp</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str1, <span class="hljs-keyword">char</span>* str2)</span></span>;<span class="hljs-comment">//以字典序比较两个函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">strlen</span> <span class="hljs-params">(<span class="hljs-keyword">char</span> * str )</span></span>;<br></code></pre></td></tr></table></figure>
-<p>其实字符串内置的函数很多，但是太难记了，个人人为实用的就以上几个。<br />
-接下来重点说一下memset这个函数。<br />
-memset第一个参数是一个指针，可以是字符串的头指针也可以是任何数组的指针；第二个参数是想要设置每个字节的值；第三个参数是想要填充的字节个数,第三个参数一般设置为sizeof(ptr)。<br />
-举个栗子：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(str,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/0&#x27;</span><br><span class="hljs-built_in">memset</span>(str,<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/a&#x27;</span><br><br><span class="hljs-keyword">int</span> num[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为0</span><br><span class="hljs-comment">//以下要注意！！！！</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">5</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//并不是将num全部设置为5，因为int在c语言中占4个字节</span><br><span class="hljs-comment">//但是可以这样：</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0x3f</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为一个非常大的数</span><br></code></pre></td></tr></table></figure>
-<p><font color=red>总之，memset在设置字符时，可以直接赋值。而对于int或者其他类型的，并不是特别适用。但是如果想将int数组初始化为0或者无穷大，可以考虑使用memset。</font></p>
-<h1 id="二-语法小技巧"><a class="markdownIt-Anchor" href="#二-语法小技巧"></a> 二、语法小技巧</h1>
-<h2 id="1-for循环"><a class="markdownIt-Anchor" href="#1-for循环"></a> 1、for循环</h2>
-<p>for循环其实可以这么写：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>还可以这么写(慎用):</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _for(i,a,b) for( int i=(a); i&lt;(b); ++i)</span><br><br>_for(i,<span class="hljs-number">1</span>,n);<br></code></pre></td></tr></table></figure>
-<h2 id="2-判断语句避免翻车的方法"><a class="markdownIt-Anchor" href="#2-判断语句避免翻车的方法"></a> 2、判断语句避免翻车的方法</h2>
-<p>有人if判断语句会这么写</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(a==<span class="hljs-number">1</span>) <span class="hljs-comment">//很容易写成a=1，且不易察觉</span><br>&#123;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
-<p>但是如果换一种写法</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(<span class="hljs-number">1</span>==a)<br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>这样如果不小心漏了一个等号，编译器就会报错，提醒我们。</p>
-<h2 id="3-利用好全局变量"><a class="markdownIt-Anchor" href="#3-利用好全局变量"></a> 3、利用好全局变量</h2>
-<p>将全局变量定义在main函数外，其初始值会全部被设置为0，利用这一特点可以省去初始化的工夫。此外，数组定义在main函数外，其空间可以更大（int类型最大好像是10000*10000来着）</p>
-<h1 id="三-没了"><a class="markdownIt-Anchor" href="#三-没了"></a> 三、没了</h1>
-<p>可能有人3.10下午就要上机了，先写这么多，想起来再补吧。<br />
-考试是可以应付的，但是希望读者能扬弃本文内容，将来形成良好的代码习惯。<br />
-<font color=orange size=7>祝考试顺利</font></p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>C语言</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++之STL简易食用指南</title>
-    <url>/2022/03/10/C-%E4%B9%8BSTL%E7%AE%80%E6%98%93%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[<h1 id="一-何为stl"><a class="markdownIt-Anchor" href="#一-何为stl"></a> 一、何为STL</h1>
-<blockquote>
-<p><em>STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。</em><br />
-————摘自C语言中文网</p>
-</blockquote>
-<h1 id="二-容器"><a class="markdownIt-Anchor" href="#二-容器"></a> 二、容器</h1>
-<p><font color=orange>以下代码中的T可以是任何一中数据类型,可以是自定义类型，甚至可以嵌套。</font></p>
-<h2 id="1-栈"><a class="markdownIt-Anchor" href="#1-栈"></a> 1、栈</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stack&gt;</span></span><br><br><span class="hljs-comment">//声明：</span><br>stack&lt;T&gt;mystack;<br><br><span class="hljs-comment">//常用方法：</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//压栈</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出栈</span><br>T mystack.<span class="hljs-built_in">top</span>(); <span class="hljs-comment">//返回栈顶的元素</span><br><span class="hljs-keyword">int</span> mystack.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回栈中元素个数</span><br><span class="hljs-keyword">bool</span> mystack.<span class="hljs-built_in">empty</span>(); <span class="hljs-comment">//判断栈是否为空</span><br></code></pre></td></tr></table></figure>
-<h2 id="2-队列"><a class="markdownIt-Anchor" href="#2-队列"></a> 2、队列</h2>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><br><span class="hljs-comment">//声明</span><br>queue&lt;T&gt;myqueue;<br><br><span class="hljs-comment">//常用方法</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//入队</span><br>T myqueue.<span class="hljs-built_in">front</span>(); <span class="hljs-comment">//返回队头元素</span><br>T myqueue.<span class="hljs-built_in">back</span>(); <span class="hljs-comment">//返回队尾元素</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出队</span><br><span class="hljs-keyword">int</span> myqueue.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回队列中元素个数</span><br><span class="hljs-keyword">bool</span> myqueue.<span class="hljs-built_in">isempty</span>(); <span class="hljs-comment">//判断队列是否为空</span><br></code></pre></td></tr></table></figure>
-<h3 id="双端队列deque"><a class="markdownIt-Anchor" href="#双端队列deque"></a> 双端队列deque</h3>
-<p>双端队列可以在队列的两端进行存取操作，包含在头文件deque中，声明方法与普通队列类似。<br />
-接下来使用表格形式来展示部分常用的方法</p>
-<table>
-<thead>
-<tr>
-<th>方法名</th>
-<th style="text-align:center">用处</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>front()</td>
-<td style="text-align:center">返回第一个元素</td>
-</tr>
-<tr>
-<td>back()</td>
-<td style="text-align:center">返回最后一个元素</td>
-</tr>
-<tr>
-<td>push_back()</td>
-<td style="text-align:center">在序列的尾部添加一个元素</td>
-</tr>
-<tr>
-<td>push_front()</td>
-<td style="text-align:center">在序列的头部添加一个元素</td>
-</tr>
-<tr>
-<td>pop_back()</td>
-<td style="text-align:center">移除容器尾部的元素</td>
-</tr>
-<tr>
-<td>pop_front()</td>
-<td style="text-align:center">移除容器头部的元素</td>
-</tr>
-</tbody>
-</table>
-<p>deque和vector的作用十分类似，但实际上deque更适合频繁的入队、出队操作。</p>
-<h3 id="优先队列priority_queue"><a class="markdownIt-Anchor" href="#优先队列priority_queue"></a> 优先队列priority_queue</h3>
-<p>普通的队列是一个先进先出的序列，而优先队列会在队内根据优先级对元素进行排序，是一种<em>先进最高级先出</em>的队列。其本质上是一个堆,每次出队时，会将队列内优先级最高的元素弹出。</p>
-<table>
-<thead>
-<tr>
-<th>方法名</th>
-<th style="text-align:center">用处</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>top</td>
-<td style="text-align:center">访问队头元素</td>
-</tr>
-<tr>
-<td>empty</td>
-<td style="text-align:center">队列是否为空</td>
-</tr>
-<tr>
-<td>size</td>
-<td style="text-align:center">返回队列内元素个数</td>
-</tr>
-<tr>
-<td>push</td>
-<td style="text-align:center">插入元素到队尾 (并排序)</td>
-</tr>
-<tr>
-<td>pop</td>
-<td style="text-align:center">弹出队头元素</td>
-</tr>
-</tbody>
-</table>
-<p>除了front改为top外，其他方法没有什么区别。<br />
-优先队列比较复杂的是声明操作,其定义为：<br />
-priority_queue&lt;Type, Container, Functional&gt;<br />
-Type是模板类型，Container是容器，Functional是仿函数（一般写为greater<T>或less<T>）</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><span class="hljs-comment">//下面这个声明新建一个将int从小到大排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,greater&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br><span class="hljs-comment">//下面这个声明新建一个将int从大到小排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq2;<br><span class="hljs-comment">//！！！注意，部分编译器会将“&gt;&gt;”认成右移运算符，所以需要加一个空格以区分</span><br></code></pre></td></tr></table></figure>
-<h4 id="在优先队列中使用自定义类"><a class="markdownIt-Anchor" href="#在优先队列中使用自定义类"></a> 在优先队列中使用自定义类</h4>
-<p>在实际运用中很经常遇到的情况是对含有多个属性的记录进行排序，这时候就要使用自定义类（结构体）。而如果直接将上述代码中的int改为自定义结构体，实际上是会报错的。因为我们并没有为结构体定义如何比较他们的大小（也就是优先级），两个学生，谁的优先级更高，到底是由身高、体重还是成绩决定呢？<br />
-所以，在使用自定义类（结构体）时，需要先进行运算符重载（只需要重载小于号）：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">int</span> grade,height;<br>    <span class="hljs-built_in">Student</span>(<span class="hljs-keyword">int</span> grade, <span class="hljs-keyword">int</span> height)<br>    &#123;<br>        <span class="hljs-keyword">this</span>.grade=grade;<br>        <span class="hljs-keyword">this</span>.height=height;<br>    &#125;<br>    <span class="hljs-comment">//下面是重载运算符的部分</span><br>    <span class="hljs-keyword">bool</span> <span class="hljs-keyword">operator</span> &lt; (<span class="hljs-keyword">const</span> Student&amp; a) <span class="hljs-keyword">const</span><br>    &#123;<br>        <span class="hljs-comment">//若成绩一样就用身高</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.grade==a.grade)<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.height&lt;a.height;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.grade&lt;a.grade;<br>    &#125;<br>&#125;<br><br>[...]<br><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br></code></pre></td></tr></table></figure>
-<p>这样就可以声明一个优先队列，队列优先弹出成绩高的学生，若成绩一样，就优先弹出身高高的学生。<br />
-当然，也可以通过自定义仿函数的方法来定义优先级，本着实用主义的原则，会其中一种方法就可以，这里不再赘述。</p>
-<h2 id="3-映射map"><a class="markdownIt-Anchor" href="#3-映射map"></a> 3、映射map</h2>
-<p>map的定义类似python中的字典，是一个键值对映射，包含两个模板参数key和value。map的内部实现是一棵红黑树，所以<strong>key必须定义小于号运算符</strong>。map也可以被当做哈希表使用。由于map内部已经定义“[]”运算符，所以元素的存取可以通过下标来实现，十分方便。<br />
-举个最常用的例子：统计单词重复出现的次数</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//健是字符串，值是整型</span><br>map&lt;string,<span class="hljs-keyword">int</span>&gt;words;<br>[...]<br>string article[<span class="hljs-number">101</span>];<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    map[article[i]]++;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>需要注意的是，当使用“[]”操作没有找到对应的键时，map会自动创建一个值为0的键值对，积累之后，可能会产生大量的无意义记录，占用空间，并且影响运行速度。所以建议在使用下标获取值之前，事先使用map.find()找到该元素（该方法返回一个迭代器，若不存在，则会返回map.end()）。</p>
-<h1 id="二-算法"><a class="markdownIt-Anchor" href="#二-算法"></a> 二、算法</h1>
-<p>算法在上一篇《C语言的上机小技巧》已经说的差不多了，这里不再赘述。</p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>OS实验记录</title>
-    <url>/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="操作系统实验报告"><a class="markdownIt-Anchor" href="#操作系统实验报告"></a> 操作系统实验报告</h1>
-<p>姓名：<u>周洪锋</u> 	学号：<u>20009200766</u>	上课班级：<u>周二、周四56节</u></p>
-<h2 id="实验一进程的建立"><a class="markdownIt-Anchor" href="#实验一进程的建立"></a> 实验一：进程的建立</h2>
-<h3 id="实验目的"><a class="markdownIt-Anchor" href="#实验目的"></a> 实验目的</h3>
-<ul>
-<li>创建进程及子进程</li>
-<li>在父子进程间实现通信</li>
-</ul>
-<h3 id="实验内容"><a class="markdownIt-Anchor" href="#实验内容"></a> 实验内容</h3>
-<ul>
-<li>创建进程并显示标识等进程控制块的属性信息；</li>
-<li>显示父子进程的通信信息和相应的应答信息（进程间通信机制任选）</li>
-</ul>
-<h3 id="实验要求"><a class="markdownIt-Anchor" href="#实验要求"></a> 实验要求</h3>
-<ul>
-<li>显示创建的进程和控制参数；</li>
-<li>显示进程间关系参数。</li>
-</ul>
-<h3 id="实验设计与实现"><a class="markdownIt-Anchor" href="#实验设计与实现"></a> 实验设计与实现</h3>
-<p>在Linux操作系统中，可以使用fork()函数来复制一个当前进程，并作为当前进程的子进程。fork()函数在头文件&lt;unistd.h&gt;中，没有参数，返回值为pid_t类型。在父进程中，该函数返回值是子进程的pid，而在子进程中，该函数返回值始终为0，可以通过返回值的特点来区别父子进程。进程创建失败时，返回值为负数。</p>
-<p>同时需要注意的是，在父进程结束时，子进程会被迫退出，所以需要在父进程的代码中调用wait()函数（在头文件&lt;sys/wait.h&gt;中），其原型如下</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">extern</span> <span class="hljs-keyword">__pid_t</span> <span class="hljs-title">wait</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> *__stat_loc)</span></span>;<br></code></pre></td></tr></table></figure>
-<p>该函数会等待，知道子进程运行完毕，<code>__stat__loc</code>参数用于接收子进程退出的信息，这里我们不关心这个值，可以直接填NULL。</p>
-<p>fork出的子进程会复制父进程的资源（实际上用的是一种类似“懒标记”法的方法，子进程会继承父进程的资源，但是当子进程修改资源的值时，会复制一份资源，不会对父进程修改），并继续执行剩余代码。</p>
-<p>代码中用到的剩余两个函数</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">pid_t</span> <span class="hljs-title">getpid</span><span class="hljs-params">()</span></span><br><span class="hljs-function"><span class="hljs-keyword">pid_t</span> <span class="hljs-title">getppid</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure>
-<p>分别用于获取自己的自己的父进程的pid。</p>
-<h3 id="实验结果分析"><a class="markdownIt-Anchor" href="#实验结果分析"></a> 实验结果分析</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;sys/wait.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> n=<span class="hljs-number">100</span>;<br>    <span class="hljs-keyword">pid_t</span> pid=fork();<br>    <span class="hljs-keyword">if</span>(pid&lt;<span class="hljs-number">0</span>) <span class="hljs-comment">//fail</span><br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create a new process!\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>) <span class="hljs-comment">//child process</span><br>    &#123;<br>        n++;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is the child process, pid=%hd, father process&#x27; pid=%hd\n&quot;</span>,getpid(),getppid());<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;n=%d\n&quot;</span>,n);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">//father process</span><br>    &#123;<br>        wait(<span class="hljs-literal">NULL</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is the father process, the pid=%hd,child&#x27;s pid=%hd\n&quot;</span>,getpid(),pid);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;n=%d\n&quot;</span>,n);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-<p>代码中，使用if语句来区别父子进程。</p>
-<p>运行结果如下<img src="/img/os_exp/p1.png" alt="p1" /></p>
-<p>可以看到，父子进程可以互相显示进程控制块中的信息，且子进程中修改值并不会影响父进程。</p>
-<hr />
-<h2 id="实验二进程间的同步"><a class="markdownIt-Anchor" href="#实验二进程间的同步"></a> 实验二：进程间的同步</h2>
-<h3 id="实验目的-2"><a class="markdownIt-Anchor" href="#实验目的-2"></a> 实验目的：</h3>
-<ul>
-<li>理解进程同步和互斥模型及其应用</li>
-</ul>
-<h3 id="实验内容-2"><a class="markdownIt-Anchor" href="#实验内容-2"></a> 实验内容</h3>
-<ul>
-<li>利用通信API实现进程之间的同步；</li>
-<li>建立司机和售票员进程，并实现他们间的同步运行。</li>
-</ul>
-<h3 id="实验要求-2"><a class="markdownIt-Anchor" href="#实验要求-2"></a> 实验要求</h3>
-<p>显示司机和售票员进程的同步运行轨迹</p>
-<h3 id="实验设计与实现-2"><a class="markdownIt-Anchor" href="#实验设计与实现-2"></a> 实验设计与实现</h3>
-<h4 id="创建信号量"><a class="markdownIt-Anchor" href="#创建信号量"></a> 创建信号量</h4>
-<p>首先使用ftok函数来创建一个关键字，该函数原型如下</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">key_t</span> <span class="hljs-title">ftok</span><span class="hljs-params">( <span class="hljs-keyword">char</span> * fname, <span class="hljs-keyword">int</span> id )</span></span>;<br></code></pre></td></tr></table></figure>
-<p>ftok函数是根据pathname和id来创建一个关键字(类型为 key_t)，此关键字在创建信号量，创建消息队列的时候都需要使用。其中pathname必须是一个存在的可访问的路径或文件，id必须不得为0。失败返回值为-1。</p>
-<p>利用创建的关键字，就可以使用semget函数来创建信号量。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">semget</span> <span class="hljs-params">(<span class="hljs-keyword">key_t</span> __key, <span class="hljs-keyword">int</span> __nsems, <span class="hljs-keyword">int</span> __semflg)</span></span>;<br></code></pre></td></tr></table></figure>
-<p>参数中，__key是上述生成的关键字，nsems是生成的信号量数量（可以产生类似数组的效果），_semflg ：信号量的创建方式或权限。有IPC_CREAT，IPC_EXCL。</p>
-<ul>
-<li>
-<p>IPC_CREAT如果信号量不存在，则创建一个信号量，否则获取。</p>
-</li>
-<li>
-<p>IPC_EXCL只有信号量不存在的时候，新的信号量才建立，否则就产生错误。</p>
-</li>
-</ul>
-<p>该函数返回一个int类型的值，这个值就可以看成是信号量的标识符。</p>
-<h4 id="初始化信号量"><a class="markdownIt-Anchor" href="#初始化信号量"></a> 初始化信号量</h4>
-<p>信号量创建完成后，需要对其值进行初始化。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">semctl</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __semid, <span class="hljs-keyword">int</span> __semnum, <span class="hljs-keyword">int</span> __cmd, ...)</span> </span>;<br></code></pre></td></tr></table></figure>
-<p>第一个参数传入信号量的标识符，第二个参数是这个信号量集中的编号（如果在semget时的__nsems大于1，那这个参数就相当于信号量数组的索引），第三个参数是需要做的操作，这里我们使用SETVAL，即设置信号量集中的一个单独信号量的值。</p>
-<p>最后还有一个可变参数，在这个实验中我们只需要初始化一个值，所以只要传入一个semun类型：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">union</span> <span class="hljs-title">semun</span> &#123;</span><br>   <span class="hljs-keyword">int</span>   val;<br>   <span class="hljs-class"><span class="hljs-keyword">struct</span>   <span class="hljs-title">semid_ds</span>  *<span class="hljs-title">buf</span>;</span><br>   <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span>   *arrary;<br><br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>声明一个semun，改变其中的val然后传入semctl函数即可。(详见完整代码)</p>
-<h4 id="定义p操作和v操作"><a class="markdownIt-Anchor" href="#定义p操作和v操作"></a> 定义P操作和V操作</h4>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">P</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>semop用于操作信号量，可以使用资源也可以释放资源，第一个参数为信号量标识符，第二参数是一个sembuf结构体的指针，第三个参数用于指定操作的结构数量。</p>
-<p>其中sembuf结构体定义如下</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"> <span class="hljs-class"><span class="hljs-keyword">struct</span>   <span class="hljs-title">sembuf</span>&#123;</span><br><br>     <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span>  sem_num;<span class="hljs-comment">//第几个信号量，第一个信号量为0；</span><br>     <span class="hljs-keyword">short</span>  sem_op;<span class="hljs-comment">//对该信号量的操作。</span><br>     <span class="hljs-keyword">short</span>  semflg;<span class="hljs-comment">//</span><br>&#125;;<br></code></pre></td></tr></table></figure>
-<p>在P操作中，需要占用资源，所以sem_op设置为-1，sem_num为0，表示我们希望修改这个信号集中的第一个信号量。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">V</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>V操作同理，将sem_op设置为1即可。</p>
-<h3 id="实验结果分析-2"><a class="markdownIt-Anchor" href="#实验结果分析-2"></a> 实验结果分析</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/sem.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-class"><span class="hljs-keyword">union</span> <span class="hljs-title">semun</span> &#123;</span><br>    <span class="hljs-keyword">int</span>              val;    <span class="hljs-comment">/* Value for SETVAL */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">semid_ds</span> *<span class="hljs-title">buf</span>;</span>    <span class="hljs-comment">/* Buffer for IPC_STAT, IPC_SET */</span><br>    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span>  *<span class="hljs-built_in">array</span>;  <span class="hljs-comment">/* Array for GETALL, SETALL */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">seminfo</span>  *__<span class="hljs-title">buf</span>;</span>  <span class="hljs-comment">/* Buffer for IPC_INFO</span><br><span class="hljs-comment">                                           (Linux-specific) */</span><br>&#125;;<br><span class="hljs-keyword">int</span> sem_id1=<span class="hljs-number">0</span>,sem_id2=<span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">P</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">V</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span>;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> key1= ftok(<span class="hljs-string">&quot;.&quot;</span>,<span class="hljs-number">36</span>),key2=ftok(<span class="hljs-string">&quot;.&quot;</span>,<span class="hljs-number">98</span>);<br>    <span class="hljs-keyword">if</span>(key1==<span class="hljs-number">-1</span>||key2==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;keyFail!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    sem_id1=semget(key1,<span class="hljs-number">1</span>,IPC_CREAT|<span class="hljs-number">0666</span>);<br>    sem_id2=semget(key2,<span class="hljs-number">1</span>,IPC_CREAT|<span class="hljs-number">0666</span>);<br>    semun u1,u2;<br>    u1.val=<span class="hljs-number">0</span>;u2.val=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">if</span>(sem_id1==<span class="hljs-number">-1</span>||sem_id2==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;semFail!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">int</span> flag1=semctl(sem_id1,<span class="hljs-number">0</span>,SETVAL,u1);<br>    <span class="hljs-keyword">int</span> flag2=semctl(sem_id2,<span class="hljs-number">0</span>,SETVAL,u2);<br>    <span class="hljs-keyword">if</span>(flag1==<span class="hljs-number">-1</span>||flag2==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;fail to set!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">pid_t</span> pid=fork();<br>    <span class="hljs-keyword">if</span>(pid&lt;<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create a new process!\n&quot;</span>);<br><br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>) <span class="hljs-comment">//child process</span><br>    &#123;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)<br>        &#123;<br><br>            P(sem_id2);<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The seller start to sell to ticker~\n&quot;</span>);<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;press &#x27;#stop&#x27; to stop selling:&quot;</span>);<br><span class="hljs-comment">//            getchar();</span><br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> s;<br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cin</span>&gt;&gt;s;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The seller stops selling!\n&quot;</span>);<br>            V(sem_id1);<br><br>        &#125;<br><br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">//father process</span><br>    &#123;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)<br>        &#123;	<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;press &#x27;#stop&#x27; to stop the car:&quot;</span>);<br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> s;<br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cin</span>&gt;&gt;s;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The driver stops the car\n&quot;</span>);<br>            V(sem_id2);<br>            P(sem_id1);<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The driver ignited the car~\n&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">P</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">V</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>开始时，默认汽车在行驶，当控制台输入字符串时，汽车停止，售票员开始售票；再次输入字符串，售票员停止售票，汽车启动。</p>
-<p><img src="https://img-blog.csdnimg.cn/20210409234555517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2EwNDE3MTI4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" /></p>
-<h4 id="运行结果"><a class="markdownIt-Anchor" href="#运行结果"></a> 运行结果</h4>
-<p><img src="/img/os_exp/p2.png" alt="p2" /></p>
-<hr />
-<h2 id="实验三线程进程共享数据"><a class="markdownIt-Anchor" href="#实验三线程进程共享数据"></a> 实验三：线程进程共享数据</h2>
-<h3 id="实验目的-3"><a class="markdownIt-Anchor" href="#实验目的-3"></a> 实验目的</h3>
-<p>了解线程与进程之间的数据共享关系。创建一个线程，在线程中更改进程中的数据。</p>
-<h3 id="实验内容-3"><a class="markdownIt-Anchor" href="#实验内容-3"></a> 实验内容</h3>
-<p>在进程中定义全局共享数据，在线程中直接引用该数据进行更改并输出该数据。</p>
-<h3 id="实验要求-3"><a class="markdownIt-Anchor" href="#实验要求-3"></a> 实验要求</h3>
-<p>显示和输出共享数据。</p>
-<h3 id="实验设计与实现-3"><a class="markdownIt-Anchor" href="#实验设计与实现-3"></a> 实验设计与实现</h3>
-<h4 id="创建进程"><a class="markdownIt-Anchor" href="#创建进程"></a> 创建进程</h4>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_create</span> <span class="hljs-params">(<span class="hljs-keyword">pthread_t</span> *__restrict __newthread,</span></span><br><span class="hljs-params"><span class="hljs-function">			   <span class="hljs-keyword">const</span> <span class="hljs-keyword">pthread_attr_t</span> *__restrict __attr,</span></span><br><span class="hljs-params"><span class="hljs-function">			   <span class="hljs-keyword">void</span> *(*__start_routine) (<span class="hljs-keyword">void</span> *),</span></span><br><span class="hljs-params"><span class="hljs-function">			   <span class="hljs-keyword">void</span> *__restrict __arg)</span></span><br></code></pre></td></tr></table></figure>
-<p>这个函数用于创建一个线程，需要指定调用的函数和函数的参数。</p>
-<p>参数：</p>
-<ul>
-<li>第一个参数：新建的线程ID，也就是指向的内存单元(传入的是指针)，</li>
-<li>第二个参数：线程属性，默认为NULL</li>
-<li>第三个参数：可以理解为希望被执行的函数指针</li>
-<li>第四个参数：函数的参数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_join</span> <span class="hljs-params">(<span class="hljs-keyword">pthread_t</span> __th, <span class="hljs-keyword">void</span> **__thread_return)</span></span>;<br></code></pre></td></tr></table></figure>
-<p>当进程结束时，子进程也会被迫结束，所以需要调用这个函数，阻塞进程，直到指定的进程结束。</p>
-<p>参数：</p>
-<ul>
-<li>第一个参数：线程的ID</li>
-<li>第二个参数：指向字符串的指针，用于接受子进程的运行结果</li>
-</ul>
-<h3 id="实验结果分析-3"><a class="markdownIt-Anchor" href="#实验结果分析-3"></a> 实验结果分析</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;errno.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">func</span><span class="hljs-params">(<span class="hljs-keyword">void</span>* x)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">int</span> *p=(<span class="hljs-keyword">int</span>*)x;<br>    *p=<span class="hljs-number">100</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;in thread,n=%d\n&quot;</span>,*p);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">pthread_t</span> tid;<br>    <span class="hljs-keyword">int</span> n=<span class="hljs-number">50</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;in main process, n=%d\n&quot;</span>,n);<br>    <span class="hljs-keyword">int</span> res= pthread_create(&amp;tid,<span class="hljs-literal">NULL</span>,func,(<span class="hljs-keyword">void</span>*)&amp;n);<br>    <span class="hljs-keyword">if</span>(res!=<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create thread! \n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    pthread_join(tid,<span class="hljs-literal">NULL</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;after the thread, n=%d\n&quot;</span>,n);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="运行结果-2"><a class="markdownIt-Anchor" href="#运行结果-2"></a> 运行结果</h4>
-<p><img src="/img/os_exp/p3.png" alt="p3" /></p>
-<p>可以看到，子线程修改了主进程中的数据，并将结果输出。</p>
-<h2 id="实验四创建进程"><a class="markdownIt-Anchor" href="#实验四创建进程"></a> 实验四：创建进程</h2>
-<h3 id="实验目的-4"><a class="markdownIt-Anchor" href="#实验目的-4"></a> 实验目的</h3>
-<p>学会通过基本的windows或者Linux进程控制函数，由父进程创建子进程，并实现父子进程协同工作。</p>
-<h3 id="实验内容-4"><a class="markdownIt-Anchor" href="#实验内容-4"></a> 实验内容</h3>
-<p>创建两个进程，让子进程读取一个文件，父进程等待子进程读取完文件后继续执行，实现进程协同工作。</p>
-<p>进程协同工作就是协调好两个进程，使之安排好先后次序，并以此执行，可以用等待函数来实现这一点。当需要等待子进程运行结束时，可在父进程中调用等待函数。</p>
-<h3 id="实验要求-4"><a class="markdownIt-Anchor" href="#实验要求-4"></a> 实验要求</h3>
-<p>让父子进程按要求的顺序读取文件。</p>
-<h3 id="实验设计与实现-4"><a class="markdownIt-Anchor" href="#实验设计与实现-4"></a> 实验设计与实现</h3>
-<p>在父进程中调用<code>fork()</code>函数产生一个子进程，在子进程中读取文件，再在父进程中读取文件。为了保证父进程在子进程之后读取文件，所以使用<code>wait()</code>函数在父进程中等待子进程运行完毕后再运行接下来的代码。</p>
-<p>在两个进程中，使用fopen等文件指针相关操作来读取文件。</p>
-<h3 id="实验结果分析-4"><a class="markdownIt-Anchor" href="#实验结果分析-4"></a> 实验结果分析</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/sem.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/wait.h&gt;</span></span><br><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">pid_t</span> pid;<br>    pid=fork();<br>    FILE *fp=fopen(<span class="hljs-string">&quot;/home/zhouhf/CLionProjects/os_exp4/data.txt&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>);<br>    <span class="hljs-keyword">if</span>(fp==<span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to open file!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create process!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-comment">//child process</span><br>        <span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br>        fgets(str,<span class="hljs-number">100</span>,fp);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is from child process:\n&quot;</span>);<br>        <span class="hljs-built_in">puts</span>(str);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">// father process</span><br>    &#123;<br>        <span class="hljs-keyword">int</span> status;<br>        wait(&amp;status); <span class="hljs-comment">//wait until child process ends</span><br>        <span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br>        fgets(str,<span class="hljs-number">100</span>,fp);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is from father process:\n&quot;</span>);<br>        <span class="hljs-built_in">puts</span>(str);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-<p>其中，文件data.txt的内容为如下</p>
-<blockquote>
-<p>Hello, have a nice day!</p>
-</blockquote>
-<p>运行结果：</p>
-<p><img src="/img/os_exp/p4.png" alt="p4" /></p>
-<h2 id="实验五匿名管道通信"><a class="markdownIt-Anchor" href="#实验五匿名管道通信"></a> 实验五：匿名管道通信</h2>
-<h3 id="实验目的-5"><a class="markdownIt-Anchor" href="#实验目的-5"></a> 实验目的</h3>
-<p>学习使用匿名管道在两个进程间建立通信。</p>
-<h3 id="实验内容-5"><a class="markdownIt-Anchor" href="#实验内容-5"></a> 实验内容</h3>
-<p>分别建立名为Parent的单文档应用程序和Child的单文档应用程序作为父子进程，由父进程创建一个匿名管道，实现父子进程向匿名管道写入和读取数据。</p>
-<h3 id="实验要求-5"><a class="markdownIt-Anchor" href="#实验要求-5"></a> 实验要求</h3>
-<p>父进程要能够从子进程创建的匿名管道中读取数据，实现进程间通信。</p>
-<h3 id="实验设计与实现-5"><a class="markdownIt-Anchor" href="#实验设计与实现-5"></a> 实验设计与实现</h3>
-<h4 id="创建管道"><a class="markdownIt-Anchor" href="#创建管道"></a> 创建管道</h4>
-<p>函数：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pipe</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __pipedes[<span class="hljs-number">2</span>])</span></span>;<br></code></pre></td></tr></table></figure>
-<p>pipe函数需要一个长度为2的数组指针作为参数，创建管道完成后，会修改数组指针的值作为标识符（_pipedes[0]是读取的管道，_pipedes[1]写入的管道），当创建失败时，该函数会返回-1值。</p>
-<h4 id="子进程"><a class="markdownIt-Anchor" href="#子进程"></a> 子进程</h4>
-<p>子进程只需要写入数据，所以可以在子进程中使用<code>close(int)</code>函数将读取的管道关闭。</p>
-<p>接下来，使用<code>write</code>函数</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">write</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __fd, <span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *__buf, <span class="hljs-keyword">size_t</span> __n)</span></span><br></code></pre></td></tr></table></figure>
-<p>三个参数分别是：</p>
-<ul>
-<li>管道标识符</li>
-<li>缓冲区的头指针</li>
-<li>缓冲区的大小</li>
-</ul>
-<p>该函数会返回成功写入的字节数（由于各种可能导致写入失败的因素，该值可能会比预期的小）</p>
-<h4 id="父进程"><a class="markdownIt-Anchor" href="#父进程"></a> 父进程</h4>
-<p>同理，在父进程中，只需要读取数据，所以使用<code>close</code>函数关闭写入管道，然后使用<code>read</code>函数从管道读取内容。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">read</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __fd, <span class="hljs-keyword">void</span> *__buf, <span class="hljs-keyword">size_t</span> __nbytes)</span></span><br></code></pre></td></tr></table></figure>
-<p>该函数与write函数类似，但需要注意的是第一个参数要传递读取管道的标识符，buf指针是期望读入的缓冲区。</p>
-<h3 id="实验结果分析-5"><a class="markdownIt-Anchor" href="#实验结果分析-5"></a> 实验结果分析</h3>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;cstdlib&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;time.h&quot;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> _pipe[<span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">char</span> msg[]=<span class="hljs-string">&quot;Have a nice day!\n&quot;</span>;<br>    <span class="hljs-keyword">char</span> buf[<span class="hljs-number">101</span>];<br>    <span class="hljs-keyword">int</span> res=pipe(_pipe);<br>    <span class="hljs-keyword">if</span>(res==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to build pipe!\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-keyword">pid_t</span> pid=fork();<br><br>    <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to fork process!\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>) <span class="hljs-comment">//child process</span><br>    &#123;<br>        close(_pipe[<span class="hljs-number">0</span>]);<br>        write(_pipe[<span class="hljs-number">1</span>],msg,<span class="hljs-keyword">sizeof</span>(msg));<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">//father process</span><br>    &#123;<br>        <span class="hljs-keyword">int</span> status;<br>        wait(&amp;status);<br>        close(_pipe[<span class="hljs-number">1</span>]);<br>        read(_pipe[<span class="hljs-number">0</span>],buf,<span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;msg from child process :%s&quot;</span>,buf);<br>    &#125;<br><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<p><img src="/img/os_exp/p5.png" alt="p5" /></p>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>实验</tag>
-        <tag>操作系统</tag>
       </tags>
   </entry>
   <entry>
@@ -779,6 +509,99 @@ x \equiv a_n(mod \quad m_n)
       </tags>
   </entry>
   <entry>
+    <title>C语言上机事半功倍的小技巧</title>
+    <url>/2022/03/10/C%E8%AF%AD%E8%A8%80%E4%B8%8A%E6%9C%BA%E4%BA%8B%E5%8D%8A%E5%8A%9F%E5%80%8D%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<h1 id="零-前言"><a class="markdownIt-Anchor" href="#零-前言"></a> 零、前言</h1>
+<p>本篇博客旨在帮助各位用最少代码、最快的时间通过C语言上机测试，主要介绍一些C++内置函数。这些函数主要是笔者平时写题时积累的一些实用函数，包含了较多的个人主观因素，希望读者能各取所需，内容可能不够全面也不够准确，但应付考试是够的。<strong>如果考试时实在无法运用本文的小技巧，请尊重自身平时的代码习惯。</strong></p>
+<blockquote>
+<p>UPD:<br />
+2022-03-10 13:44: 增加了algorithm的其他函数和命名空间std中的函数。</p>
+</blockquote>
+<h1 id="一-实用的内置函数"><a class="markdownIt-Anchor" href="#一-实用的内置函数"></a> 一、实用的内置函数</h1>
+<h2 id="1-排序函数"><a class="markdownIt-Anchor" href="#1-排序函数"></a> 1、排序函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-comment">//快速排序（不稳定）</span><br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br><span class="hljs-comment">//稳定排序</span><br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br><span class="hljs-built_in">stable_sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+);<br></code></pre></td></tr></table></figure>
+<p>sort函数有三个参数，前两个参数是指针，代表需要排序的区间（左闭右开），第三个参数是<em>函数指针</em>，<strong>可填可不填</strong>，不填就默认递增排序。sort函数无返回值，是对于数组做原地排序。<br />
+例如，上述代码就是对a数组的第1个到第n个元素排序（笔者习惯数组下标从1开始）。如果习惯的下标是从0开始，那就是</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a,a+n);<br></code></pre></td></tr></table></figure>
+<p>更普遍的，sort(a+p,a+q)就是将a[p]~a[q-1]排序。</p>
+<h3 id="递减的排序怎么办"><a class="markdownIt-Anchor" href="#递减的排序怎么办"></a> 递减的排序怎么办？</h3>
+<p>解决办法有两个：<br />
+1、将待排序数组全部取相反数，按默认的递增排序后再取一次相反数即可。<br />
+<font color=red>2、编写cmp函数</font><br />
+这里可能比较复杂，看不懂就可以不用看了。<br />
+首先，声明一个cmp函数（名字未必要是cmp，符合C语言规范即可）</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> X,<span class="hljs-keyword">int</span> Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X&gt;Y;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>然后将cmp函数指针作为sort的第三个参数即可。</p>
+<blockquote>
+<p>函数指针是指针的一种，只写函数名，就是该函数的函数指针。<br />
+bool是C++的数据类型，只有1和0（true和false）两种取值。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">sort</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n,cmp);<br></code></pre></td></tr></table></figure>
+<p>还可以对自定义的结构体设定排序关键字:</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">cmp</span><span class="hljs-params">(Student X, Student Y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> X.grade &gt; Y.grade;<br>&#125;<br>[...]<br><span class="hljs-built_in">sort</span>(students+<span class="hljs-number">1</span>, students+<span class="hljs-number">1</span>+n, cmp);<br></code></pre></td></tr></table></figure>
+<p>对学生按照成绩从高到低排序。</p>
+<blockquote>
+<p>稳定排序和不稳定排序<br />
+稳定排序指的是：当数据中存在两个相同的值时，排序后不会改变相对位置。例如A和B成绩都是90分，A原先在B前面，排序后不会出现A跑到B后面的情况，这就是稳定排序。<br />
+考试中两种都可以用，问题不大。</p>
+</blockquote>
+<h2 id="2-algorithm头文件中的其他函数"><a class="markdownIt-Anchor" href="#2-algorithm头文件中的其他函数"></a> 2、algorithm头文件中的其他函数</h2>
+<h3 id="11-倒序函数"><a class="markdownIt-Anchor" href="#11-倒序函数"></a> 1.1、倒序函数</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">reverse</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//将目标区间内的值倒置</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">例如： 数组&#123;1,1,4,5,1,4&#125;被倒置后会变成&#123;4,1,5,4,1,1&#125;</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure>
+<p>使用方法和sort十分类似，区间也是左闭右开。<br />
+<font color=green>实际上，C++和许多语言的内置函数默认都是左闭右开的</font></p>
+<h3 id="12-取最大值-最小值的函数"><a class="markdownIt-Anchor" href="#12-取最大值-最小值的函数"></a> 1.2、取最大值、最小值的函数</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;algorithm&gt;</span></span><br><span class="hljs-built_in">max_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最大值</span><br><span class="hljs-built_in">min_element</span>(a+<span class="hljs-number">1</span>,a+<span class="hljs-number">1</span>+n);<span class="hljs-comment">//返回给定区间内的最小值</span><br></code></pre></td></tr></table></figure>
+<h2 id="3-命名空间std中的函数"><a class="markdownIt-Anchor" href="#3-命名空间std中的函数"></a> 3、命名空间std中的函数</h2>
+<p>要使用命名空间std中的函数，你需要像这样做：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;...&gt;</span></span><br>[...]<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std; <span class="hljs-comment">//在引用完头文件后加上这句话</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>主要有以下三个函数</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-built_in">max</span>(a,b); <span class="hljs-comment">//返回a和b中的较大者</span><br><span class="hljs-built_in">min</span>(a,b); <span class="hljs-comment">//返回a和b中的较小者</span><br><span class="hljs-built_in">swap</span>(a,b); <span class="hljs-comment">//将a和b的值交换</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，以上所有的函数都是C++特有的，使用时请保证文件扩展名为.cpp<br />
+且上面的所有函数都是模板函数，这意味着可以任何数据类型都可以使用（前提是为该数据类型定义了大于、小于预算符），例如，排序函数可以对int数组排序，也可以对double、float甚至字符排序。</p>
+</blockquote>
+<h2 id="4-字符判断的函数"><a class="markdownIt-Anchor" href="#4-字符判断的函数"></a> 4、字符判断的函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cctype&gt;</span></span><br><span class="hljs-comment">//上面的是C++的头文件，C语言头文件为#include&lt;ctype.h&gt;</span><br><span class="hljs-comment">//其实只要文件名结尾是.cpp，就没什么区别</span><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isdigit</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是数字（&#x27;0&#x27;~&#x27;9&#x27;)</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isalpha</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是英文字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是大写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">islower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//判断字符c是不是小写字母</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">toupper</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为大写后的字符</span><br><br><span class="hljs-function"><span class="hljs-keyword">char</span> <span class="hljs-title">tolower</span><span class="hljs-params">(<span class="hljs-keyword">char</span> c)</span></span>;<span class="hljs-comment">//返回将字符c转为小写后的字符</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>以上bool的返回值，在C语言中是int</p>
+</blockquote>
+<h2 id="5-字符串函数"><a class="markdownIt-Anchor" href="#5-字符串函数"></a> 5、字符串函数</h2>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//头文件</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-comment">//C语言中是string.h</span><br><br><span class="hljs-comment">//非常常用的一个函数（个人觉得）</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> * <span class="hljs-title">memset</span> <span class="hljs-params">( <span class="hljs-keyword">void</span> * ptr, <span class="hljs-keyword">int</span> value, <span class="hljs-keyword">size_t</span> num)</span></span>;<span class="hljs-comment">//以字节方式填充一个数组</span><br><br><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">strcmp</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str1, <span class="hljs-keyword">char</span>* str2)</span></span>;<span class="hljs-comment">//以字典序比较两个函数</span><br><br><span class="hljs-function"><span class="hljs-keyword">size_t</span> <span class="hljs-title">strlen</span> <span class="hljs-params">(<span class="hljs-keyword">char</span> * str )</span></span>;<br></code></pre></td></tr></table></figure>
+<p>其实字符串内置的函数很多，但是太难记了，个人人为实用的就以上几个。<br />
+接下来重点说一下memset这个函数。<br />
+memset第一个参数是一个指针，可以是字符串的头指针也可以是任何数组的指针；第二个参数是想要设置每个字节的值；第三个参数是想要填充的字节个数,第三个参数一般设置为sizeof(ptr)。<br />
+举个栗子：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(str,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/0&#x27;</span><br><span class="hljs-built_in">memset</span>(str,<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(str));<span class="hljs-comment">//将str的值全部设置为&#x27;/a&#x27;</span><br><br><span class="hljs-keyword">int</span> num[<span class="hljs-number">101</span>];<br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为0</span><br><span class="hljs-comment">//以下要注意！！！！</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">5</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//并不是将num全部设置为5，因为int在c语言中占4个字节</span><br><span class="hljs-comment">//但是可以这样：</span><br><span class="hljs-built_in">memset</span>(num,<span class="hljs-number">0x3f</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(num));<span class="hljs-comment">//将num的值全部设置为一个非常大的数</span><br></code></pre></td></tr></table></figure>
+<p><font color=red>总之，memset在设置字符时，可以直接赋值。而对于int或者其他类型的，并不是特别适用。但是如果想将int数组初始化为0或者无穷大，可以考虑使用memset。</font></p>
+<h1 id="二-语法小技巧"><a class="markdownIt-Anchor" href="#二-语法小技巧"></a> 二、语法小技巧</h1>
+<h2 id="1-for循环"><a class="markdownIt-Anchor" href="#1-for循环"></a> 1、for循环</h2>
+<p>for循环其实可以这么写：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    [...]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>还可以这么写(慎用):</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> _for(i,a,b) for( int i=(a); i&lt;(b); ++i)</span><br><br>_for(i,<span class="hljs-number">1</span>,n);<br></code></pre></td></tr></table></figure>
+<h2 id="2-判断语句避免翻车的方法"><a class="markdownIt-Anchor" href="#2-判断语句避免翻车的方法"></a> 2、判断语句避免翻车的方法</h2>
+<p>有人if判断语句会这么写</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(a==<span class="hljs-number">1</span>) <span class="hljs-comment">//很容易写成a=1，且不易察觉</span><br>&#123;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是如果换一种写法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">if</span>(<span class="hljs-number">1</span>==a)<br>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样如果不小心漏了一个等号，编译器就会报错，提醒我们。</p>
+<h2 id="3-利用好全局变量"><a class="markdownIt-Anchor" href="#3-利用好全局变量"></a> 3、利用好全局变量</h2>
+<p>将全局变量定义在main函数外，其初始值会全部被设置为0，利用这一特点可以省去初始化的工夫。此外，数组定义在main函数外，其空间可以更大（int类型最大好像是10000*10000来着）</p>
+<h1 id="三-没了"><a class="markdownIt-Anchor" href="#三-没了"></a> 三、没了</h1>
+<p>可能有人3.10下午就要上机了，先写这么多，想起来再补吧。<br />
+考试是可以应付的，但是希望读者能扬弃本文内容，将来形成良好的代码习惯。<br />
+<font color=orange size=7>祝考试顺利</font></p>
+]]></content>
+      <categories>
+        <category>课内</category>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>C语言</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>scrapy爬虫框架学习笔记</title>
     <url>/2022/01/23/scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="scrapy入门"><a class="markdownIt-Anchor" href="#scrapy入门"></a> Scrapy入门</h1>
@@ -976,83 +799,6 @@ rules元组冲包含了Rule类，包含以下参数</p>
       </tags>
   </entry>
   <entry>
-    <title>计网大作业-web应用之爬虫</title>
-    <url>/2022/06/07/%E8%AE%A1%E7%BD%91%E5%A4%A7%E4%BD%9C%E4%B8%9A-web%E5%BA%94%E7%94%A8%E4%B9%8B%E7%88%AC%E8%99%AB/</url>
-    <content><![CDATA[<h1 id="计算机通信与网络课外实验"><a class="markdownIt-Anchor" href="#计算机通信与网络课外实验"></a> 计算机通信与网络课外实验</h1>
-<h4 id="作者u周洪锋2000920-刘勇建2000920u"><a class="markdownIt-Anchor" href="#作者u周洪锋2000920-刘勇建2000920u"></a> 作者：<u>周洪锋2000920**** 刘勇建2000920****</u></h4>
-<h2 id="实验题目"><a class="markdownIt-Anchor" href="#实验题目"></a> 实验题目</h2>
-<p><strong>WEB应用——利用爬虫爬取”电影天堂“网站的电影</strong></p>
-<h2 id="实验目的"><a class="markdownIt-Anchor" href="#实验目的"></a> 实验目的</h2>
-<ul>
-<li>通过爬虫工具的使用，加强对<strong>HTTP</strong>协议的理解</li>
-<li>学会如何发送请求头，完成与HTTP服务器的交互</li>
-<li>在解析页面的过程中熟悉<strong>HTML</strong> 代码</li>
-</ul>
-<h2 id="实验工具"><a class="markdownIt-Anchor" href="#实验工具"></a> 实验工具</h2>
-<ul>
-<li>python（装有<code>request</code>、<code>bs4</code>等模块）</li>
-<li>chrome浏览器</li>
-</ul>
-<h2 id="实验原理"><a class="markdownIt-Anchor" href="#实验原理"></a> 实验原理</h2>
-<h3 id="http协议"><a class="markdownIt-Anchor" href="#http协议"></a> HTTP协议</h3>
-<p>HTTP协议是面向事务的应用层协议，可以完成超文本内容的传送。其基本过程如下图所示：服务器不断在<strong>80端口</strong>监听是否有客户端浏览器的请求，一旦监听到请求后，便由客户端发起TCP连接的建立。随后浏览器向客户机发送HTTP请求报文，申请获取<strong>指定URL</strong>的页面，服务器收到请求后，便向客户机发送对应的页面（通常是HTML代码，后由浏览器解析）。</p>
-<p><img src="/img/dytt/HTTP.png" alt="HTTP协议基本原理" /></p>
-<p><strong>HTTP协议有以下特点</strong></p>
-<ul>
-<li><strong>HTTP是无状态的</strong>。浏览器不会记得曾经访问过的客户，也不会记录客户的信息。但是，Cookies技术可以改变这一特点。</li>
-<li><strong>HTTP的请求报文头使用ASCII码，是可读的</strong>。用户可以检查浏览器发出的请求头和收到的响应头来获得相应信息（本实验中，使用请求头的<em>User-Agent</em>信息来伪装请求报文。同时响应头中含有状态码，可以用于查看服务器的响应情况。</li>
-<li><strong>HTTP使用HTML（超文本标记语言）作为制作页面的语言</strong>。可以使用Python的相关模块对HTML进行解析，提取其中的信息。</li>
-</ul>
-<p><img src="/img/dytt/request_header.png" alt="请求头的格式" /></p>
-<h3 id="爬虫原理"><a class="markdownIt-Anchor" href="#爬虫原理"></a> 爬虫原理</h3>
-<p>正常的HTTP访问请求中，由浏览器发送请求报文，而爬虫便是使用Python等工具向服务器发送大量请求报文，批量获取服务器的响应，并从中获取有效信息。</p>
-<p>在爬取之前，需要了解目标网站的<strong>网址、网页结构、是否有反爬虫机制</strong>等相关信息。</p>
-<h2 id="实验步骤"><a class="markdownIt-Anchor" href="#实验步骤"></a> 实验步骤</h2>
-<h3 id="1-分析网站结构"><a class="markdownIt-Anchor" href="#1-分析网站结构"></a> 1、分析网站结构</h3>
-<p>通过在chrome浏览器中对网页进行检查，可以发现，在网站的 <em>电影-&gt;最新电影-&gt;下载页面</em> 中有规律地列出了许多最新电影的下载页面，可以从该页面<a href="https://www.dy2018.com/html/gndy/dyzz/index.html">电影天堂</a>开始作为爬取的对象。</p>
-<p>查看网页的<strong>HTML代码</strong>，可以发现下载跳转链接都被放在一个<code>&lt;div class='bd3r'&gt;</code>标签中，可以使用网页解析工具对该页面进行解析，抽取出想要的电影信息。</p>
-<img src="/img/dytt/index.png" style="zoom:67%;" />
-<p>当然，一页的电影肯定是不够的，需要考虑<strong>下载多个页面的内容</strong>，不难发现，该网站不同页的url有以下的规律</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>www.dy2018.com<span class="hljs-regexp">/html/g</span>ndy<span class="hljs-regexp">/dyzz/i</span>ndex.html <span class="hljs-regexp">//</span>第一页<br>https:<span class="hljs-regexp">//</span>www.dy2018.com<span class="hljs-regexp">/html/g</span>ndy<span class="hljs-regexp">/dyzz/i</span>ndex_2.html <span class="hljs-regexp">//</span>第二页<br>https:<span class="hljs-regexp">//</span>www.dy2018.com<span class="hljs-regexp">/html/g</span>ndy<span class="hljs-regexp">/dyzz/i</span>ndex_3.html <span class="hljs-regexp">//</span>第三页<br></code></pre></td></tr></table></figure>
-<p>这样，我们就可以简单推出所有页面的url。</p>
-<h3 id="2-发出http请求"><a class="markdownIt-Anchor" href="#2-发出http请求"></a> 2、发出HTTP请求</h3>
-<p>python3中带有requests模块，其中的<code>get()</code>函数可以自动向HTTP服务器发出请求,可以通过以下的调用发出请求</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">url = <span class="hljs-string">&quot;https://www.dy2018.com/html/gndy/dyzz/index.html&quot;</span><br>requests.get(url)<br></code></pre></td></tr></table></figure>
-<p>但是，检查返回的状态码会发现，HTTP并没有给出正确的响应，因为requests.get()发出的请求被服务器识别为不正常的请求，为了让服务器能够正常响应，<strong>需要伪装请求头</strong>。打开浏览器的检查，通过抓包可以查看浏览器发出的请求头信息：</p>
-<p><img src="/img/dytt/header.png" alt="请求头信息" /></p>
-<p><code>user-agent</code>代表的是客户端浏览器的相关信息，为了防止服务器拒绝我们的请求，可以在调用get函数时携带headers参数，来伪装成是浏览器发出的请求，同时还可以<strong>设置cookies</strong>来保持登录状态。</p>
-<p>以下为获得<strong>HTTP响应</strong>的代码</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">GetHtml</span>(<span class="hljs-params">url</span>):</span><br>    ua = UserAgent()<br>    headers=&#123;<br>        <span class="hljs-string">&#x27;user-agent&#x27;</span>:<span class="hljs-built_in">str</span>(ua.random),<br>        <span class="hljs-string">&#x27;Connection&#x27;</span>:<span class="hljs-string">&#x27;close&#x27;</span><br>    &#125;<br><br>    r = requests.get(url,headers=headers)<br>    <br>    <span class="hljs-keyword">if</span> r.status_code == <span class="hljs-number">200</span>:<br>        r.encoding = <span class="hljs-string">&#x27;gb2312&#x27;</span><br>        soup = BeautifulSoup(r.text,<span class="hljs-string">&#x27;lxml&#x27;</span>) //使用bs4模块对获取的页面解析<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br>    <span class="hljs-keyword">return</span> soup<br></code></pre></td></tr></table></figure>
-<h3 id="3-页面解析-信息提取"><a class="markdownIt-Anchor" href="#3-页面解析-信息提取"></a> 3、页面解析、信息提取</h3>
-<p>再次检查页面，可以发现每一部电影的链接都置于标签<code>&lt;a class='ulink'&gt;</code>中，可以考虑使用<code>BeautifulSoup</code>模块抽取出页面每一个class为ulink的标签，进行进一步解析。</p>
-<p><img src="/img/dytt/html.png" alt="" /></p>
-<p>提取出的标签含有较多无用信息，可以考虑对标签中的信息进一步清洗。</p>
-<ul>
-<li>电影的标题考虑使用正则表达式来匹配书名号中的内容</li>
-<li>电影详细页面的链接可以使用<code>BeautifulSoup</code>来提取出标签中的<code>href</code></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Parser</span>(<span class="hljs-params">soup</span>):</span><br>    raw = soup.find_all(<span class="hljs-string">&quot;a&quot;</span>,class_=<span class="hljs-string">&#x27;ulink&#x27;</span>)<br>    ptn = re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&quot;《[\u4e00-\u9fa5]*》&quot;</span>)<br>    movies = []<br>    urls = []<br>    <span class="hljs-keyword">for</span> each <span class="hljs-keyword">in</span> raw:<br>        movies.extend(ptn.findall(each.string))<br>        urls.append(each[<span class="hljs-string">&quot;href&quot;</span>])<br>    full_urls = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        full_urls.append(parse.urljoin(root_url,url))<br>    <span class="hljs-keyword">return</span> movies,full_urls<br></code></pre></td></tr></table></figure>
-<p>这样，就可以爬取出<strong>电影和电影的详细页面</strong>，但是还无法获得下载电影的磁力链接。电影磁力链接在详细页面中可以找到，所以可以通过上一步获得的详细页面链接，尝试访问详细信息页面，用类似的方法（正则表达式）提取出电影的磁力链接。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">SubHtml</span>(<span class="hljs-params">urls</span>):</span><br>    magnet = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        soup = GetHtml(url)<br>        <span class="hljs-keyword">if</span> soup == <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">continue</span><br>        get = soup.find(<span class="hljs-string">&quot;a&quot;</span>,href=re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&#x27;magnet(.*?\.mp4)?&#x27;</span>))<br>        <span class="hljs-keyword">if</span> get != <span class="hljs-literal">None</span>:<br>            magnet.append(get.string)<br>            <span class="hljs-built_in">print</span>(get.string)<br>    <span class="hljs-keyword">return</span> magnet<br></code></pre></td></tr></table></figure>
-<h3 id="4-开始爬取"><a class="markdownIt-Anchor" href="#4-开始爬取"></a> 4、开始爬取</h3>
-<p>整个爬虫程序的流程图如下所示：</p>
-<p><img src="/img/dytt/step.png" alt="" /></p>
-<h2 id="实验结果"><a class="markdownIt-Anchor" href="#实验结果"></a> 实验结果</h2>
-<p>将爬取到的信息储存到txt文本文档中，结果如下所示：</p>
-<p><img src="/img/dytt/result.png" alt="" /></p>
-<h2 id="完整代码"><a class="markdownIt-Anchor" href="#完整代码"></a> 完整代码</h2>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> sre_constants <span class="hljs-keyword">import</span> AT<br><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup<br><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">from</span> urllib <span class="hljs-keyword">import</span> parse<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">from</span> requests.adapters <span class="hljs-keyword">import</span> HTTPAdapter<br><span class="hljs-keyword">from</span> fake_useragent <span class="hljs-keyword">import</span> UserAgent<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">GetHtml</span>(<span class="hljs-params">url</span>):</span><br>    ua = UserAgent()<br>    headers=&#123;<br>        <span class="hljs-string">&#x27;user-agent&#x27;</span>:<span class="hljs-built_in">str</span>(ua.random), //使用随机UA，防止被服务器拒绝<br>        <span class="hljs-string">&#x27;Connection&#x27;</span>:<span class="hljs-string">&#x27;close&#x27;</span><br>    &#125;<br><br>    r = requests.get(url,headers=headers)<br>    <br>    <span class="hljs-keyword">if</span> r.status_code == <span class="hljs-number">200</span>:<br>        r.encoding = <span class="hljs-string">&#x27;gb2312&#x27;</span><br>        soup = BeautifulSoup(r.text,<span class="hljs-string">&#x27;lxml&#x27;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br>    <span class="hljs-comment">#print(r.text)</span><br>    <span class="hljs-keyword">return</span> soup<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Parser</span>(<span class="hljs-params">soup</span>):</span><br>    raw = soup.find_all(<span class="hljs-string">&quot;a&quot;</span>,class_=<span class="hljs-string">&#x27;ulink&#x27;</span>)<br>    <span class="hljs-comment">#print(raw)</span><br>    ptn = re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&quot;《[\u4e00-\u9fa5]*》&quot;</span>)<br>    movies = []<br>    urls = []<br>    <span class="hljs-keyword">for</span> each <span class="hljs-keyword">in</span> raw:<br>        movies.extend(ptn.findall(each.string))<br>        urls.append(each[<span class="hljs-string">&quot;href&quot;</span>])<br>    <span class="hljs-comment">#print(movies)</span><br>    <span class="hljs-comment">#print(urls)</span><br>    full_urls = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        full_urls.append(parse.urljoin(root_url,url))<br>    <span class="hljs-keyword">return</span> movies,full_urls<br>        <br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Save</span>(<span class="hljs-params">movies,urls,magnets</span>):</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;D:\AAA桌面映射文档\抢课app\爬虫\text.txt&quot;</span>,<span class="hljs-string">&quot;a+&quot;</span>,encoding=<span class="hljs-string">&#x27;utf-8&#x27;</span>) <span class="hljs-keyword">as</span> fp:<br>        <span class="hljs-keyword">for</span> m,u,magnet <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(movies,urls,magnets):<br>            fp.write(m+<span class="hljs-string">&#x27;\n&#x27;</span>)<br>            fp.write(u+<span class="hljs-string">&#x27;\n&#x27;</span>)<br>            fp.write(magnet+<span class="hljs-string">&#x27;\n&#x27;</span>)<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">SubHtml</span>(<span class="hljs-params">urls</span>):</span><br>    magnet = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        soup = GetHtml(url)<br>        <span class="hljs-keyword">if</span> soup == <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">continue</span><br>        <span class="hljs-comment">#print(soup)</span><br>        get = soup.find(<span class="hljs-string">&quot;a&quot;</span>,href=re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&#x27;magnet(.*?\.mp4)?&#x27;</span>))<br>        <span class="hljs-keyword">if</span> get != <span class="hljs-literal">None</span>:<br>            magnet.append(get.string)<br>            <span class="hljs-built_in">print</span>(get.string)<br>            <span class="hljs-comment">#print(get.string)</span><br>    <span class="hljs-keyword">return</span> magnet<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    root_url = <span class="hljs-string">&quot;https://www.dy2018.com/html/gndy/dyzz/index.html&quot;</span><br>    soup = GetHtml(root_url)<br>    movies,urls = Parser(soup)<br>    magnets = SubHtml(urls)<br>    Save(movies,urls,magnets)<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>,<span class="hljs-number">6</span>):<br>        root_url = <span class="hljs-string">&quot;https://www.dy2018.com/html/gndy/dyzz/index_&#123;0&#125;.html&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-built_in">str</span>(i))<br>        soup = GetHtml(root_url)<br>        movies,urls = Parser(soup)<br>        magnets = SubHtml(urls)<br>        <span class="hljs-comment">#print(magnets)</span><br>        Save(movies,urls,magnets)<br><br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>课内</category>
-        <category>计算机网络</category>
-      </categories>
-      <tags>
-        <tag>实验</tag>
-        <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数论基础</title>
     <url>/2022/03/18/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="零-概述"><a class="markdownIt-Anchor" href="#零-概述"></a> 零、概述</h1>
@@ -1192,6 +938,183 @@ y=y_0-\frac{k}{g}*a
       </tags>
   </entry>
   <entry>
+    <title>OS实验记录</title>
+    <url>/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="操作系统实验报告"><a class="markdownIt-Anchor" href="#操作系统实验报告"></a> 操作系统实验报告</h1>
+<p>姓名：<u>周洪锋</u> 	学号：<u>20009200766</u>	上课班级：<u>周二、周四56节</u></p>
+<h2 id="实验一进程的建立"><a class="markdownIt-Anchor" href="#实验一进程的建立"></a> 实验一：进程的建立</h2>
+<h3 id="实验目的"><a class="markdownIt-Anchor" href="#实验目的"></a> 实验目的</h3>
+<ul>
+<li>创建进程及子进程</li>
+<li>在父子进程间实现通信</li>
+</ul>
+<h3 id="实验内容"><a class="markdownIt-Anchor" href="#实验内容"></a> 实验内容</h3>
+<ul>
+<li>创建进程并显示标识等进程控制块的属性信息；</li>
+<li>显示父子进程的通信信息和相应的应答信息（进程间通信机制任选）</li>
+</ul>
+<h3 id="实验要求"><a class="markdownIt-Anchor" href="#实验要求"></a> 实验要求</h3>
+<ul>
+<li>显示创建的进程和控制参数；</li>
+<li>显示进程间关系参数。</li>
+</ul>
+<h3 id="实验设计与实现"><a class="markdownIt-Anchor" href="#实验设计与实现"></a> 实验设计与实现</h3>
+<p>在Linux操作系统中，可以使用fork()函数来复制一个当前进程，并作为当前进程的子进程。fork()函数在头文件&lt;unistd.h&gt;中，没有参数，返回值为pid_t类型。在父进程中，该函数返回值是子进程的pid，而在子进程中，该函数返回值始终为0，可以通过返回值的特点来区别父子进程。进程创建失败时，返回值为负数。</p>
+<p>同时需要注意的是，在父进程结束时，子进程会被迫退出，所以需要在父进程的代码中调用wait()函数（在头文件&lt;sys/wait.h&gt;中），其原型如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">extern</span> <span class="hljs-keyword">__pid_t</span> <span class="hljs-title">wait</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> *__stat_loc)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>该函数会等待，知道子进程运行完毕，<code>__stat__loc</code>参数用于接收子进程退出的信息，这里我们不关心这个值，可以直接填NULL。</p>
+<p>fork出的子进程会复制父进程的资源（实际上用的是一种类似“懒标记”法的方法，子进程会继承父进程的资源，但是当子进程修改资源的值时，会复制一份资源，不会对父进程修改），并继续执行剩余代码。</p>
+<p>代码中用到的剩余两个函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">pid_t</span> <span class="hljs-title">getpid</span><span class="hljs-params">()</span></span><br><span class="hljs-function"><span class="hljs-keyword">pid_t</span> <span class="hljs-title">getppid</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure>
+<p>分别用于获取自己的自己的父进程的pid。</p>
+<h3 id="实验结果分析"><a class="markdownIt-Anchor" href="#实验结果分析"></a> 实验结果分析</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;sys/wait.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> n=<span class="hljs-number">100</span>;<br>    <span class="hljs-keyword">pid_t</span> pid=fork();<br>    <span class="hljs-keyword">if</span>(pid&lt;<span class="hljs-number">0</span>) <span class="hljs-comment">//fail</span><br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create a new process!\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>) <span class="hljs-comment">//child process</span><br>    &#123;<br>        n++;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is the child process, pid=%hd, father process&#x27; pid=%hd\n&quot;</span>,getpid(),getppid());<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;n=%d\n&quot;</span>,n);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">//father process</span><br>    &#123;<br>        wait(<span class="hljs-literal">NULL</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is the father process, the pid=%hd,child&#x27;s pid=%hd\n&quot;</span>,getpid(),pid);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;n=%d\n&quot;</span>,n);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>代码中，使用if语句来区别父子进程。</p>
+<p>运行结果如下<img src="/img/os_exp/p1.png" alt="p1" /></p>
+<p>可以看到，父子进程可以互相显示进程控制块中的信息，且子进程中修改值并不会影响父进程。</p>
+<hr />
+<h2 id="实验二进程间的同步"><a class="markdownIt-Anchor" href="#实验二进程间的同步"></a> 实验二：进程间的同步</h2>
+<h3 id="实验目的-2"><a class="markdownIt-Anchor" href="#实验目的-2"></a> 实验目的：</h3>
+<ul>
+<li>理解进程同步和互斥模型及其应用</li>
+</ul>
+<h3 id="实验内容-2"><a class="markdownIt-Anchor" href="#实验内容-2"></a> 实验内容</h3>
+<ul>
+<li>利用通信API实现进程之间的同步；</li>
+<li>建立司机和售票员进程，并实现他们间的同步运行。</li>
+</ul>
+<h3 id="实验要求-2"><a class="markdownIt-Anchor" href="#实验要求-2"></a> 实验要求</h3>
+<p>显示司机和售票员进程的同步运行轨迹</p>
+<h3 id="实验设计与实现-2"><a class="markdownIt-Anchor" href="#实验设计与实现-2"></a> 实验设计与实现</h3>
+<h4 id="创建信号量"><a class="markdownIt-Anchor" href="#创建信号量"></a> 创建信号量</h4>
+<p>首先使用ftok函数来创建一个关键字，该函数原型如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">key_t</span> <span class="hljs-title">ftok</span><span class="hljs-params">( <span class="hljs-keyword">char</span> * fname, <span class="hljs-keyword">int</span> id )</span></span>;<br></code></pre></td></tr></table></figure>
+<p>ftok函数是根据pathname和id来创建一个关键字(类型为 key_t)，此关键字在创建信号量，创建消息队列的时候都需要使用。其中pathname必须是一个存在的可访问的路径或文件，id必须不得为0。失败返回值为-1。</p>
+<p>利用创建的关键字，就可以使用semget函数来创建信号量。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">semget</span> <span class="hljs-params">(<span class="hljs-keyword">key_t</span> __key, <span class="hljs-keyword">int</span> __nsems, <span class="hljs-keyword">int</span> __semflg)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>参数中，__key是上述生成的关键字，nsems是生成的信号量数量（可以产生类似数组的效果），_semflg ：信号量的创建方式或权限。有IPC_CREAT，IPC_EXCL。</p>
+<ul>
+<li>
+<p>IPC_CREAT如果信号量不存在，则创建一个信号量，否则获取。</p>
+</li>
+<li>
+<p>IPC_EXCL只有信号量不存在的时候，新的信号量才建立，否则就产生错误。</p>
+</li>
+</ul>
+<p>该函数返回一个int类型的值，这个值就可以看成是信号量的标识符。</p>
+<h4 id="初始化信号量"><a class="markdownIt-Anchor" href="#初始化信号量"></a> 初始化信号量</h4>
+<p>信号量创建完成后，需要对其值进行初始化。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">semctl</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __semid, <span class="hljs-keyword">int</span> __semnum, <span class="hljs-keyword">int</span> __cmd, ...)</span> </span>;<br></code></pre></td></tr></table></figure>
+<p>第一个参数传入信号量的标识符，第二个参数是这个信号量集中的编号（如果在semget时的__nsems大于1，那这个参数就相当于信号量数组的索引），第三个参数是需要做的操作，这里我们使用SETVAL，即设置信号量集中的一个单独信号量的值。</p>
+<p>最后还有一个可变参数，在这个实验中我们只需要初始化一个值，所以只要传入一个semun类型：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">union</span> <span class="hljs-title">semun</span> &#123;</span><br>   <span class="hljs-keyword">int</span>   val;<br>   <span class="hljs-class"><span class="hljs-keyword">struct</span>   <span class="hljs-title">semid_ds</span>  *<span class="hljs-title">buf</span>;</span><br>   <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span>   *arrary;<br><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>声明一个semun，改变其中的val然后传入semctl函数即可。(详见完整代码)</p>
+<h4 id="定义p操作和v操作"><a class="markdownIt-Anchor" href="#定义p操作和v操作"></a> 定义P操作和V操作</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">P</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>semop用于操作信号量，可以使用资源也可以释放资源，第一个参数为信号量标识符，第二参数是一个sembuf结构体的指针，第三个参数用于指定操作的结构数量。</p>
+<p>其中sembuf结构体定义如下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"> <span class="hljs-class"><span class="hljs-keyword">struct</span>   <span class="hljs-title">sembuf</span>&#123;</span><br><br>     <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span>  sem_num;<span class="hljs-comment">//第几个信号量，第一个信号量为0；</span><br>     <span class="hljs-keyword">short</span>  sem_op;<span class="hljs-comment">//对该信号量的操作。</span><br>     <span class="hljs-keyword">short</span>  semflg;<span class="hljs-comment">//</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>在P操作中，需要占用资源，所以sem_op设置为-1，sem_num为0，表示我们希望修改这个信号集中的第一个信号量。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">V</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>V操作同理，将sem_op设置为1即可。</p>
+<h3 id="实验结果分析-2"><a class="markdownIt-Anchor" href="#实验结果分析-2"></a> 实验结果分析</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/sem.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-class"><span class="hljs-keyword">union</span> <span class="hljs-title">semun</span> &#123;</span><br>    <span class="hljs-keyword">int</span>              val;    <span class="hljs-comment">/* Value for SETVAL */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">semid_ds</span> *<span class="hljs-title">buf</span>;</span>    <span class="hljs-comment">/* Buffer for IPC_STAT, IPC_SET */</span><br>    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span>  *<span class="hljs-built_in">array</span>;  <span class="hljs-comment">/* Array for GETALL, SETALL */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">seminfo</span>  *__<span class="hljs-title">buf</span>;</span>  <span class="hljs-comment">/* Buffer for IPC_INFO</span><br><span class="hljs-comment">                                           (Linux-specific) */</span><br>&#125;;<br><span class="hljs-keyword">int</span> sem_id1=<span class="hljs-number">0</span>,sem_id2=<span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">P</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">V</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span>;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> key1= ftok(<span class="hljs-string">&quot;.&quot;</span>,<span class="hljs-number">36</span>),key2=ftok(<span class="hljs-string">&quot;.&quot;</span>,<span class="hljs-number">98</span>);<br>    <span class="hljs-keyword">if</span>(key1==<span class="hljs-number">-1</span>||key2==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;keyFail!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    sem_id1=semget(key1,<span class="hljs-number">1</span>,IPC_CREAT|<span class="hljs-number">0666</span>);<br>    sem_id2=semget(key2,<span class="hljs-number">1</span>,IPC_CREAT|<span class="hljs-number">0666</span>);<br>    semun u1,u2;<br>    u1.val=<span class="hljs-number">0</span>;u2.val=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">if</span>(sem_id1==<span class="hljs-number">-1</span>||sem_id2==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;semFail!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">int</span> flag1=semctl(sem_id1,<span class="hljs-number">0</span>,SETVAL,u1);<br>    <span class="hljs-keyword">int</span> flag2=semctl(sem_id2,<span class="hljs-number">0</span>,SETVAL,u2);<br>    <span class="hljs-keyword">if</span>(flag1==<span class="hljs-number">-1</span>||flag2==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;fail to set!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">pid_t</span> pid=fork();<br>    <span class="hljs-keyword">if</span>(pid&lt;<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create a new process!\n&quot;</span>);<br><br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>) <span class="hljs-comment">//child process</span><br>    &#123;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)<br>        &#123;<br><br>            P(sem_id2);<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The seller start to sell to ticker~\n&quot;</span>);<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;press &#x27;#stop&#x27; to stop selling:&quot;</span>);<br><span class="hljs-comment">//            getchar();</span><br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> s;<br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cin</span>&gt;&gt;s;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The seller stops selling!\n&quot;</span>);<br>            V(sem_id1);<br><br>        &#125;<br><br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">//father process</span><br>    &#123;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)<br>        &#123;	<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;press &#x27;#stop&#x27; to stop the car:&quot;</span>);<br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> s;<br>            <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cin</span>&gt;&gt;s;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The driver stops the car\n&quot;</span>);<br>            V(sem_id2);<br>            P(sem_id1);<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The driver ignited the car~\n&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">P</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">V</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sem_id)</span></span><br><span class="hljs-function"></span>&#123;<br>    sembuf op = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>&#125;;<br>    semop(sem_id,&amp;op,<span class="hljs-number">1</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>开始时，默认汽车在行驶，当控制台输入字符串时，汽车停止，售票员开始售票；再次输入字符串，售票员停止售票，汽车启动。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210409234555517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2EwNDE3MTI4Mw==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" /></p>
+<h4 id="运行结果"><a class="markdownIt-Anchor" href="#运行结果"></a> 运行结果</h4>
+<p><img src="/img/os_exp/p2.png" alt="p2" /></p>
+<hr />
+<h2 id="实验三线程进程共享数据"><a class="markdownIt-Anchor" href="#实验三线程进程共享数据"></a> 实验三：线程进程共享数据</h2>
+<h3 id="实验目的-3"><a class="markdownIt-Anchor" href="#实验目的-3"></a> 实验目的</h3>
+<p>了解线程与进程之间的数据共享关系。创建一个线程，在线程中更改进程中的数据。</p>
+<h3 id="实验内容-3"><a class="markdownIt-Anchor" href="#实验内容-3"></a> 实验内容</h3>
+<p>在进程中定义全局共享数据，在线程中直接引用该数据进行更改并输出该数据。</p>
+<h3 id="实验要求-3"><a class="markdownIt-Anchor" href="#实验要求-3"></a> 实验要求</h3>
+<p>显示和输出共享数据。</p>
+<h3 id="实验设计与实现-3"><a class="markdownIt-Anchor" href="#实验设计与实现-3"></a> 实验设计与实现</h3>
+<h4 id="创建进程"><a class="markdownIt-Anchor" href="#创建进程"></a> 创建进程</h4>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_create</span> <span class="hljs-params">(<span class="hljs-keyword">pthread_t</span> *__restrict __newthread,</span></span><br><span class="hljs-params"><span class="hljs-function">			   <span class="hljs-keyword">const</span> <span class="hljs-keyword">pthread_attr_t</span> *__restrict __attr,</span></span><br><span class="hljs-params"><span class="hljs-function">			   <span class="hljs-keyword">void</span> *(*__start_routine) (<span class="hljs-keyword">void</span> *),</span></span><br><span class="hljs-params"><span class="hljs-function">			   <span class="hljs-keyword">void</span> *__restrict __arg)</span></span><br></code></pre></td></tr></table></figure>
+<p>这个函数用于创建一个线程，需要指定调用的函数和函数的参数。</p>
+<p>参数：</p>
+<ul>
+<li>第一个参数：新建的线程ID，也就是指向的内存单元(传入的是指针)，</li>
+<li>第二个参数：线程属性，默认为NULL</li>
+<li>第三个参数：可以理解为希望被执行的函数指针</li>
+<li>第四个参数：函数的参数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_join</span> <span class="hljs-params">(<span class="hljs-keyword">pthread_t</span> __th, <span class="hljs-keyword">void</span> **__thread_return)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>当进程结束时，子进程也会被迫结束，所以需要调用这个函数，阻塞进程，直到指定的进程结束。</p>
+<p>参数：</p>
+<ul>
+<li>第一个参数：线程的ID</li>
+<li>第二个参数：指向字符串的指针，用于接受子进程的运行结果</li>
+</ul>
+<h3 id="实验结果分析-3"><a class="markdownIt-Anchor" href="#实验结果分析-3"></a> 实验结果分析</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;errno.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">func</span><span class="hljs-params">(<span class="hljs-keyword">void</span>* x)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">int</span> *p=(<span class="hljs-keyword">int</span>*)x;<br>    *p=<span class="hljs-number">100</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;in thread,n=%d\n&quot;</span>,*p);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">pthread_t</span> tid;<br>    <span class="hljs-keyword">int</span> n=<span class="hljs-number">50</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;in main process, n=%d\n&quot;</span>,n);<br>    <span class="hljs-keyword">int</span> res= pthread_create(&amp;tid,<span class="hljs-literal">NULL</span>,func,(<span class="hljs-keyword">void</span>*)&amp;n);<br>    <span class="hljs-keyword">if</span>(res!=<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create thread! \n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    pthread_join(tid,<span class="hljs-literal">NULL</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;after the thread, n=%d\n&quot;</span>,n);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="运行结果-2"><a class="markdownIt-Anchor" href="#运行结果-2"></a> 运行结果</h4>
+<p><img src="/img/os_exp/p3.png" alt="p3" /></p>
+<p>可以看到，子线程修改了主进程中的数据，并将结果输出。</p>
+<h2 id="实验四创建进程"><a class="markdownIt-Anchor" href="#实验四创建进程"></a> 实验四：创建进程</h2>
+<h3 id="实验目的-4"><a class="markdownIt-Anchor" href="#实验目的-4"></a> 实验目的</h3>
+<p>学会通过基本的windows或者Linux进程控制函数，由父进程创建子进程，并实现父子进程协同工作。</p>
+<h3 id="实验内容-4"><a class="markdownIt-Anchor" href="#实验内容-4"></a> 实验内容</h3>
+<p>创建两个进程，让子进程读取一个文件，父进程等待子进程读取完文件后继续执行，实现进程协同工作。</p>
+<p>进程协同工作就是协调好两个进程，使之安排好先后次序，并以此执行，可以用等待函数来实现这一点。当需要等待子进程运行结束时，可在父进程中调用等待函数。</p>
+<h3 id="实验要求-4"><a class="markdownIt-Anchor" href="#实验要求-4"></a> 实验要求</h3>
+<p>让父子进程按要求的顺序读取文件。</p>
+<h3 id="实验设计与实现-4"><a class="markdownIt-Anchor" href="#实验设计与实现-4"></a> 实验设计与实现</h3>
+<p>在父进程中调用<code>fork()</code>函数产生一个子进程，在子进程中读取文件，再在父进程中读取文件。为了保证父进程在子进程之后读取文件，所以使用<code>wait()</code>函数在父进程中等待子进程运行完毕后再运行接下来的代码。</p>
+<p>在两个进程中，使用fopen等文件指针相关操作来读取文件。</p>
+<h3 id="实验结果分析-4"><a class="markdownIt-Anchor" href="#实验结果分析-4"></a> 实验结果分析</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/sem.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/wait.h&gt;</span></span><br><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">pid_t</span> pid;<br>    pid=fork();<br>    FILE *fp=fopen(<span class="hljs-string">&quot;/home/zhouhf/CLionProjects/os_exp4/data.txt&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>);<br>    <span class="hljs-keyword">if</span>(fp==<span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to open file!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to create process!\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-comment">//child process</span><br>        <span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br>        fgets(str,<span class="hljs-number">100</span>,fp);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is from child process:\n&quot;</span>);<br>        <span class="hljs-built_in">puts</span>(str);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">// father process</span><br>    &#123;<br>        <span class="hljs-keyword">int</span> status;<br>        wait(&amp;status); <span class="hljs-comment">//wait until child process ends</span><br>        <span class="hljs-keyword">char</span> str[<span class="hljs-number">101</span>];<br>        fgets(str,<span class="hljs-number">100</span>,fp);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;This is from father process:\n&quot;</span>);<br>        <span class="hljs-built_in">puts</span>(str);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>其中，文件data.txt的内容为如下</p>
+<blockquote>
+<p>Hello, have a nice day!</p>
+</blockquote>
+<p>运行结果：</p>
+<p><img src="/img/os_exp/p4.png" alt="p4" /></p>
+<h2 id="实验五匿名管道通信"><a class="markdownIt-Anchor" href="#实验五匿名管道通信"></a> 实验五：匿名管道通信</h2>
+<h3 id="实验目的-5"><a class="markdownIt-Anchor" href="#实验目的-5"></a> 实验目的</h3>
+<p>学习使用匿名管道在两个进程间建立通信。</p>
+<h3 id="实验内容-5"><a class="markdownIt-Anchor" href="#实验内容-5"></a> 实验内容</h3>
+<p>分别建立名为Parent的单文档应用程序和Child的单文档应用程序作为父子进程，由父进程创建一个匿名管道，实现父子进程向匿名管道写入和读取数据。</p>
+<h3 id="实验要求-5"><a class="markdownIt-Anchor" href="#实验要求-5"></a> 实验要求</h3>
+<p>父进程要能够从子进程创建的匿名管道中读取数据，实现进程间通信。</p>
+<h3 id="实验设计与实现-5"><a class="markdownIt-Anchor" href="#实验设计与实现-5"></a> 实验设计与实现</h3>
+<h4 id="创建管道"><a class="markdownIt-Anchor" href="#创建管道"></a> 创建管道</h4>
+<p>函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pipe</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __pipedes[<span class="hljs-number">2</span>])</span></span>;<br></code></pre></td></tr></table></figure>
+<p>pipe函数需要一个长度为2的数组指针作为参数，创建管道完成后，会修改数组指针的值作为标识符（_pipedes[0]是读取的管道，_pipedes[1]写入的管道），当创建失败时，该函数会返回-1值。</p>
+<h4 id="子进程"><a class="markdownIt-Anchor" href="#子进程"></a> 子进程</h4>
+<p>子进程只需要写入数据，所以可以在子进程中使用<code>close(int)</code>函数将读取的管道关闭。</p>
+<p>接下来，使用<code>write</code>函数</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">write</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __fd, <span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *__buf, <span class="hljs-keyword">size_t</span> __n)</span></span><br></code></pre></td></tr></table></figure>
+<p>三个参数分别是：</p>
+<ul>
+<li>管道标识符</li>
+<li>缓冲区的头指针</li>
+<li>缓冲区的大小</li>
+</ul>
+<p>该函数会返回成功写入的字节数（由于各种可能导致写入失败的因素，该值可能会比预期的小）</p>
+<h4 id="父进程"><a class="markdownIt-Anchor" href="#父进程"></a> 父进程</h4>
+<p>同理，在父进程中，只需要读取数据，所以使用<code>close</code>函数关闭写入管道，然后使用<code>read</code>函数从管道读取内容。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">read</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> __fd, <span class="hljs-keyword">void</span> *__buf, <span class="hljs-keyword">size_t</span> __nbytes)</span></span><br></code></pre></td></tr></table></figure>
+<p>该函数与write函数类似，但需要注意的是第一个参数要传递读取管道的标识符，buf指针是期望读入的缓冲区。</p>
+<h3 id="实验结果分析-5"><a class="markdownIt-Anchor" href="#实验结果分析-5"></a> 实验结果分析</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;cstdlib&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&quot;time.h&quot;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> _pipe[<span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">char</span> msg[]=<span class="hljs-string">&quot;Have a nice day!\n&quot;</span>;<br>    <span class="hljs-keyword">char</span> buf[<span class="hljs-number">101</span>];<br>    <span class="hljs-keyword">int</span> res=pipe(_pipe);<br>    <span class="hljs-keyword">if</span>(res==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to build pipe!\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-keyword">pid_t</span> pid=fork();<br><br>    <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">-1</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Fail to fork process!\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>) <span class="hljs-comment">//child process</span><br>    &#123;<br>        close(_pipe[<span class="hljs-number">0</span>]);<br>        write(_pipe[<span class="hljs-number">1</span>],msg,<span class="hljs-keyword">sizeof</span>(msg));<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-comment">//father process</span><br>    &#123;<br>        <span class="hljs-keyword">int</span> status;<br>        wait(&amp;status);<br>        close(_pipe[<span class="hljs-number">1</span>]);<br>        read(_pipe[<span class="hljs-number">0</span>],buf,<span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;msg from child process :%s&quot;</span>,buf);<br>    &#125;<br><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p><img src="/img/os_exp/p5.png" alt="p5" /></p>
+]]></content>
+      <categories>
+        <category>课内</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>实验</tag>
+        <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>计算机中的数据编码</title>
     <url>/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/</url>
     <content><![CDATA[<h1 id="计算机中的数据编码"><a class="markdownIt-Anchor" href="#计算机中的数据编码"></a> 计算机中的数据编码</h1>
@@ -1278,6 +1201,83 @@ y=y_0-\frac{k}{g}*a
       </categories>
       <tags>
         <tag>计算机组成原理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计网大作业-web应用之爬虫</title>
+    <url>/2022/06/07/%E8%AE%A1%E7%BD%91%E5%A4%A7%E4%BD%9C%E4%B8%9A-web%E5%BA%94%E7%94%A8%E4%B9%8B%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h1 id="计算机通信与网络课外实验"><a class="markdownIt-Anchor" href="#计算机通信与网络课外实验"></a> 计算机通信与网络课外实验</h1>
+<h4 id="作者u周洪锋2000920-刘勇建2000920u"><a class="markdownIt-Anchor" href="#作者u周洪锋2000920-刘勇建2000920u"></a> 作者：<u>周洪锋2000920**** 刘勇建2000920****</u></h4>
+<h2 id="实验题目"><a class="markdownIt-Anchor" href="#实验题目"></a> 实验题目</h2>
+<p><strong>WEB应用——利用爬虫爬取”电影天堂“网站的电影</strong></p>
+<h2 id="实验目的"><a class="markdownIt-Anchor" href="#实验目的"></a> 实验目的</h2>
+<ul>
+<li>通过爬虫工具的使用，加强对<strong>HTTP</strong>协议的理解</li>
+<li>学会如何发送请求头，完成与HTTP服务器的交互</li>
+<li>在解析页面的过程中熟悉<strong>HTML</strong> 代码</li>
+</ul>
+<h2 id="实验工具"><a class="markdownIt-Anchor" href="#实验工具"></a> 实验工具</h2>
+<ul>
+<li>python（装有<code>request</code>、<code>bs4</code>等模块）</li>
+<li>chrome浏览器</li>
+</ul>
+<h2 id="实验原理"><a class="markdownIt-Anchor" href="#实验原理"></a> 实验原理</h2>
+<h3 id="http协议"><a class="markdownIt-Anchor" href="#http协议"></a> HTTP协议</h3>
+<p>HTTP协议是面向事务的应用层协议，可以完成超文本内容的传送。其基本过程如下图所示：服务器不断在<strong>80端口</strong>监听是否有客户端浏览器的请求，一旦监听到请求后，便由客户端发起TCP连接的建立。随后浏览器向客户机发送HTTP请求报文，申请获取<strong>指定URL</strong>的页面，服务器收到请求后，便向客户机发送对应的页面（通常是HTML代码，后由浏览器解析）。</p>
+<p><img src="/img/dytt/HTTP.png" alt="HTTP协议基本原理" /></p>
+<p><strong>HTTP协议有以下特点</strong></p>
+<ul>
+<li><strong>HTTP是无状态的</strong>。浏览器不会记得曾经访问过的客户，也不会记录客户的信息。但是，Cookies技术可以改变这一特点。</li>
+<li><strong>HTTP的请求报文头使用ASCII码，是可读的</strong>。用户可以检查浏览器发出的请求头和收到的响应头来获得相应信息（本实验中，使用请求头的<em>User-Agent</em>信息来伪装请求报文。同时响应头中含有状态码，可以用于查看服务器的响应情况。</li>
+<li><strong>HTTP使用HTML（超文本标记语言）作为制作页面的语言</strong>。可以使用Python的相关模块对HTML进行解析，提取其中的信息。</li>
+</ul>
+<p><img src="/img/dytt/request_header.png" alt="请求头的格式" /></p>
+<h3 id="爬虫原理"><a class="markdownIt-Anchor" href="#爬虫原理"></a> 爬虫原理</h3>
+<p>正常的HTTP访问请求中，由浏览器发送请求报文，而爬虫便是使用Python等工具向服务器发送大量请求报文，批量获取服务器的响应，并从中获取有效信息。</p>
+<p>在爬取之前，需要了解目标网站的<strong>网址、网页结构、是否有反爬虫机制</strong>等相关信息。</p>
+<h2 id="实验步骤"><a class="markdownIt-Anchor" href="#实验步骤"></a> 实验步骤</h2>
+<h3 id="1-分析网站结构"><a class="markdownIt-Anchor" href="#1-分析网站结构"></a> 1、分析网站结构</h3>
+<p>通过在chrome浏览器中对网页进行检查，可以发现，在网站的 <em>电影-&gt;最新电影-&gt;下载页面</em> 中有规律地列出了许多最新电影的下载页面，可以从该页面<a href="https://www.dy2018.com/html/gndy/dyzz/index.html">电影天堂</a>开始作为爬取的对象。</p>
+<p>查看网页的<strong>HTML代码</strong>，可以发现下载跳转链接都被放在一个<code>&lt;div class='bd3r'&gt;</code>标签中，可以使用网页解析工具对该页面进行解析，抽取出想要的电影信息。</p>
+<img src="/img/dytt/index.png" style="zoom:67%;" />
+<p>当然，一页的电影肯定是不够的，需要考虑<strong>下载多个页面的内容</strong>，不难发现，该网站不同页的url有以下的规律</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>www.dy2018.com<span class="hljs-regexp">/html/g</span>ndy<span class="hljs-regexp">/dyzz/i</span>ndex.html <span class="hljs-regexp">//</span>第一页<br>https:<span class="hljs-regexp">//</span>www.dy2018.com<span class="hljs-regexp">/html/g</span>ndy<span class="hljs-regexp">/dyzz/i</span>ndex_2.html <span class="hljs-regexp">//</span>第二页<br>https:<span class="hljs-regexp">//</span>www.dy2018.com<span class="hljs-regexp">/html/g</span>ndy<span class="hljs-regexp">/dyzz/i</span>ndex_3.html <span class="hljs-regexp">//</span>第三页<br></code></pre></td></tr></table></figure>
+<p>这样，我们就可以简单推出所有页面的url。</p>
+<h3 id="2-发出http请求"><a class="markdownIt-Anchor" href="#2-发出http请求"></a> 2、发出HTTP请求</h3>
+<p>python3中带有requests模块，其中的<code>get()</code>函数可以自动向HTTP服务器发出请求,可以通过以下的调用发出请求</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">url = <span class="hljs-string">&quot;https://www.dy2018.com/html/gndy/dyzz/index.html&quot;</span><br>requests.get(url)<br></code></pre></td></tr></table></figure>
+<p>但是，检查返回的状态码会发现，HTTP并没有给出正确的响应，因为requests.get()发出的请求被服务器识别为不正常的请求，为了让服务器能够正常响应，<strong>需要伪装请求头</strong>。打开浏览器的检查，通过抓包可以查看浏览器发出的请求头信息：</p>
+<p><img src="/img/dytt/header.png" alt="请求头信息" /></p>
+<p><code>user-agent</code>代表的是客户端浏览器的相关信息，为了防止服务器拒绝我们的请求，可以在调用get函数时携带headers参数，来伪装成是浏览器发出的请求，同时还可以<strong>设置cookies</strong>来保持登录状态。</p>
+<p>以下为获得<strong>HTTP响应</strong>的代码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">GetHtml</span>(<span class="hljs-params">url</span>):</span><br>    ua = UserAgent()<br>    headers=&#123;<br>        <span class="hljs-string">&#x27;user-agent&#x27;</span>:<span class="hljs-built_in">str</span>(ua.random),<br>        <span class="hljs-string">&#x27;Connection&#x27;</span>:<span class="hljs-string">&#x27;close&#x27;</span><br>    &#125;<br><br>    r = requests.get(url,headers=headers)<br>    <br>    <span class="hljs-keyword">if</span> r.status_code == <span class="hljs-number">200</span>:<br>        r.encoding = <span class="hljs-string">&#x27;gb2312&#x27;</span><br>        soup = BeautifulSoup(r.text,<span class="hljs-string">&#x27;lxml&#x27;</span>) //使用bs4模块对获取的页面解析<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br>    <span class="hljs-keyword">return</span> soup<br></code></pre></td></tr></table></figure>
+<h3 id="3-页面解析-信息提取"><a class="markdownIt-Anchor" href="#3-页面解析-信息提取"></a> 3、页面解析、信息提取</h3>
+<p>再次检查页面，可以发现每一部电影的链接都置于标签<code>&lt;a class='ulink'&gt;</code>中，可以考虑使用<code>BeautifulSoup</code>模块抽取出页面每一个class为ulink的标签，进行进一步解析。</p>
+<p><img src="/img/dytt/html.png" alt="" /></p>
+<p>提取出的标签含有较多无用信息，可以考虑对标签中的信息进一步清洗。</p>
+<ul>
+<li>电影的标题考虑使用正则表达式来匹配书名号中的内容</li>
+<li>电影详细页面的链接可以使用<code>BeautifulSoup</code>来提取出标签中的<code>href</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Parser</span>(<span class="hljs-params">soup</span>):</span><br>    raw = soup.find_all(<span class="hljs-string">&quot;a&quot;</span>,class_=<span class="hljs-string">&#x27;ulink&#x27;</span>)<br>    ptn = re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&quot;《[\u4e00-\u9fa5]*》&quot;</span>)<br>    movies = []<br>    urls = []<br>    <span class="hljs-keyword">for</span> each <span class="hljs-keyword">in</span> raw:<br>        movies.extend(ptn.findall(each.string))<br>        urls.append(each[<span class="hljs-string">&quot;href&quot;</span>])<br>    full_urls = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        full_urls.append(parse.urljoin(root_url,url))<br>    <span class="hljs-keyword">return</span> movies,full_urls<br></code></pre></td></tr></table></figure>
+<p>这样，就可以爬取出<strong>电影和电影的详细页面</strong>，但是还无法获得下载电影的磁力链接。电影磁力链接在详细页面中可以找到，所以可以通过上一步获得的详细页面链接，尝试访问详细信息页面，用类似的方法（正则表达式）提取出电影的磁力链接。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">SubHtml</span>(<span class="hljs-params">urls</span>):</span><br>    magnet = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        soup = GetHtml(url)<br>        <span class="hljs-keyword">if</span> soup == <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">continue</span><br>        get = soup.find(<span class="hljs-string">&quot;a&quot;</span>,href=re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&#x27;magnet(.*?\.mp4)?&#x27;</span>))<br>        <span class="hljs-keyword">if</span> get != <span class="hljs-literal">None</span>:<br>            magnet.append(get.string)<br>            <span class="hljs-built_in">print</span>(get.string)<br>    <span class="hljs-keyword">return</span> magnet<br></code></pre></td></tr></table></figure>
+<h3 id="4-开始爬取"><a class="markdownIt-Anchor" href="#4-开始爬取"></a> 4、开始爬取</h3>
+<p>整个爬虫程序的流程图如下所示：</p>
+<p><img src="/img/dytt/step.png" alt="" /></p>
+<h2 id="实验结果"><a class="markdownIt-Anchor" href="#实验结果"></a> 实验结果</h2>
+<p>将爬取到的信息储存到txt文本文档中，结果如下所示：</p>
+<p><img src="/img/dytt/result.png" alt="" /></p>
+<h2 id="完整代码"><a class="markdownIt-Anchor" href="#完整代码"></a> 完整代码</h2>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">from</span> sre_constants <span class="hljs-keyword">import</span> AT<br><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup<br><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver<br><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">from</span> urllib <span class="hljs-keyword">import</span> parse<br><span class="hljs-keyword">import</span> time<br><span class="hljs-keyword">from</span> requests.adapters <span class="hljs-keyword">import</span> HTTPAdapter<br><span class="hljs-keyword">from</span> fake_useragent <span class="hljs-keyword">import</span> UserAgent<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">GetHtml</span>(<span class="hljs-params">url</span>):</span><br>    ua = UserAgent()<br>    headers=&#123;<br>        <span class="hljs-string">&#x27;user-agent&#x27;</span>:<span class="hljs-built_in">str</span>(ua.random), //使用随机UA，防止被服务器拒绝<br>        <span class="hljs-string">&#x27;Connection&#x27;</span>:<span class="hljs-string">&#x27;close&#x27;</span><br>    &#125;<br><br>    r = requests.get(url,headers=headers)<br>    <br>    <span class="hljs-keyword">if</span> r.status_code == <span class="hljs-number">200</span>:<br>        r.encoding = <span class="hljs-string">&#x27;gb2312&#x27;</span><br>        soup = BeautifulSoup(r.text,<span class="hljs-string">&#x27;lxml&#x27;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br>    <span class="hljs-comment">#print(r.text)</span><br>    <span class="hljs-keyword">return</span> soup<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Parser</span>(<span class="hljs-params">soup</span>):</span><br>    raw = soup.find_all(<span class="hljs-string">&quot;a&quot;</span>,class_=<span class="hljs-string">&#x27;ulink&#x27;</span>)<br>    <span class="hljs-comment">#print(raw)</span><br>    ptn = re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&quot;《[\u4e00-\u9fa5]*》&quot;</span>)<br>    movies = []<br>    urls = []<br>    <span class="hljs-keyword">for</span> each <span class="hljs-keyword">in</span> raw:<br>        movies.extend(ptn.findall(each.string))<br>        urls.append(each[<span class="hljs-string">&quot;href&quot;</span>])<br>    <span class="hljs-comment">#print(movies)</span><br>    <span class="hljs-comment">#print(urls)</span><br>    full_urls = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        full_urls.append(parse.urljoin(root_url,url))<br>    <span class="hljs-keyword">return</span> movies,full_urls<br>        <br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Save</span>(<span class="hljs-params">movies,urls,magnets</span>):</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">r&quot;D:\AAA桌面映射文档\抢课app\爬虫\text.txt&quot;</span>,<span class="hljs-string">&quot;a+&quot;</span>,encoding=<span class="hljs-string">&#x27;utf-8&#x27;</span>) <span class="hljs-keyword">as</span> fp:<br>        <span class="hljs-keyword">for</span> m,u,magnet <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(movies,urls,magnets):<br>            fp.write(m+<span class="hljs-string">&#x27;\n&#x27;</span>)<br>            fp.write(u+<span class="hljs-string">&#x27;\n&#x27;</span>)<br>            fp.write(magnet+<span class="hljs-string">&#x27;\n&#x27;</span>)<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">SubHtml</span>(<span class="hljs-params">urls</span>):</span><br>    magnet = []<br>    <span class="hljs-keyword">for</span> url <span class="hljs-keyword">in</span> urls:<br>        soup = GetHtml(url)<br>        <span class="hljs-keyword">if</span> soup == <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">continue</span><br>        <span class="hljs-comment">#print(soup)</span><br>        get = soup.find(<span class="hljs-string">&quot;a&quot;</span>,href=re.<span class="hljs-built_in">compile</span>(<span class="hljs-string">r&#x27;magnet(.*?\.mp4)?&#x27;</span>))<br>        <span class="hljs-keyword">if</span> get != <span class="hljs-literal">None</span>:<br>            magnet.append(get.string)<br>            <span class="hljs-built_in">print</span>(get.string)<br>            <span class="hljs-comment">#print(get.string)</span><br>    <span class="hljs-keyword">return</span> magnet<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    root_url = <span class="hljs-string">&quot;https://www.dy2018.com/html/gndy/dyzz/index.html&quot;</span><br>    soup = GetHtml(root_url)<br>    movies,urls = Parser(soup)<br>    magnets = SubHtml(urls)<br>    Save(movies,urls,magnets)<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>,<span class="hljs-number">6</span>):<br>        root_url = <span class="hljs-string">&quot;https://www.dy2018.com/html/gndy/dyzz/index_&#123;0&#125;.html&quot;</span>.<span class="hljs-built_in">format</span>(<span class="hljs-built_in">str</span>(i))<br>        soup = GetHtml(root_url)<br>        movies,urls = Parser(soup)<br>        magnets = SubHtml(urls)<br>        <span class="hljs-comment">#print(magnets)</span><br>        Save(movies,urls,magnets)<br><br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>课内</category>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>爬虫</tag>
+        <tag>实验</tag>
       </tags>
   </entry>
 </search>
