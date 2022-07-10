@@ -1302,6 +1302,9 @@ y=y_0-\frac{k}{g}*a
 <blockquote>
 <p>后续看情况更新传输层或数据链路层或物理层的协议</p>
 </blockquote>
+<blockquote>
+<p>UPD(2022-7-10)：计网考炸了，才81分，可能是我运气不太好吧。</p>
+</blockquote>
 <h1 id="网络层协议"><a class="markdownIt-Anchor" href="#网络层协议"></a> 网络层协议</h1>
 <h2 id="一-逻辑寻址"><a class="markdownIt-Anchor" href="#一-逻辑寻址"></a> 一、逻辑寻址</h2>
 <p>当前有（或者说我们学过）两个版本的网络层地址，<strong>IPv4地址</strong>和<strong>IPv6地址</strong></p>
