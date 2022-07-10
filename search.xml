@@ -1508,12 +1508,83 @@ y=y_0-\frac{k}{g}*a
 <p>实例化一个类的手段和C++类似，都是使用new关键字，同时带上圆括号，需要时可以加上参数。</p>
 <h2 id="访问修饰符"><a class="markdownIt-Anchor" href="#访问修饰符"></a> 访问修饰符</h2>
 <ul>
-<li>private</li>
-<li>public</li>
-<li>protected</li>
-<li>internal</li>
-<li>protected internal</li>
+<li>private只在类的内部可访问</li>
+<li>public任何类可以访问</li>
+<li>protected所有继承该类的类可以访问</li>
+<li>internal该程序集内声明的类可以访问</li>
+<li>protected internal所有继承该类或者在该程序集内声明的类可以访问</li>
 </ul>
+<h2 id="静态成员"><a class="markdownIt-Anchor" href="#静态成员"></a> 静态成员</h2>
+<p>可以从类的内部和外部访问这个静态成员，从外部访问时，可以使用<code>using static</code>关键字，从而省去前缀。</p>
+<p>静态字段的生命期不需要依赖类，而普通字段只有在实例创建后才开始它的生命期。</p>
+<p>静态函数成员也类似，但是静态函数成员不能访问实例成员</p>
+<h2 id="常量"><a class="markdownIt-Anchor" href="#常量"></a> 常量</h2>
+<p>常量比较特殊，它们表现得像静态值，但是它们没有真正的存储位置，而是在编译时被编译器替换，类似C/C++的define</p>
+<h2 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h2>
+<p>属性与字段的相同点和不同点如下：</p>
+<ul>
+<li>相同
+<ul>
+<li>都是类成员</li>
+<li>都有类型</li>
+<li>都可以被赋值和读取</li>
+</ul>
+</li>
+<li>不同
+<ul>
+<li>属性是一个函数成员</li>
+<li>属性不一定为数据存储分配内存</li>
+<li>它执行代码</li>
+</ul>
+</li>
+</ul>
+<p>且需要一个<strong>set访问器和get访问器</strong></p>
+<ul>
+<li>set访问器总是拥有一个单独的、隐式的值参，名称为value，与属性的类型相同，拥有一个返回类型void</li>
+<li>get访问器没有参数，返回一个与属性类型相同的返回类型</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">private int RealValue;<br><br>public int MyValue<br>&#123;<br>    set&#123;<br>        RealValue=value;<br>    &#125;<br>    get&#123;<br>        return RealValue;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>属性访问器尝尝使用字段作为<strong>后备储存</strong>。</p>
+<p>不能显式地调用set和get访问器，只能使用类似赋值语句的方法。</p>
+</blockquote>
+<h3 id="lambda表达式"><a class="markdownIt-Anchor" href="#lambda表达式"></a> lambda表达式</h3>
+<p>在C# 7.0以上，引入的lambda表达式，可以用更简洁的语言来表达访问器。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">int MyValue<br>&#123;<br>    set=&gt; value&gt;100?100:value;<br>    get=&gt; theRealValue;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>只有get访问器的属性称为只读属性，只有set访问器的属性称为只写属性，一个属性至少要有两种访问器的其一，否则编译器会报错。与字段相比，属性的好处是可以在读取和输出时完成一些处理。</p>
+<h3 id="自动属性"><a class="markdownIt-Anchor" href="#自动属性"></a> 自动属性</h3>
+<p>如果想要使用自动属性的话，将get和set的方法体省略，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">public int MyValue<br>&#123;<br>    set;get;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="静态属性"><a class="markdownIt-Anchor" href="#静态属性"></a> 静态属性</h3>
+<p>静态属性有以下特点：</p>
+<ul>
+<li>不能访问类的实例成员，但能被实例成员访问</li>
+<li>不管类是否有实例，它都存在</li>
+<li>在类的内部，可以仅使用名称来引用静态属性</li>
+<li>在类的外部，可以通过类名或者使用using static结构来引用静态属性</li>
+</ul>
+<h2 id="构造函数"><a class="markdownIt-Anchor" href="#构造函数"></a> 构造函数</h2>
+<p>如果没有为类声明任何构造函数，则编译器会自动定义一个<strong>无参数、无函数体</strong>的默认构造函数；而如果你已经声明了任何一个构造函数，则这个默认构造函数将不会存在。</p>
+<h3 id="静态构造函数"><a class="markdownIt-Anchor" href="#静态构造函数"></a> 静态构造函数</h3>
+<p>当静态成员被调用时，静态构造函数会随之被调用，<strong>静态构造函数只会被调用一次</strong>，用于初始化静态成员变量。</p>
+<h2 id="readonly修饰符"><a class="markdownIt-Anchor" href="#readonly修饰符"></a> readonly修饰符</h2>
+<p>与const区别如下：</p>
+<ul>
+<li>const只能在字段的声明语句中初始化，而readonly还可以在类的任何构造函数中使用。</li>
+<li>const的值必须在编译时确定，而readonly可以在运行时确定。</li>
+<li>const是静态的，在内存中没有存储位置，而readonly有。</li>
+</ul>
+<h2 id="索引器"><a class="markdownIt-Anchor" href="#索引器"></a> 索引器</h2>
+<p>索引器是一组get和set访问器，与属性类似，属性通常表示单个数据成员，而索引器表示多个数据成员。可以认为索引器是为类的多个数据成员提供set和get访问的属性。</p>
+<blockquote>
+<p>索引器总是实例成员，因此不能被声明为static</p>
+</blockquote>
+<h3 id="声明索引器"><a class="markdownIt-Anchor" href="#声明索引器"></a> 声明索引器</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">ReturnType this [Type Params1, ...]<br>&#123;<br>    get<br>    &#123;<br>        <br>    &#125;<br>    set<br>    &#123;<br>        <br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>使用this关键字作为名称，参数列表在方括号中，且至少声明一个参数。</p>
+<blockquote>
+<p>索引器可以理解为，用方括号中的参数作为索引，然后在get和set中人为地判断当前索引所指向的成员字段，从而在后续的编程中节省精力。<strong>索引器像方法一样，可以被重载，只需要参数类型不同</strong></p>
+</blockquote>
 <h1 id="四-方法"><a class="markdownIt-Anchor" href="#四-方法"></a> 四、方法</h1>
 <h2 id="参数"><a class="markdownIt-Anchor" href="#参数"></a> 参数</h2>
 <p>形参：声明在方法的参数列表中</p>
@@ -1578,6 +1649,40 @@ y=y_0-\frac{k}{g}*a
 <p>这样可以不按声明的顺序来调用方法，且代码可读性也得到了提升，但是<strong>位置参数</strong>必须在命名参数前面列出。</p>
 <h3 id="可选参数"><a class="markdownIt-Anchor" href="#可选参数"></a> 可选参数</h3>
 <p>类似python中的默认参数，调用时可以不为其赋值，则采用声明时的默认值。</p>
+<h2 id="运算符重载"><a class="markdownIt-Anchor" href="#运算符重载"></a> 运算符重载</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">public static MyClass operator +(MyClass a,MyClass b);<br></code></pre></td></tr></table></figure>
+<p>该方法必须是静态的和公共的，且运算符必须是要操作的类或者结构的成员。</p>
+<h1 id="五-类和继承"><a class="markdownIt-Anchor" href="#五-类和继承"></a> 五、类和继承</h1>
+<h2 id="屏蔽类的成员"><a class="markdownIt-Anchor" href="#屏蔽类的成员"></a> 屏蔽类的成员</h2>
+<p>可以使用相同的名称来屏蔽父类的成员，若想屏蔽函数成员，则签名必须相同。要让编译器知道你在故意屏蔽父类的成员，可以使用new修饰符，否则编译器可以会发出警告。</p>
+<h2 id="访问类的成员"><a class="markdownIt-Anchor" href="#访问类的成员"></a> 访问类的成员</h2>
+<p>与其他语言不同，C#使用<strong>base</strong>关键字来表示父类（或者说是基类）</p>
+<h2 id="使用基类的引用"><a class="markdownIt-Anchor" href="#使用基类的引用"></a> 使用基类的引用</h2>
+<p>可以用<strong>类型转化运算</strong>将派生类转化为基类，即使两个引用指向的是同样一个实例，但是派生类类型的引用可以“看到”更多成员，而基类类型的引用只能看到在基类中声明的内容（即使被屏蔽）。</p>
+<h3 id="虚方法和覆写方法"><a class="markdownIt-Anchor" href="#虚方法和覆写方法"></a> 虚方法和覆写方法</h3>
+<p>想要在基类中使用派生类的方法，可以使用虚方法和覆写方法来实现，这个方法有以下要求：</p>
+<ul>
+<li>派生类的方法和基类的方法要有相同的签名</li>
+<li>基类的方法使用virtual标注</li>
+<li>派生类的方法使用override标注</li>
+</ul>
+<p>这样，即使派生类的实例被转化成基类，也可以通过这个基类的引用来访问到派生类中的方法。</p>
+<p>可以继续让新的类继承这个派生类，并再次覆写某个方法，这样调用基类时，就会优先调用覆写层数最高的方法。</p>
+<blockquote>
+<p>与屏蔽（使用new修饰符）不同，屏蔽的方法只会向上传递一级。</p>
+</blockquote>
+<h2 id="构造函数的执行"><a class="markdownIt-Anchor" href="#构造函数的执行"></a> 构造函数的执行</h2>
+<p>构造函数会先执行基类的构造函数。默认情况下，派生类会调用基类的无参数构造函数，但是当你不希望调用无参数构造函数，或基类压根就没有无参数构造函数时，必须在<strong>构造函数初始化语句</strong>中指定它。</p>
+<p>调用父类的构造函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">public MyDerivedClass(int x,string s) : base(s,x)<br>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>调用自己的构造函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs c#">public MyDerivedClass(int x) : this(x,&quot;Using default string&quot;)<br>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这种手段在存在好几种构造方法时特别好用。</p>
+<h2 id="抽象类"><a class="markdownIt-Anchor" href="#抽象类"></a> 抽象类</h2>
+<p>抽象类不能被实例化，只能被继承。</p>
+<p>抽象成员和虚成员类似，但是抽象成员没有实现体，必须在派生类中被实现；且抽象方法只能在抽象类中存在。</p>
+<h2 id="密封类"><a class="markdownIt-Anchor" href="#密封类"></a> 密封类</h2>
+<p>使用sealed关键字来制定一个密封类，密封类无法被继承。</p>
 ]]></content>
       <tags>
         <tag>编程语言</tag>
