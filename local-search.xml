@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>从中国剩余定理到拉格朗日插值法</title>
+    <link href="/2022/08/15/%E4%BB%8E%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86%E5%88%B0%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/"/>
+    <url>/2022/08/15/%E4%BB%8E%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86%E5%88%B0%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<p>本文是看了b站up主<em>乐正垂星</em>的视频后写下的笔记（拖了足足三四个月吧），当时看的时候觉得大受震撼。可能看这篇博客不如直接看视频来的简明，但写下这篇博客仅仅是为了记录我学过这个定理。</p><iframe src="//player.bilibili.com/player.html?aid=339210437&bvid=BV1TR4y1j745&cid=512174127&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="800px" height="600px"> </iframe><h1 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h1><p>在之前的博客中，介绍了<strong>中国剩余定理</strong>，该定理用数学表达为：</p><p>对于同余方程组<br>$$<br>\begin{cases}<br>x\equiv a_1(\mod m_1) \<br>x\equiv a_2(\mod m_2) \<br>\cdots\<br>x\equiv a_n(\mod m_n)<br>\end{cases}<br>$$<br>其解为：<br>$$<br>x\equiv\sum_{i&#x3D;1}^n{a_i*M_i}*inv(M_i) (\mod M)<br>$$<br>其中：<br>$$<br>M&#x3D;\prod_{i&#x3D;1}^{n}m_i\<br>M_i&#x3D;\frac{M}{m_i}<br>$$<br>$inv$表示乘法逆元</p><h1 id="整式除法"><a href="#整式除法" class="headerlink" title="整式除法"></a>整式除法</h1><p>在初中，我们可能会见到如下的的整式除法：<br>$$<br>\frac{x^2+3x+2}{x+1}&#x3D;x+2<br>$$<br>这是显而易见的，因为我们可以用十字相乘法对分子式进行因式分解，但是当遇到这样的情况时，你可能会束手无策：<br>$$<br>\frac{x^2+4x+2}{x+1}<br>$$<br>这里引入一个新的计算方式</p><p><img src="/%E4%BB%8E%E4%B8%AD%E5%9B%BD%E5%89%A9%E4%BD%99%E5%AE%9A%E7%90%86%E5%88%B0%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E6%8F%92%E5%80%BC%E6%B3%95/%E6%95%B4%E5%BC%8F%E9%99%A4%E6%B3%95.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>笔记</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>数论</tag>
+      
+      <tag>笔记</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>C#学习笔记</title>
     <link href="/2022/07/09/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <url>/2022/07/09/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
