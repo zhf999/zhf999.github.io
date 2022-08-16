@@ -84,7 +84,11 @@
   <script  src="/js/color-schema.js" ></script>
 
   
-<meta name="generator" content="Hexo 6.0.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
 
 
 <body>
@@ -301,17 +305,17 @@
               
               <h1 id="一-何为stl"><a class="markdownIt-Anchor" href="#一-何为stl"></a> 一、何为STL</h1>
 <blockquote>
-<p><em>STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。</em><br />
+<p><em>STL 是“Standard Template Library”的缩写，中文译为“标准模板库”。STL 是 C++ 标准库的一部分，不用单独安装。C++ 对模板（Template）支持得很好，STL 就是借助模板把常用的数据结构及其算法都实现了一遍，并且做到了数据结构和算法的分离。</em><br>
 ————摘自C语言中文网</p>
 </blockquote>
 <h1 id="二-容器"><a class="markdownIt-Anchor" href="#二-容器"></a> 二、容器</h1>
-<p><font color=orange>以下代码中的T可以是任何一中数据类型,可以是自定义类型，甚至可以嵌套。</font></p>
+<p><font color="orange">以下代码中的T可以是任何一中数据类型,可以是自定义类型，甚至可以嵌套。</font></p>
 <h2 id="1-栈"><a class="markdownIt-Anchor" href="#1-栈"></a> 1、栈</h2>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stack&gt;</span></span><br><br><span class="hljs-comment">//声明：</span><br>stack&lt;T&gt;mystack;<br><br><span class="hljs-comment">//常用方法：</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//压栈</span><br><span class="hljs-keyword">void</span> mystack.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出栈</span><br>T mystack.<span class="hljs-built_in">top</span>(); <span class="hljs-comment">//返回栈顶的元素</span><br><span class="hljs-keyword">int</span> mystack.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回栈中元素个数</span><br><span class="hljs-keyword">bool</span> mystack.<span class="hljs-built_in">empty</span>(); <span class="hljs-comment">//判断栈是否为空</span><br></code></pre></td></tr></table></figure>
 <h2 id="2-队列"><a class="markdownIt-Anchor" href="#2-队列"></a> 2、队列</h2>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><br><span class="hljs-comment">//声明</span><br>queue&lt;T&gt;myqueue;<br><br><span class="hljs-comment">//常用方法</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">push</span>(T elem); <span class="hljs-comment">//入队</span><br>T myqueue.<span class="hljs-built_in">front</span>(); <span class="hljs-comment">//返回队头元素</span><br>T myqueue.<span class="hljs-built_in">back</span>(); <span class="hljs-comment">//返回队尾元素</span><br><span class="hljs-keyword">void</span> myqueue.<span class="hljs-built_in">pop</span>(); <span class="hljs-comment">//出队</span><br><span class="hljs-keyword">int</span> myqueue.<span class="hljs-built_in">size</span>(); <span class="hljs-comment">//返回队列中元素个数</span><br><span class="hljs-keyword">bool</span> myqueue.<span class="hljs-built_in">isempty</span>(); <span class="hljs-comment">//判断队列是否为空</span><br></code></pre></td></tr></table></figure>
 <h3 id="双端队列deque"><a class="markdownIt-Anchor" href="#双端队列deque"></a> 双端队列deque</h3>
-<p>双端队列可以在队列的两端进行存取操作，包含在头文件deque中，声明方法与普通队列类似。<br />
+<p>双端队列可以在队列的两端进行存取操作，包含在头文件deque中，声明方法与普通队列类似。<br>
 接下来使用表格形式来展示部分常用的方法</p>
 <table>
 <thead>
@@ -380,19 +384,19 @@
 </tr>
 </tbody>
 </table>
-<p>除了front改为top外，其他方法没有什么区别。<br />
-优先队列比较复杂的是声明操作,其定义为：<br />
-priority_queue&lt;Type, Container, Functional&gt;<br />
-Type是模板类型，Container是容器，Functional是仿函数（一般写为greater<T>或less<T>）</p>
+<p>除了front改为top外，其他方法没有什么区别。<br>
+优先队列比较复杂的是声明操作,其定义为：<br>
+priority_queue&lt;Type, Container, Functional&gt;<br>
+Type是模板类型，Container是容器，Functional是仿函数（一般写为greater<T>或less<T>）</T></T></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;queue&gt;</span></span><br><span class="hljs-comment">//下面这个声明新建一个将int从小到大排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,greater&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br><span class="hljs-comment">//下面这个声明新建一个将int从大到小排序的优先队列</span><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq2;<br><span class="hljs-comment">//！！！注意，部分编译器会将“&gt;&gt;”认成右移运算符，所以需要加一个空格以区分</span><br></code></pre></td></tr></table></figure>
 <h4 id="在优先队列中使用自定义类"><a class="markdownIt-Anchor" href="#在优先队列中使用自定义类"></a> 在优先队列中使用自定义类</h4>
-<p>在实际运用中很经常遇到的情况是对含有多个属性的记录进行排序，这时候就要使用自定义类（结构体）。而如果直接将上述代码中的int改为自定义结构体，实际上是会报错的。因为我们并没有为结构体定义如何比较他们的大小（也就是优先级），两个学生，谁的优先级更高，到底是由身高、体重还是成绩决定呢？<br />
+<p>在实际运用中很经常遇到的情况是对含有多个属性的记录进行排序，这时候就要使用自定义类（结构体）。而如果直接将上述代码中的int改为自定义结构体，实际上是会报错的。因为我们并没有为结构体定义如何比较他们的大小（也就是优先级），两个学生，谁的优先级更高，到底是由身高、体重还是成绩决定呢？<br>
 所以，在使用自定义类（结构体）时，需要先进行运算符重载（只需要重载小于号）：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Student</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">int</span> grade,height;<br>    <span class="hljs-built_in">Student</span>(<span class="hljs-keyword">int</span> grade, <span class="hljs-keyword">int</span> height)<br>    &#123;<br>        <span class="hljs-keyword">this</span>.grade=grade;<br>        <span class="hljs-keyword">this</span>.height=height;<br>    &#125;<br>    <span class="hljs-comment">//下面是重载运算符的部分</span><br>    <span class="hljs-keyword">bool</span> <span class="hljs-keyword">operator</span> &lt; (<span class="hljs-keyword">const</span> Student&amp; a) <span class="hljs-keyword">const</span><br>    &#123;<br>        <span class="hljs-comment">//若成绩一样就用身高</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span>.grade==a.grade)<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.height&lt;a.height;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.grade&lt;a.grade;<br>    &#125;<br>&#125;<br><br>[...]<br><br>priority_queue &lt;<span class="hljs-keyword">int</span>,vector&lt;<span class="hljs-keyword">int</span>&gt;,less&lt;<span class="hljs-keyword">int</span>&gt; &gt; pq1;<br></code></pre></td></tr></table></figure>
-<p>这样就可以声明一个优先队列，队列优先弹出成绩高的学生，若成绩一样，就优先弹出身高高的学生。<br />
+<p>这样就可以声明一个优先队列，队列优先弹出成绩高的学生，若成绩一样，就优先弹出身高高的学生。<br>
 当然，也可以通过自定义仿函数的方法来定义优先级，本着实用主义的原则，会其中一种方法就可以，这里不再赘述。</p>
 <h2 id="3-映射map"><a class="markdownIt-Anchor" href="#3-映射map"></a> 3、映射map</h2>
-<p>map的定义类似python中的字典，是一个键值对映射，包含两个模板参数key和value。map的内部实现是一棵红黑树，所以<strong>key必须定义小于号运算符</strong>。map也可以被当做哈希表使用。由于map内部已经定义“[]”运算符，所以元素的存取可以通过下标来实现，十分方便。<br />
+<p>map的定义类似python中的字典，是一个键值对映射，包含两个模板参数key和value。map的内部实现是一棵红黑树，所以<strong>key必须定义小于号运算符</strong>。map也可以被当做哈希表使用。由于map内部已经定义“[]”运算符，所以元素的存取可以通过下标来实现，十分方便。<br>
 举个最常用的例子：统计单词重复出现的次数</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//健是字符串，值是整型</span><br>map&lt;string,<span class="hljs-keyword">int</span>&gt;words;<br>[...]<br>string article[<span class="hljs-number">101</span>];<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)<br>&#123;<br>    map[article[i]]++;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>需要注意的是，当使用“[]”操作没有找到对应的键时，map会自动创建一个值为0的键值对，积累之后，可能会产生大量的无意义记录，占用空间，并且影响运行速度。所以建议在使用下标获取值之前，事先使用map.find()找到该元素（该方法返回一个迭代器，若不存在，则会返回map.end()）。</p>
