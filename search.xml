@@ -1929,4 +1929,26 @@ y=y_0-\frac{k}{g}*a
         <tag>实验</tag>
       </tags>
   </entry>
+  <entry>
+    <title>面向对象语言中的虚函数</title>
+    <url>/2022/09/03/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E8%99%9A%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>前段时间在写C#脚本时遇到了一些问题，<s>具体是啥问题我现在也忘了</s>，但是我还是发现了出现问题的原因，就是C#中虚函数和实函数是存在区别的。</p>
+<h1 id="何为虚函数"><a class="markdownIt-Anchor" href="#何为虚函数"></a> 何为虚函数</h1>
+<p>在编程语言中，一个函数的相对地址在运行过程中是不会改变的。但是面向对象语言为了<strong>多态</strong>性，通常希望基类的函数在调用时能够灵活根据自己的实例类来灵活的执行函数，所以加入了<strong>虚函数</strong>这个东西。参考下列C#代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">using System;<br><br>namespace CsharpLearning<br>&#123;<br>    class Animal<br>    &#123;<br>        static void Main(string[] args)<br>        &#123;<br>            Animal animal_1 = new Dog();<br>            Animal animal_2 = new Cat();<br>            animal_1.Call();<br>            animal_2.Call();<br>        &#125;<br>        public void Call()<br>        &#123;<br>            Console.WriteLine(&quot;Do nothing&quot;);<br>        &#125;<br>    &#125;<br><br>    class Dog:Animal<br>    &#123;<br>        public new void Call()<br>        &#123;<br>            Console.WriteLine(&quot;Wah Wah!&quot;);<br>        &#125;<br>    &#125;<br>    class Cat : Animal<br>    &#123;<br>        public new void Call()<br>        &#123;<br>            Console.WriteLine(&quot;Miao~&quot;);<br>        &#125;<br>    &#125;<br>&#125;<br>/*<br>输出：<br>Do nothing<br>Do nothing<br>*/<br></code></pre></td></tr></table></figure>
+<p>这里调用了<code>Dog</code>和<code>Cat</code> 两个实例类方法，可是调用的却是基类中的方法，所以输出的是两行<code>Do nothing</code>。原因是C#中的函数均为实函数（除了抽象函数），所以在通过声明类（基类）的方法调用时，只会调用这个基类中的方法。这也是为什么编译器要求在派生类的同签名函数前需要添加<code>new</code>关键字，否则会有警告的原因。</p>
+<p>C#提供了<code>virtual</code>、<code>override</code>关键字来声明和继承虚函数。在上面代码中做以下修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs C#">[...]<br>	//Animal类中<br>	public virtual void Call()<br>    &#123;<br>        [...]<br>    &#125;<br>	<br>	//Dog类中<br>	public override void Call()<br>    &#123;<br>        [...]<br>    &#125;<br><br>	//Cat类不变<br>    public new void Call()<br>    &#123;<br>        <br>    &#125;<br>[...]<br>/*输出结果：<br>Wah Wah!<br>Do nothing<br>*/<br></code></pre></td></tr></table></figure>
+<p>基类中标记<code>Call</code>函数为虚函数，在通过声明类（基类）调用时会自动地向类继承树的深处寻找，直到找到对应的由<code>override</code>标记的函数为止，所以<code>Dog</code>类调用产生的结果符合我们的预期。但是这里<code>Cat</code>类使用了<code>new</code>关键字，表明这个函数与父类中的函数的不同的函数（即使它们签名相同），所以调用的结果是Do nothing。如果在继承类中没有添加<code>new</code>或者<code>override</code>关键字，编译器会产生一个警告，且默认该方法为<code>new</code>的方法。</p>
+<h1 id="其他语言"><a class="markdownIt-Anchor" href="#其他语言"></a> 其他语言</h1>
+<p>在C/C++中，和C#一样，默认函数为实函数，需要使用<code>virtual</code>关键字来声明虚函数。而Java中除<code>final</code>以外所有函数均为虚函数，直接继承就可以实现多态，不需要额外的声明。之前一直在用Java写MC mod，转到C#一下有点不适应，可能这就是遇到问题的原因吧。</p>
+<p>我本来想探究一下python有没有虚函数和实函数的区别，但是打开之后发现Python是弱类型的语言，不存在声明类和实例类的区别，所以不需要关键字，直接继承自父类即可实现多态。</p>
+]]></content>
+      <categories>
+        <category>编程语言</category>
+      </categories>
+      <tags>
+        <tag>编程语言</tag>
+      </tags>
+  </entry>
 </search>
