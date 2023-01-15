@@ -26,8 +26,9 @@
 <meta property="og:image" content="http://zhf-xdu.top/2023/01/15/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/20200428025529551.png">
 <meta property="og:image" content="http://zhf-xdu.top/2023/01/15/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/20160313203419859-1673768271951-1.png">
 <meta property="og:image" content="http://zhf-xdu.top/2023/01/15/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/20190602181243782.png">
+<meta property="og:image" content="http://zhf-xdu.top/2023/01/15/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/20190731184935595.png">
 <meta property="article:published_time" content="2023-01-15T05:32:27.000Z">
-<meta property="article:modified_time" content="2023-01-15T08:33:47.632Z">
+<meta property="article:modified_time" content="2023-01-15T09:17:30.668Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="TCP">
@@ -247,7 +248,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k 字
+          3k 字
         
       </span>
     
@@ -372,14 +373,20 @@
 <ol>
 <li>慢启动。最开始会将cwnd设置为1，并以指数形式增长，每次增大为原来的两倍。</li>
 <li>加法增大。拥塞控制机制记录一个阈值ssthresh，当cwnd超过这个阈值时，就会由指数增大变为加法增大，每次增大1，从而避免拥塞。</li>
-<li>乘法减小。当网络发生丢包且原因是超时时，就引发乘法减小机制，ssthresh和cwnd同时减小为原来的一般，并继续通过加法增大进行增加。</li>
-<li>快重传。如果丢包是通过上文说的3-ack发现的，就不需要减小阈值和cwnd，直接对丢失的数据报进行重传即可。</li>
+<li>发生丢包：发送丢包时，ssthresh需要减小为原来的一半，cwnd则根据重传两种情况进行调整：
+<ol>
+<li>超时：cwnd直接降为1（慢启动）</li>
+<li>3-ack：cwnd也降为原来的一半（快重传）</li>
 </ol>
+</li>
+</ol>
+<p><img src="/2023/01/15/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/20190731184935595.png" srcset="/img/loading.gif" lazyload alt="20190731184935595"></p>
 <p>最终发送方的窗口大小就是对rwnd和cwnd取最小值获得。</p>
 <h1 id="参考文章"><a class="markdownIt-Anchor" href="#参考文章"></a> 参考文章</h1>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43138808/article/details/105804383">CSDN：通俗易懂的讲讲TCP的三次握手</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/guoweimelon/article/details/50879588">CSDN:TCP连续ARQ协议和滑动窗口协议</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/O9A0MA/article/details/90731748">TCP四次挥手过程</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41431406/article/details/97926927">TCP的拥塞控制（详解）</a></p>
 
               
             </div>
