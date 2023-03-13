@@ -658,7 +658,7 @@ Type是模板类型，Container是容器，Functional是仿函数（一般写为
 <p><a href="https://blog.csdn.net/qq_41431406/article/details/97926927">TCP的拥塞控制（详解）</a></p>
 ]]></content>
       <categories>
-        <category>网络</category>
+        <category>计算机网络</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -3529,7 +3529,7 @@ c-16-25.333-24-45-24-59z"/></svg></span></span></span></span><span class="vlist-
 <p><a href="https://developer.aliyun.com/article/243540">阿里云：STUN, TURN, ICE介绍</a></p>
 ]]></content>
       <categories>
-        <category>网络</category>
+        <category>计算机网络</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -4773,7 +4773,7 @@ PF\_IPX &amp; IPX Novell协议族 \\
 <p>以上便是socket的基本函数以及创建socket套接字的主要流程。</p>
 ]]></content>
       <categories>
-        <category>网络</category>
+        <category>计算机网络</category>
       </categories>
       <tags>
         <tag>计算机网络</tag>
@@ -4841,6 +4841,72 @@ PF\_IPX &amp; IPX Novell协议族 \\
       </categories>
       <tags>
         <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Socket编程（三）——多进程</title>
+    <url>/2023/03/13/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E8%BF%9B%E7%A8%8B/</url>
+    <content><![CDATA[<p>考完上学期的期末考试了，这学期课还特别少，最近集中精力学完这本书，开始泄洪式更新。</p>
+<h1 id="进程和僵尸进程"><a class="markdownIt-Anchor" href="#进程和僵尸进程"></a> 进程和僵尸进程</h1>
+<h2 id="温故而知新进程的概念"><a class="markdownIt-Anchor" href="#温故而知新进程的概念"></a> 温故而知新：进程的概念</h2>
+<p>一个简单且易于理解的定义：“进程是占用内存空间的正在运行的程序。“进程是操作系统进行资源调度的基本单位，资源包括时间、内存和外设等。在网络编程中，在服务端实现多进程可以降低服务的平均时延，提高客户端的访问体验。在Linux操作系统下，可以通过下面这个函数来复制一个进程副本。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-keyword">pid_t</span> <span class="hljs-title">fork</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>;<br><span class="hljs-comment">// 成功时返回进程ID，失败返回-1</span><br></code></pre></td></tr></table></figure>
+<p>复制后的进程与父进程使用同一个内存空间，但是父进程中该函数的返回值是子进程的ID，子进程中该函数的返回值为0，可以利用这个特点来区分父子进程。</p>
+<h2 id="僵尸进程"><a class="markdownIt-Anchor" href="#僵尸进程"></a> 僵尸进程</h2>
+<p>当父进程创建一个子进程，并且子进程运行结束，产生返回值时，子进程会把这个返回值传递给操作系统。操作系统会试图将这个返回值传递给父进程，在此之前，操作系统都不会杀死子进程。处在这种运行完毕但没有被杀死的进程就是<strong>僵尸进程</strong>。很显然，僵尸进程会像其他进程一样占用资源，且不做任何事，所以应该避免僵尸进程的出现。</p>
+<p>知道僵尸进程产生的原因后，就知道如何防止其产生。只需要在父进程中主动要求获得子进程的返回值即可。</p>
+<h3 id="方式一wait函数"><a class="markdownIt-Anchor" href="#方式一wait函数"></a> 方式一：wait函数</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-comment">// 传递的指针用于接收子进程的运行状态</span><br><span class="hljs-comment">// 运行成功时返回子进程ID，失败时返回-1</span><br><span class="hljs-function"><span class="hljs-keyword">pid_t</span> <span class="hljs-title">wait</span><span class="hljs-params">(<span class="hljs-keyword">int</span> * statloc)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>wait函数会让父进程进入阻塞状态，直到有子进程终止，此函数还要用两个宏函数配合使用：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C">WIFEXITED(status); <span class="hljs-comment">// 子进程正常终止时返回true</span><br>WEXITSTATUS(status); <span class="hljs-comment">// 返回子进程的返回值</span><br></code></pre></td></tr></table></figure>
+<h3 id="方式二waitpid函数"><a class="markdownIt-Anchor" href="#方式二waitpid函数"></a> 方式二：waitpid函数</h3>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* options: 可以传递常量WNOHANG，使得如果没有子进程终止就继续执行下面的代码，不阻塞。</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">pid_t</span> <span class="hljs-title">waitpid</span><span class="hljs-params">(<span class="hljs-keyword">pid_t</span> pid, <span class="hljs-keyword">int</span> * statloc, <span class="hljs-keyword">int</span> options)</span></span>;<br></code></pre></td></tr></table></figure>
+<h1 id="信号量"><a class="markdownIt-Anchor" href="#信号量"></a> 信号量</h1>
+<p>上面提到的两个方法都是父进程在主动等待子进程，更精明的方法是求助操作系统，向操作系统“注册”一个函数，用于收到信号量时执行。</p>
+<h2 id="signal"><a class="markdownIt-Anchor" href="#signal"></a> signal</h2>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;signal.h&gt;</span></span><br><span class="hljs-keyword">void</span> (*signal(<span class="hljs-keyword">int</span> signo, <span class="hljs-keyword">void</span> (*func)(<span class="hljs-keyword">int</span>)))(<span class="hljs-keyword">int</span>);<br></code></pre></td></tr></table></figure>
+<p>声明过于复杂，但是不难理解：</p>
+<ul>
+<li>函数名：signal</li>
+<li>参数：int signo, void(*func)(int)</li>
+<li>返回值：参数为int，返回void型的函数指针</li>
+</ul>
+<p>第一个参数用于传递常量，代表不同的事件，第二个参数代表事件发生时应该调用的函数。常量有下：</p>
+<ul>
+<li>SIGALRM：已到通过alarm函数注册的时间（定时器）</li>
+<li>SIGINT：输入CTRL+C</li>
+<li>SIGCHLD：子进程终止</li>
+</ul>
+<p>alarm函数声明如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> <span class="hljs-title">alarm</span><span class="hljs-params">(<span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> seconds)</span></span>;<br><span class="hljs-comment">// 返回以秒为单位的剩余时间</span><br></code></pre></td></tr></table></figure>
+<p>返回值似乎很令人迷惑，实际上如果给这个函数传递的参数为0，就会取消对SIGALRM信号的预约，此时可以通过读取返回值来确定剩余的或者已经过去的时间。</p>
+<h2 id="sigaction"><a class="markdownIt-Anchor" href="#sigaction"></a> sigaction</h2>
+<p>实际上现在很少使用signal函数，因为sigaction在不同版本的Unix操作系统中完全相同。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;signal.h&gt;</span></span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">* act:传递注册函数的信息 oldact:获取这个参数之前注册的处理函数指针</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sigaction</span><span class="hljs-params">(<span class="hljs-keyword">int</span> signo, <span class="hljs-keyword">const</span> struct sigaction * act, struct sigaction * oldact)</span></span>;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sigaction</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">void</span> (*sa_handler)(<span class="hljs-keyword">int</span>); <span class="hljs-comment">// 信号处理函数的指针</span><br>    <span class="hljs-comment">// 以下两个在处理僵尸进程时可以直接初始化为0</span><br>    <span class="hljs-keyword">sigset_t</span> sa_mask;<br>    <span class="hljs-keyword">int</span> sa_flags;<br>&#125;<br><br><span class="hljs-comment">// 使用下面这个函数将sa_mask清零</span><br>sigemptyset(&amp;act.sa_mask);<br></code></pre></td></tr></table></figure>
+<p>sigaction函数操作较为复杂，但无论是可移植性还是灵活性都比signal函数强一些。</p>
+<h1 id="多进程服务端"><a class="markdownIt-Anchor" href="#多进程服务端"></a> 多进程服务端</h1>
+<p>多进程服务端的框架书上介绍得很详细，这里只记录一下其框架：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C">serv_sock = socket(...);<br>bind(...);<br>listen(...);<br>clnt_sock = accept(...);<br>pid = fork();<br><span class="hljs-keyword">if</span>(pid==<span class="hljs-number">0</span>) <span class="hljs-comment">// child process</span><br>&#123;<br>    close(serv_sock);<br>    read_and_write();<br>    close(clnt_sock)<br>&#125;<br><span class="hljs-keyword">else</span>&#123; <span class="hljs-comment">//father process</span><br>    close(clnt_sock);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>该段伪代码使用fork出的子进程来负责与客户端进行通信，服务端只负责接受客户端的连接请求。需要注意的是在子进程中需要事先关闭不再使用的文件描述符（实际上就是套接字），因为子进程中会复制父进程的文件描述符，<strong>而套接字只有当其所有文件描述符都关闭时才会被关闭</strong>。所以，如果子进程不事先关闭服务端套接字，父进程就有可能无法关闭套接字。</p>
+<p>对于父进程中关闭客户端文件描述符的操作，也是因为此。</p>
+<p><img src="/2023/03/13/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E8%BF%9B%E7%A8%8B/IMG_0296(20230313-212321)-1678713864859-2.PNG" alt="套接字和文件描述符的关系"></p>
+<h1 id="分割客户端的io进程"><a class="markdownIt-Anchor" href="#分割客户端的io进程"></a> 分割客户端的IO进程</h1>
+<p>对于客户端，使用多进程也可以提高程序执行的效率。书中例子将客户端的发送数据部分放在父进程中，读取回声放在子进程中，这样可以使得客户端的输入和输出在时间上无关，即下一轮的输出无需等待上一轮的输入到达。</p>
+<h1 id="进程间通信"><a class="markdownIt-Anchor" href="#进程间通信"></a> 进程间通信</h1>
+<p>以上提到的例子中其实已经设计到一部分的进程通信，但通信的方法是信号量，只能起到相互通知的作用。如果希望在进程之间读取较大规模的数据，需要用到一些其他技巧，例如<strong>管道</strong>。其实这个部分应该属于操作系统范畴，但是鉴于我寒假读了《操作系统导论》这本书却没有写读书笔记，这里再啰嗦一下罢。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* 成功时返回0，失败返回-1</span><br><span class="hljs-comment">* filedes[0]用于父进程读取数据，filedes[1]用于子进程写入数据</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pipe</span><span class="hljs-params">(<span class="hljs-keyword">int</span> filedes[<span class="hljs-number">2</span>])</span></span>;<br></code></pre></td></tr></table></figure>
+<p><code>filedes</code>这个数组我们可以像文件描述符一样使用，调用像<code>write</code>、<code>read</code>这样的IO函数来进行数据传输。根据pipe函数的描述我们可以知道，一个管道只能实现子进程到父进程的单向通信。</p>
+<blockquote>
+<p>如果使用一个管道实现双向通信，可能会引发一些问题，因为“向管道传递数据时，先读的进程会把数据取走”，规划父子进程间数据的读取数据这件事十分繁琐。</p>
+</blockquote>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>多进程的服务端和客户端可以在一定程度上优化程序的执行，但也会带来一些问题，例如占用内存较大等等。所以在实现大型服务端时，通常不会采用这种方式，本部分的学习可以权当是对操作系统知识点的一些回顾。</p>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
 </search>
