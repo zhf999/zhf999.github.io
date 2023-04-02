@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>Socket编程（五）——多线程</title>
+    <link href="/2023/04/02/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    <url>/2023/04/02/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/</url>
+    
+    <content type="html"><![CDATA[<p>本篇博客应该会是Socket编程系列的最后一篇博客，之后可能会集中精力用于实际应用方面或者Unix高级编程方面。</p><h2 id="什么是线程"><a class="markdownIt-Anchor" href="#什么是线程"></a> 什么是线程</h2><p>在之前的博客中介绍过多进程客户端的概念，多进程可以并行地执行多段代码，从而提高IO的效率。但是使用多进程客户端（服务端）用于通信也有一定的不足，比如<strong>进程过于占用内存、进程间通信需要特殊的IPC技术、进程的上下文切换会占用大量资源</strong>。于是线程的概念就被提出。线程是小于进程的概念，在一个进程的多个进程中，只共享数据区和堆区域，并不共享栈区域，所以大大减小了线程间切换的开销，可以利用数据区和堆交换数据。</p><h2 id="线程的创建和运行"><a class="markdownIt-Anchor" href="#线程的创建和运行"></a> 线程的创建和运行</h2><h3 id="创建线程"><a class="markdownIt-Anchor" href="#创建线程"></a> 创建线程</h3><p>Unix系列操作系统的线程创建函数如下：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">* thread:用于保存新线程ID的变量地址</span><br><span class="hljs-comment">* attr:创建线程属性的参数，传递NULL时创建默认属性</span><br><span class="hljs-comment">* start_routine:新线程执行的函数</span><br><span class="hljs-comment">* arg: 新函数的参数地址</span><br><span class="hljs-comment">* 返回0时正常，否则创建失败</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_create</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-keyword">pthread_t</span> * <span class="hljs-keyword">restrict</span> thread, <span class="hljs-keyword">const</span> <span class="hljs-keyword">pthread_attr_t</span> *<span class="hljs-keyword">restrict</span> attr,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-keyword">void</span> * (*start_routine)(<span class="hljs-keyword">void</span>*), <span class="hljs-keyword">void</span> * <span class="hljs-keyword">restrict</span> arg</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span>;<br></code></pre></td></tr></table></figure><p>需要注意的是，没有办法向新线程中传递多个形式参数，但可以创建一个新的结构体用于打包传递所有参数。</p><blockquote><p>最开始我有这样疑问：新线程的几个变量间没有关系，创建一个新的结构体是有必要的吗？网上的大神是这么解答的：只要变量都是用于一个新线程的，就不应该认为这几个变量之间没有关系。</p></blockquote><h3 id="等待线程"><a class="markdownIt-Anchor" href="#等待线程"></a> 等待线程</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_join</span><span class="hljs-params">(<span class="hljs-keyword">phread_t</span> thread, <span class="hljs-keyword">void</span> ** status)</span></span>;<br><br><span class="hljs-comment">// example:</span><br><span class="hljs-keyword">void</span> *thr_ret;<br>pthread_join(t_id,&amp;thr_ret);<br></code></pre></td></tr></table></figure><p>第一个参数用于指定需要等待的线程ID，第二个参数需要注意，由于创建的线程main函数返回的是<code>void*</code>类型的参数，所以需要使用一个指向<code>void*</code>类型参数的指针来接受线程状态。</p><h2 id="线程间同步"><a class="markdownIt-Anchor" href="#线程间同步"></a> 线程间同步</h2><p>上面提到了线程间是共享数据区和堆区域的，所以当两个进程并发运行时，难免会出现同时对一个数据进行操作的情况，为了避免一些不在预期之内的事情发生，就必须使用一定的手段来避免。</p><h3 id="互斥量"><a class="markdownIt-Anchor" href="#互斥量"></a> 互斥量</h3><p>书中使用“卫生间”的例子来形容互斥量，这个比喻非常形象。互斥量就是阻止两个线程同时对一个区域进行访问，这样的区域称为<strong>临界区</strong>，互斥量可以理解为访问临界区的“锁”。对互斥量的操作函数如下：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_init</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> * mutex, <span class="hljs-keyword">const</span> <span class="hljs-keyword">pthread_mutexattr_t</span> * attr)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_destroy</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> *mutex)</span></span>;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">* mutex:需要创建或者销毁的互斥量的地址</span><br><span class="hljs-comment">* attr: 需要创建的互斥量属性</span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_lock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> * mutex)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_unlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> * mutex)</span></span>;<br></code></pre></td></tr></table></figure><p>后两个的函数的作用不用说也很容易理解，就是对互斥量进行访问和离开的函数。</p><p>使用互斥量时需要注意几点，首先是对互斥量访问的过程中难免存在等待的现象，所以会使得执行速度比原来低很多的情况；其次是临界区的大小问题，扩大临界区可能会使得执行时间变得更长，但是可以减少lock函数和unlock函数的调用次数，所以临界区的大小需要根据实际情况来调整；再次是编程时应该尽最大努力避免死锁。</p><h3 id="信号量"><a class="markdownIt-Anchor" href="#信号量"></a> 信号量</h3><p>信号量和互斥量很相似，但是可以做的事情更多。信号量可以理解为线程间相互通知的变量。相关的操作如下：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;semaphore.h&gt;</span></span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">* sem: 信号量的变量地址值</span><br><span class="hljs-comment">* pshared；可以创多个进程共享的信号量，这里我们不需要，故填0</span><br><span class="hljs-comment">* value: 信号量的初始值</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_init</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem,<span class="hljs-keyword">int</span> pshared, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> value)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_destroy</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_post</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> * sem)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_wait</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> * sem)</span></span>;<br></code></pre></td></tr></table></figure><h2 id="线程资源的回收"><a class="markdownIt-Anchor" href="#线程资源的回收"></a> 线程资源的回收</h2><p>线程资源的回收有两种方法，对应两个函数分别是<code>pthread_join</code>和<code>pthread_detach</code>，尝试从字面去理解就是连接和分离。连接指的是该线程会保留当前的状态和资源，当主进程调用<code>pthread_join</code>函数时就会把状态返回。分离指的是将两个线程的状态分开，线程执行完毕后自动释放资源，可以理解为解耦。</p><p>如果不需要等待线程结束或检索其返回值，或者知道该线程将一直运行，那么将其设置为分离线程可能是一个好的选择，因为它可以避免内存泄漏和其他资源泄漏的问题。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Socket编程（四）——IO复用和更多IO函数</title>
     <link href="/2023/03/14/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94IO%E5%A4%8D%E7%94%A8%E5%92%8C%E6%9B%B4%E5%A4%9AIO%E5%87%BD%E6%95%B0/"/>
     <url>/2023/03/14/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94IO%E5%A4%8D%E7%94%A8%E5%92%8C%E6%9B%B4%E5%A4%9AIO%E5%87%BD%E6%95%B0/</url>
@@ -611,9 +636,9 @@
     
     <tags>
       
-      <tag>C/C++</tag>
-      
       <tag>编程语言</tag>
+      
+      <tag>C/C++</tag>
       
     </tags>
     
@@ -640,9 +665,9 @@
     
     <tags>
       
-      <tag>中国剩余定理</tag>
-      
       <tag>数论</tag>
+      
+      <tag>中国剩余定理</tag>
       
     </tags>
     
