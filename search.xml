@@ -870,6 +870,7 @@ Selector对象还有extract()方法，获取其中的文字。</p>
 <h2 id="验证"><a class="markdownIt-Anchor" href="#验证"></a> 验证</h2>
 <p>将Alice的属性设置为(Master, CS, Assistant)，Bob设置为(Prof, EE, Teacher)，结果是Alice解密错误，而Bob的res1解密成功，res2解密失败。如果在共谋攻击中把Bob的Teacher分量借给Alice使用，则还是无法解密，验证了ABE可以抵抗共谋攻击的特点。</p>
 <p>如果将Alice设置为(Master, CS, Teacher)而Bob不变，则可以发现两者都解密成功。但是有趣的是，Alice和Bob共谋攻击后反而不成功，这就是ABE的奇妙之处，由于各个密钥的t值不同，所以无论怎样，混合使用始终无法解开密文。</p>
+<h2 id="代码下载"><a class="markdownIt-Anchor" href="#代码下载"></a> 代码下载</h2>
 <p><a href="https://zhf999.github.io/download/CPABE.cpp">代码下载</a></p>
 ]]></content>
       <categories>
