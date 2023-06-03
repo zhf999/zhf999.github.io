@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>C#学习笔记（二）——类、委托、接口</title>
+    <link href="/2023/06/03/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E3%80%81%E5%A7%94%E6%89%98%E3%80%81%E6%8E%A5%E5%8F%A3/"/>
+    <url>/2023/06/03/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E3%80%81%E5%A7%94%E6%89%98%E3%80%81%E6%8E%A5%E5%8F%A3/</url>
+    
+    <content type="html"><![CDATA[<h1 id="静态成员"><a class="markdownIt-Anchor" href="#静态成员"></a> 静态成员</h1><p>所谓静态成员，就是与实例无关、只与类有关的字段、方法、或者属性。静态成员的存在不依赖于实例的存在，即使没有任何该类的实例，静态成员也会存在与堆上。如果静态成员有初始化字段，那么会在该类的任何静态成员之前初始化该字。</p><h2 id="静态成员的访问方式"><a class="markdownIt-Anchor" href="#静态成员的访问方式"></a> 静态成员的访问方式</h2><p>静态成员可以使用<code>实例.成员</code>的方式来访问，也可以直接使用<code>类.成员</code>的方式来访问，个人认为后一种更合理。</p><p>也可以使用<code>using static</code>结构来引用静态属性，这样或许可以少写一些代码。</p><h2 id="区分常量与静态量"><a class="markdownIt-Anchor" href="#区分常量与静态量"></a> 区分常量与静态量</h2><p>常量没有自己的储存位置，在编译时就被编译器替换为字面量，可以理解为与C语言的<code>#deinfe</code>宏定义类似，而静态量在内存中有特定的存储位置，可以被修改。常量对类的每个实例都是可见的，而静态量可以通过改变访问修饰符的办法来改变对其他类的可见性。</p><h3 id="再对比readonly"><a class="markdownIt-Anchor" href="#再对比readonly"></a> 再对比readonly</h3><p>const字段只能在声明语句中被初始化，而readonly可以在声明语句中被初始化，也可以在构造函数中被初始化。readonly变量的其他特点与静态量都类似。</p><h1 id="构造函数"><a class="markdownIt-Anchor" href="#构造函数"></a> 构造函数</h1><p>构造函数与方法类似，但是有以下两点不同：</p><ul><li>构造函数的名称必须与类名系统；</li><li>构造函数不能有返回值。</li></ul><p>一个类可以有多个构造函数，也就是说构造函数可以被重载。如果没有为类定义构造函数，那么编译器会为类提供一个隐式的构造函数，这个构造函数无参数，方法体为空。如果你已经定义了构造函数，那么编译器不再提供默认构造函数。<strong>有时在继承一个类时编译器会提示基类没有默认构造函数，就与此有关。</strong></p><h2 id="静态构造函数"><a class="markdownIt-Anchor" href="#静态构造函数"></a> 静态构造函数</h2><p>静态函数是用于初始化类的静态字段的，其会在任何静态成员被引用或创建类的任何实例之前被调用。一个类只能有一个静态构造函数，且不能有访问修饰符。</p><h2 id="对象初始化语句"><a class="markdownIt-Anchor" href="#对象初始化语句"></a> 对象初始化语句</h2><p>对象初始化语句的语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs C#">public class Point<br>&#123;<br>    public int X = 1;<br>    public int Y = 2;<br>&#125;<br><br>class Program<br>&#123;<br>    static void Main()<br>    &#123;<br>        Point pt1 = new Point();<br>        Point pt2 = new Point&#123;X = 5, Y = 6&#125;;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure><p>初始化发生在构造方法执行之后，所以上文第12行的语句会吧对象中的X改为5，Y改为6。</p><h1 id="类和继承"><a class="markdownIt-Anchor" href="#类和继承"></a> 类和继承</h1><p>类和继承方面的内容在之前的博客中写过了，这里不再赘述。比较需要注意的就是C#中的函数都为实函数，如果希望其被子类的函数覆盖，就得为其添加<code>virtual</code>关键字并为子类的方法添加<code>override</code>关键字。<strong>在C#中屏蔽和覆盖的概念是不同的</strong>。</p><h2 id="扩展方法"><a class="markdownIt-Anchor" href="#扩展方法"></a> 扩展方法</h2><p>当我们使用第三方库时会希望能够在第三方类中添加新的方法便于编程，但是如果第三方库的代码无法修改，且我们希望修改的第三方类是密封的（我们无法继承自该基类），就可以使用扩展方法，在第三方类中实现一个额外的方法，语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs C#">namespace ExtensionMethods<br>&#123;<br>    sealed class MyData<br>    &#123;<br>        private double D1,D2,D3;<br>        public Mydata(double d1,double d2,double d2)<br>        &#123;<br>            //...<br>        &#125;<br>        <br>        public double Sum()&#123; return D1+D2+D3&#125;;<br>    &#125;<br>    <br>    static class ExtendMyData<br>    &#123;<br>        public static double Average(this MyData md)<br>        &#123;<br>return md.Sum()/3;<br>        &#125;<br>    &#125;<br>    <br>    class Program<br>    &#123;<br>        static void Main()<br>        &#123;<br>MyData md = new MyData(3,4,5);<br>            Console.WriteLine(&quot;Average: &#123;0&#125;&quot;,md.Average());<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>通过上面的扩展方法，我们可以直接把<code>Average</code>方法像调用<code>MyData</code>类的成员一样调用，既不需要继承，也不需要修改源代码，十分地神奇。需要注意的是新建的类和方法都必须是静态的，且方法的参数需要添加<code>this</code>关键字。</p><h1 id="运算符"><a class="markdownIt-Anchor" href="#运算符"></a> 运算符</h1><p>之前的文章提过运算符，但是并没有细说运算符重载，这里再大致介绍一下其语法。运算符重载只能用于类和结构，且根据我们重载的运算符是一元运算符还是二元运算符，相关的重载方法也应该具有对应的参数个数：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C#">public static LimitedInt operator -(LimitedInt x);// 重载的是负数运算符而不是减法<br>public static LimitedInt operator +(LimitedInt x, double y);<br></code></pre></td></tr></table></figure><p>可重载的一元运算符：<code>+ - ! ~ ++ -- true false</code></p><p>可重载的二元运算符：<code>+ - * / % &amp; | ^ &gt;&gt; &lt;&lt; == != &gt; &lt; &gt;= &lt;=</code></p><p>重载运算符只能定义一个新的操作结果（语义），而不能改变运算符的语法、结合性等语法特点。</p><h2 id="用户定义的类型转换"><a class="markdownIt-Anchor" href="#用户定义的类型转换"></a> 用户定义的类型转换</h2><p>类型转换实际上也是运算符的一种，可以分为隐式类型转换和显式类型转换。隐式类型转换是编译器在发现类型不对等时自动进行类型转换，而显示类型转换需要使用括号来表明要转换的对象。</p><p>语法如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C#">public static implicit operator TargetType(SourceType param)<br>&#123;<br>    return ObjectOfTargetType;<br>&#125;<br></code></pre></td></tr></table></figure><p>上面展示的是隐式的类型转换对应的代码，如果希望定义一个显式类型转换，就把代码中的<code>implicit</code>改成<code>explicit</code>即可。两种类型转换其实十分相似，只是我们希望类型转换的场合不同。隐式转换的场合更加广泛，而显示转换只在<strong>必要的时候</strong>进行。</p><h1 id="结构"><a class="markdownIt-Anchor" href="#结构"></a> 结构</h1><p>结构看上去像是从C/C++搬过来的东西，结构和类十分类似，但不同的是结构是值类型，而且结构是密封的，不能被继承。虽然说结构的定义和C语言很类似，但是创建结构的语法却又和类类似，使用的是<code>new</code>语句。有<code>new</code>语句，就肯定少不了构造函数。我们可以为结构添加构造函数，但是需要注意的是，不论我们是否为其添加构造函数，结构都存在一个默认构造函数，这是与类不同的另外一个地方。</p><blockquote><p>默认构造函数将值类型设置为默认值，引用类型设置成null。</p></blockquote><p>也可以像C语言中一样不使用<code>new</code>来创建结构的实例，但是这样有一些限制：</p><ul><li>在显示设置数据成员的值之后，才能使用它们的值；</li><li>在对所有数据成员赋值之后才能调用结构的函数成员。</li></ul><p>总之，这么干听起来就很危险，不建议使用。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C#">static void Main()<br>&#123;<br>    Simple s1;<br>    Simple s2 = new Simple();<br>    Console.WriteLine(&quot;&#123;0&#125;&quot;,s1.X); // 这么做会编译错误<br>    Console.WriteLine(&quot;&#123;0&#125;&quot;,s2.X); // Fine<br>&#125;<br></code></pre></td></tr></table></figure><h1 id="委托"><a class="markdownIt-Anchor" href="#委托"></a> 委托</h1><p>什么是委托？《C#图解教程》中有一句十分浅显易懂的话：</p><blockquote><p>如果你有C<ins>背景，理解委托最快的方法就是把它看成一个类型安全的、面向对象的C</ins>函数指针。</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>编程语言</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>编程语言</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CP-ABE属性基加密</title>
     <link href="/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/"/>
     <url>/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/</url>
@@ -555,7 +580,7 @@
     <link href="/2022/06/12/%E5%8D%9A%E5%AE%A2%E8%B5%84%E6%96%99%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%E7%B4%A2%E5%BC%95/"/>
     <url>/2022/06/12/%E5%8D%9A%E5%AE%A2%E8%B5%84%E6%96%99%E4%B8%8B%E8%BD%BD%E9%93%BE%E6%8E%A5%E7%B4%A2%E5%BC%95/</url>
     
-    <content type="html"><![CDATA[<h1 id="思维导图"><a class="markdownIt-Anchor" href="#思维导图"></a> 思维导图</h1><p>均为个人复习资料，正确性无法保证，敬请包容，也欢迎指出。</p><p><a href="https://zhf999.github.io/mind/ComputerComposition.rar">计算机组成原理2022</a></p><p><a href="https://zhf999.github.io/mind/ComputerNetwork.rar">计算机通信与网络2022</a></p><blockquote><p>UPD(2022-6-13): 蹭了节复习课，根据其他老师的复习目录修改了一点点内容。增加了绪论章节的思维导图。</p></blockquote><p><a href="https://zhf999.github.io/mind/OS.rar">操作系统2022</a></p><h1 id="大作业"><a class="markdownIt-Anchor" href="#大作业"></a> 大作业</h1><p><a href="https://zhf999.github.io/download/CV.rar">计算机数据lyn大作业</a></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="思维导图"><a class="markdownIt-Anchor" href="#思维导图"></a> 思维导图</h1><p>均为个人复习资料，正确性无法保证，敬请包容，也欢迎指出。</p><h2 id="软件"><a class="markdownIt-Anchor" href="#软件"></a> 软件</h2><p><a href="https://zhf999.github.io/download/MaoGai.zip">毛概答题助手</a></p><h2 id="大三上"><a class="markdownIt-Anchor" href="#大三上"></a> 大三上</h2><p><a href="https://zhf999.github.io/download/LiSan.zip">l离散数学思维导图</a></p><h2 id="大二下"><a class="markdownIt-Anchor" href="#大二下"></a> 大二下</h2><p><a href="https://zhf999.github.io/mind/ComputerComposition.rar">计算机组成原理2022</a></p><p><a href="https://zhf999.github.io/mind/ComputerNetwork.rar">计算机通信与网络2022</a></p><blockquote><p>UPD(2022-6-13): 蹭了节复习课，根据其他老师的复习目录修改了一点点内容。增加了绪论章节的思维导图。</p></blockquote><p><a href="https://zhf999.github.io/mind/OS.rar">操作系统2022</a></p><h1 id="大作业"><a class="markdownIt-Anchor" href="#大作业"></a> 大作业</h1><p><a href="https://zhf999.github.io/download/CV.rar">计算机数据lyn大作业</a></p>]]></content>
     
     
     
@@ -690,9 +715,9 @@
     
     <tags>
       
-      <tag>数论</tag>
-      
       <tag>中国剩余定理</tag>
+      
+      <tag>数论</tag>
       
     </tags>
     
