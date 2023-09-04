@@ -16,25 +16,29 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="说在前面 这算是一篇北航夏令营的回忆录吧，简单地复盘一下整个流程，希望能给之后有望保研北航的同学提供一些经验。当然，整个过程仅仅代表我自己的体会，不同面试组别提的问题甚至整个面试的氛围都有差别，这篇博客只能提供一个参考作用。  入营前 个人情况：rank前5%，没有科研经验，有ACM类竞赛省奖国奖各一个，CSP认证320分，校奖若干，一个大创项目和若干课程设计。 可能是看了之前学长学姐的夏令营经">
+    <meta name="description" content="一、简介 “毛概答题小助手”是笔者开发的一款辅助学生学习记忆毛概客观题的一款轻量级的桌面端应用程序。该软件可以从特定格式的json文件中提取出题干、选项和答案，并利用程序逻辑来完成判题。  软件的前端页面使用C# + WPF编写，利用C#优雅的语言特性和WPF的Binding机制，可以很好地在前端界面和后端数据之间形成通路；软件的数据（题库）来自正则表达式提取，通过使用特定的正则表达式，可以从整">
 <meta property="og:type" content="article">
-<meta property="og:title" content="24届北航夏令营面试经验">
-<meta property="og:url" content="http://zhf-xdu.top/2023/07/16/24%E5%B1%8A%E5%8C%97%E8%88%AA%E5%A4%8F%E4%BB%A4%E8%90%A5%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C/index.html">
+<meta property="og:title" content="毛概答题小助手项目中的关键技术点">
+<meta property="og:url" content="http://zhf-xdu.top/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="说在前面 这算是一篇北航夏令营的回忆录吧，简单地复盘一下整个流程，希望能给之后有望保研北航的同学提供一些经验。当然，整个过程仅仅代表我自己的体会，不同面试组别提的问题甚至整个面试的氛围都有差别，这篇博客只能提供一个参考作用。  入营前 个人情况：rank前5%，没有科研经验，有ACM类竞赛省奖国奖各一个，CSP认证320分，校奖若干，一个大创项目和若干课程设计。 可能是看了之前学长学姐的夏令营经">
+<meta property="og:description" content="一、简介 “毛概答题小助手”是笔者开发的一款辅助学生学习记忆毛概客观题的一款轻量级的桌面端应用程序。该软件可以从特定格式的json文件中提取出题干、选项和答案，并利用程序逻辑来完成判题。  软件的前端页面使用C# + WPF编写，利用C#优雅的语言特性和WPF的Binding机制，可以很好地在前端界面和后端数据之间形成通路；软件的数据（题库）来自正则表达式提取，通过使用特定的正则表达式，可以从整">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-07-16T02:38:42.000Z">
-<meta property="article:modified_time" content="2023-07-16T06:01:40.517Z">
+<meta property="og:image" content="http://zhf-xdu.top/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/image-20230904191506064.png">
+<meta property="og:image" content="http://zhf-xdu.top/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/image-20230904192800326.png">
+<meta property="og:image" content="http://zhf-xdu.top/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/image-20230904194055046.png">
+<meta property="article:published_time" content="2023-09-04T11:11:08.000Z">
+<meta property="article:modified_time" content="2023-09-04T14:00:27.146Z">
 <meta property="article:author" content="周洪锋">
-<meta property="article:tag" content="经验">
-<meta property="article:tag" content="保研">
+<meta property="article:tag" content="编程">
+<meta property="article:tag" content="项目">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhf-xdu.top/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/image-20230904191506064.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>24届北航夏令营面试经验 - 周洪锋的博客</title>
+  <title>毛概答题小助手项目中的关键技术点 - 周洪锋的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -215,7 +219,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="24届北航夏令营面试经验"></span>
+            <span id="subtitle" data-typed-text="毛概答题小助手项目中的关键技术点"></span>
           
         </div>
 
@@ -231,8 +235,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-07-16 10:38" pubdate>
-          2023年7月16日 上午
+        <time datetime="2023-09-04 19:11" pubdate>
+          2023年9月4日 晚上
         </time>
       </span>
     
@@ -243,7 +247,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          2.5k 字
         
       </span>
     
@@ -254,7 +258,7 @@
         
         
         
-          15 分钟
+          21 分钟
         
       </span>
     
@@ -300,52 +304,48 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">24届北航夏令营面试经验</h1>
+            <h1 style="display: none">毛概答题小助手项目中的关键技术点</h1>
             
             <div class="markdown-body">
               
-              <h1 id="说在前面"><a class="markdownIt-Anchor" href="#说在前面"></a> 说在前面</h1>
-<p>这算是一篇北航夏令营的回忆录吧，简单地复盘一下整个流程，希望能给之后有望保研北航的同学提供一些经验。当然，整个过程仅仅代表我自己的体会，不同面试组别提的问题甚至整个面试的氛围都有差别，这篇博客只能提供一个参考作用。</p>
-<h1 id="入营前"><a class="markdownIt-Anchor" href="#入营前"></a> 入营前</h1>
-<p>个人情况：rank前5%，没有科研经验，有ACM类竞赛省奖国奖各一个，CSP认证320分，校奖若干，一个大创项目和若干课程设计。</p>
-<p>可能是看了之前学长学姐的夏令营经验和去向，所以夏令营报名的时候有些眼高手低，报的都是华五等一些比较难入的学校，再加上今年夏令营变成线下，所以各个学校能接纳的人数都变少了，导致最后一个营都没入。当时只是顺手报了一下北航，在这之前也没有真的想去，于是就入营了。看网上的经验贴说北航对xdu比较钟爱，入营人数比较多，今年看来确实是这样，我们几个同校入北航的拉了个群，大概有八九个人，结果在去北京的高铁上发现另一帮同是xdu去北航的，可见入营人数之多。另外北航特别钟爱程序设计类竞赛，夏令营申请表上只能写程序设计类竞赛，而且<strong>CSP认证可以抵掉机试的成绩</strong>。</p>
-<p>关于准备工作，首先北航不提供食宿，而在帝都的消费又高得离谱（打印店一张2元，打印个报名表三十元就没了），所以最好找人结伴一起住（富哥当我没说）。其次是面试准备，个人感觉应该以数学为主，面试被问到的问题主要是数学，具体面试问题下文会说。然后再准备一个英文的自我介绍。</p>
-<h1 id="夏令营"><a class="markdownIt-Anchor" href="#夏令营"></a> 夏令营</h1>
-<h2 id="day0"><a class="markdownIt-Anchor" href="#day0"></a> day0</h2>
-<p>到达订好的宾馆，稍微安顿一下，调整一下状态。</p>
-<h2 id="day1"><a class="markdownIt-Anchor" href="#day1"></a> day1</h2>
-<p>早晨是开营仪式，研究生院负责招生的老师介绍了一下夏令营的流程和情况，然后是各个实验室的老师上去介绍实验室。这里吐槽一下北航礼堂的投影设备，根本看不清，想拍照记一下老师的联系方式也拍不到，体验极差。</p>
-<p>下午两点是机试，用CSP认证的成绩可以抵机试成绩，具体公式网上有，应该是根据CSP累积排名百分百和机试成绩的均值、方差来计算的。我用CSP抵了机试，所以并不知道题目是啥，听同行的两位说是两道大模拟题，比较难，爆零的人数还是比较多的，所以如果CSP分数比较高的话拿去抵一下优势应该还是挺大的。</p>
-<p>北航的效率相当高，当天晚上就能出入围面试的名单，机试没过就没有面试机会了，可以提前回家或者留北京玩玩。</p>
-<h2 id="day2"><a class="markdownIt-Anchor" href="#day2"></a> day2</h2>
-<p>第二天就是喜闻乐见的面试，每个人面试的时间严格控制在20min，不会超时也不会提前结束，所以可以根据面试的次序安排好时间，不用像我一样从七点多等到十一点，太煎熬了。</p>
-<p>下面是面试题（大致按顺序排列了，有些题目忘了，只能大概回忆一下）：</p>
-<ol>
-<li>抽一道政治题回答（正常回答就好，不计入分数）</li>
-<li>英语自我介绍</li>
-<li>将一段英文翻译成中文</li>
-<li>已知平面上三点，如何求出这个平面的法向量（叉乘）</li>
-<li>什么是散度</li>
-<li>用什么数学模型（线性代数、微分方程等）来表达房间中的动态变化，如热气球膨胀、水流流动等</li>
-<li>哈米尔顿图和欧拉图的概念和判断</li>
-<li>旅行商问题的解法</li>
-<li>（最后几个问题是根据成绩单上的课程来问的）计算机图形学中如何表达一个无穷远的点</li>
-<li>对称密码和非对称密码的区别</li>
-<li>使用非对称密码应该如何将公钥分发给对方</li>
-</ol>
-<p>不同组的问题不太一样，听说别的组是英文自我介绍和翻译二选一，而我这组两个都有。并且其他同学有被问到408专业课的相关内容，而我这组全是数学。</p>
-<h2 id="day3"><a class="markdownIt-Anchor" href="#day3"></a> day3</h2>
-<p>面试分两天，day3没有面试的话就可以在北京逛逛。当时我去了圆明园、天坛逛了逛，然后晚上吃饭的时候优营名单出来了（北航效率真的高）。</p>
-<h2 id="day4"><a class="markdownIt-Anchor" href="#day4"></a> day4</h2>
-<p>夏令营安排是留了day4一天给优营的同学联系导师，可以线下或者线上交流。虽然我最后优营，但是我并没有成功联系到导师，于是便决定暑假再说，所以day4又在北京逛了一下，day5打道回府。</p>
-<h1 id="个人感受"><a class="markdownIt-Anchor" href="#个人感受"></a> 个人感受</h1>
+              <h2 id="一-简介"><a class="markdownIt-Anchor" href="#一-简介"></a> 一、简介</h2>
+<p>“毛概答题小助手”是笔者开发的一款辅助学生学习记忆毛概客观题的一款轻量级的桌面端应用程序。该软件可以从特定格式的<code>json</code>文件中提取出题干、选项和答案，并利用程序逻辑来完成判题。</p>
+<p><img src="/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/image-20230904191506064.png" srcset="/img/loading.gif" lazyload alt="界面"></p>
+<p>软件的前端页面使用C# + WPF编写，利用C#优雅的语言特性和WPF的Binding机制，可以很好地在前端界面和后端数据之间形成通路；软件的数据（题库）来自正则表达式提取，通过使用特定的正则表达式，可以从整个题目片段中精准地提取出题干等信息。接下来分块解析整个项目中的重点和难点。</p>
+<h2 id="二-正则表达式提取"><a class="markdownIt-Anchor" href="#二-正则表达式提取"></a> 二、正则表达式提取</h2>
+<p>在正则表达式提取这块，主要采用分歩提取的策略，首先从大量题目组成的文本中提取出多个孤立的题目，在根据题目的格式特点来提取题干、选项和答案。在提取孤立的题目时，使用的正则表达式串为：<code>[0-9]\.?(.+?)答案</code>，同时需要注意，需要开启正则表达式的“S模式”，即不匹配新的行，否则会出现无法提取的情况。下面为使用在线网站模拟提取的情况：</p>
+<p><img src="/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/image-20230904192800326.png" srcset="/img/loading.gif" lazyload alt="提取单个题目"></p>
+<p>在脚本中，就可以将各个题目转化为对象，进行进一步操作了。接下来是各个题目中答案的提取，这个比较简单：<code>答案[:|：](.*\S)</code>。注意，这一步不需要对单个题目进行提取，而是应该像上一步一样对所有题目提取，否则单个题目的文本中不会包含“答案”字眼。</p>
+<p>下一步是选项提取，也相对简单，注意到选项前面都有A-F的标号，所以使用<code>[ABCDEF]\.?([^A-F^\n].*)</code>就可以轻松提取出各个题目的选项。</p>
+<h2 id="三-转化为json"><a class="markdownIt-Anchor" href="#三-转化为json"></a> 三、转化为json</h2>
+<p>提取出的数据还是以python的对象形式存在的，并不能直接使用，所以需要想办法将其持久化为文件的形式。这里笔者第一个想到的就是轻量化的json格式，json文件的表达效率高，并且多种编程语言都有相应的库来处理json文件，比较适合我们的应用场景。当然，也可以自定义一个文件格式来表达题目，这样做可以更好地节约空间，但是制定一个新的文件格式（协议）比较费脑，这里就直接使用json了。</p>
+<p>python自带<code>json</code>库来将列表等数据类型转化为json文件，只需要使用<code>json.dump(object)</code>即可，非常方便快捷。当然，在此之前要确定一下数据类型，不同的数据类型转换的json文件格式是不同的。笔者这里将每个单独的题目定义为一个字典，字典有<code>type</code>、<code>question</code>、<code>candidate</code>、<code>answer</code>四个字段，分别用于表达题目类型（单选、多选、判断），题干、选项、答案。题目类型可以从答案中推断出来。</p>
+<p><img src="/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/image-20230904194055046.png" srcset="/img/loading.gif" lazyload alt="转化成的json文件">、</p>
+<p>在C#语言中，提取Json需要使用第三方库，笔者使用的NewTonJson这个库来完成的。</p>
+<h2 id="四-wpf编写"><a class="markdownIt-Anchor" href="#四-wpf编写"></a> 四、WPF编写</h2>
+<p>下面是官方文档对WPF的简介：</p>
+<blockquote>
+<p>WPF 的核心是一个与分辨率无关且基于矢量的呈现引擎，旨在充分利用现代图形硬件。 WPF 通过一套完善的应用程序开发功能对该核心进行了扩展，这些功能包括可扩展应用程序标记语言 (XAML)、控件、数据绑定、布局、二维和三维图形、动画、样式、模板、文档、媒体、文本和版式。 WPF 属于 .NET，因此可以生成整合 .NET API 其他元素的应用程序。</p>
+</blockquote>
+<p>个人对WPF的浅显理解就是WPF是用于图像化界面开发的一个平台，前端使用<code>xaml</code>语言，后端使用C#语言，并使用Binding特性将前后端的数据简洁地联络起来。Binding这个特性是WPF最为人称道的特性，将以往的事件驱动的编程方式变成了数据驱动的编程方式。</p>
+<p>笔者个人认为，WPF还是相当简洁的，在编写整个项目的过程中遇到的最大的问题就是对语言不是很熟悉，许多功能不知道如何实现，还好有各大网友和ChatGPT的帮助，让各种问题迎刃而解。</p>
+<h3 id="1clr对象绑定"><a class="markdownIt-Anchor" href="#1clr对象绑定"></a> 1.CLR对象绑定</h3>
+<p>遇到的第一个问题就是如何将自己写的CLR对象暴露给前端的xaml，实际上方法是比较多的：</p>
 <ul>
-<li>去夏令营/预推免的话可以找同学组个团，路上不会孤单，复习的时候也可以互相帮忙</li>
-<li>复习不需要复习太深，基础概念知道就行了</li>
-<li>有CSP认证的话真的很占优势</li>
-<li>面试完不要丢三落四（我当时把平板电脑落在面试的地方了，要回家了才想起来，太丢脸了）</li>
-<li>面试的时候要大方自信，当时问问题的老师有时会用疑惑(O_o)?? 的表情看我，倍感压力，搞的回答问题很卡顿，后来回想的时候其实当时回答的并没有什么问题，其实不用管老师什么反应，答好自己的就可以了。</li>
+<li>在xaml的资源中声明一个CLR对象，并从后端按名字获取</li>
+<li>在后端new一个对象，并将其赋值给前端的DataContext</li>
 </ul>
+<p>我选择的是第二种，但是当时遇到一个问题，就是实际运用中我声明了多个类，这么一来就需要为多个DataContext赋值，显得相对麻烦，后来回忆起来，其实应该将这几个类打包成一个新的类，然后赋值给顶层组件的DataContext的。</p>
+<h3 id="2根据数据内容选择前端组件"><a class="markdownIt-Anchor" href="#2根据数据内容选择前端组件"></a> 2.根据数据内容选择前端组件</h3>
+<p>这个需求理解起来很简单，即如果是单选题就在每个选项前面显示单选按钮（RadioButton），如果是多选题就在每个选项前面显示可以多选的框（CheckBox）。虽然听起来很简单，但是当时不知道如何表达这个需求，找了很多资料都没有解决（但是误打误撞把ListBox这个特性给学习了）。</p>
+<p>最终的解决方法是DataTemplate+TemplateSelector，原理就是在资源中声明两个DataTemplate，其中的组件是不同的，分别用于显示单选题和多选题，然后再声明一个TemplateSelector（需要在后端中继承DataTemplateSelector类，并实现相应方法。实现的方法要根据传入的参数来返回相应的DataTemplate，从而在前端有不同的显示效果。</p>
+<h3 id="3类的设计"><a class="markdownIt-Anchor" href="#3类的设计"></a> 3.类的设计</h3>
+<p>类的设计这块，在语言方面是相当简单的，无非就是设计一堆属性然后赋值，并套娃。但是实际上设计出符合直觉的、合理的类之间的关系是相对复杂的，特别是WPF又引入了<strong>依赖属性</strong>的概念，要求实现INotifyOnPropertyChanged接口。</p>
+<p>在这个项目中设计的类主要是选项、题目和题目列表，三者的包含范围从小到大。由于笔者自认为最终的设计也不是完美的，所以这里就不展示最终设计的结果了。</p>
+<h2 id="五-总结"><a class="markdownIt-Anchor" href="#五-总结"></a> 五、总结</h2>
+<p>“毛概答题小助手”第一代原只是为了帮助自己记忆客观题，没想到后来发布后，引起了不错的反响，于是当时下定决心将这个软件完善得更好，帮助更多人。这也算是我大学期间捣鼓出的为数不多的实用小工具吧，当然，和那些大学四年憋出一个独立游戏的大佬还是不能比的。</p>
+<p>下面是我从这个项目总结出的心得：</p>
+<p>第一点就是要对语言特性非常掌握，否则会写出又臭又长的代码，影响可读性；第二点是代码重构是必然的，不可能在第一次就能写下完美的代码，每一次重构都能让代码的质量上升一个台阶；第三点是编程要持之以恒，三天打鱼两天晒网会严重影响项目的开发进度，有可能第一天写下的代码，过几天就忘了’。</p>
 
               
             </div>
@@ -363,7 +363,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E4%BF%9D%E7%A0%94/" class="category-chain-item">保研</a>
+  <a href="/categories/%E5%BF%83%E5%BE%97/" class="category-chain-item">心得</a>
   
   
 
@@ -378,9 +378,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%BB%8F%E9%AA%8C/">#经验</a>
+        <a href="/tags/%E7%BC%96%E7%A8%8B/">#编程</a>
       
-        <a href="/tags/%E4%BF%9D%E7%A0%94/">#保研</a>
+        <a href="/tags/%E9%A1%B9%E7%9B%AE/">#项目</a>
       
     </div>
   
@@ -392,8 +392,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>24届北航夏令营面试经验</div>
-      <div>http://zhf-xdu.top/2023/07/16/24届北航夏令营面试经验/</div>
+      <div>毛概答题小助手项目中的关键技术点</div>
+      <div>http://zhf-xdu.top/2023/09/04/毛概答题小助手项目中的关键技术点/</div>
     </div>
     <div class="license-meta">
       
@@ -405,7 +405,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年7月16日</div>
+          <div>2023年9月4日</div>
         </div>
       
       
@@ -435,18 +435,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/09/04/%E6%AF%9B%E6%A6%82%E7%AD%94%E9%A2%98%E5%B0%8F%E5%8A%A9%E6%89%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9/" title="毛概答题小助手项目中的关键技术点">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">毛概答题小助手项目中的关键技术点</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/10/%E6%9C%89%E9%99%90%E8%BA%AB%EF%BC%8C%E6%97%A0%E7%A9%B7%E5%BF%B5%E2%80%94-%E9%9A%8F%E7%AC%94%E8%AE%B0%E5%BD%95%E4%B8%80%E4%BA%9B%E6%84%9F%E6%82%9F/" title="有限身，无穷念—-随笔记录一些感悟">
-                        <span class="hidden-mobile">有限身，无穷念—-随笔记录一些感悟</span>
+                      <a href="/2023/07/16/24%E5%B1%8A%E5%8C%97%E8%88%AA%E5%A4%8F%E4%BB%A4%E8%90%A5%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C/" title="24届北航夏令营面试经验">
+                        <span class="hidden-mobile">24届北航夏令营面试经验</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -467,7 +461,7 @@
         var options = Object.assign(
           {"clientID":"d0d3ea3ab442a0e8e56f","clientSecret":"09ea7c1d095ff502bcdf8102d33fed5fa6b1dd45","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: '9e0efebd3db7022b000eab4e8aabd37e'
+            id: '1475f90c3775db42a79150b05266b539'
           }
         )
         var gitalk = new Gitalk(options);
