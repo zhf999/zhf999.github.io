@@ -1856,7 +1856,7 @@ rules元组冲包含了Rule类，包含以下参数</p>
   <entry>
     <title>c++中的各类构造函数、类型转换和赋值</title>
     <url>/2023/11/01/c-%E4%B8%AD%E7%9A%84%E5%90%84%E7%B1%BB%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>本篇博客讨论C++中的各种构造函数，包括列表初始化、隐式/显式构造函数、类的自动转换和强制转换、基类构造函数、复制构造函数，还会顺带提一下相关的重载赋值运算符。</p>
+    <content><![CDATA[<p>本篇博客讨论C++中的各种构造函数，包括列表初始化、隐式/显式构造函数、类的自动转换和强制转换、复制构造函数，还会顺带提一下相关的重载赋值运算符和返回值优化。</p>
 <h1 id="构造函数"><a class="markdownIt-Anchor" href="#构造函数"></a> 构造函数</h1>
 <p>最简单的构造函数就是使用类名作为构造函数的名称（无返回值），但是构造函数签名可以有多种，以表示对其重载。如果类中没有定义构造函数，编译器就会提供一个空的默认构造函数。</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++">Stock::<span class="hljs-built_in">Stock</span>(<span class="hljs-keyword">const</span> string&amp; co, <span class="hljs-keyword">long</span> n, <span class="hljs-keyword">double</span> pr)<br>&#123;<br>	<span class="hljs-comment">// do something    </span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    Stock foo; <span class="hljs-comment">// wrong</span><br>&#125;<br></code></pre></td></tr></table></figure>
@@ -1910,6 +1910,20 @@ rules元组冲包含了Rule类，包含以下参数</p>
 <li>当类中有成员是指针，被使用new初始化时，需要自定义复制构造函数；</li>
 <li>当类中有数组，或者其他“复制构造函数已经被定义”的对象时，可以不定义复制构造函数。</li>
 </ul>
+<h1 id="重载赋值运算符"><a class="markdownIt-Anchor" href="#重载赋值运算符"></a> 重载赋值运算符</h1>
+<p>正如上面所提到，当给一个已经存在的对象（而不是新的对象）赋值时，就会调用赋值运算符函数。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++">String &amp; String::<span class="hljs-keyword">operator</span>=(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s)<br>&#123;<br>    <span class="hljs-keyword">delete</span>[] <span class="hljs-keyword">this</span>-&gt;str;<br>    <span class="hljs-keyword">this</span>-&gt;len = std::<span class="hljs-built_in">strlen</span>(s);<br>    <span class="hljs-keyword">this</span>-&gt;str = <span class="hljs-keyword">new</span> <span class="hljs-keyword">char</span>[len+<span class="hljs-number">1</span>];<br>    std:<span class="hljs-built_in">strcpy</span>(<span class="hljs-keyword">this</span>-&gt;str,s);<br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>赋值运算符函数的调用对象是被赋值的类，所以上面这个代码片段中的<code>this</code>就是被赋值对象的地址，下面两个语句是等价的：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++">String a,b;<br>a = b;<br>a.<span class="hljs-keyword">operator</span>=(b);<br></code></pre></td></tr></table></figure>
+<h1 id="返回值优化"><a class="markdownIt-Anchor" href="#返回值优化"></a> 返回值优化</h1>
+<p>考虑下面一段代码：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span></span><br><span class="hljs-class">&#123;</span><br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">char</span> *str;<br>    <span class="hljs-built_in">Foo</span>(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s)<br>    &#123;<br>        <span class="hljs-keyword">int</span> len = <span class="hljs-built_in">strlen</span>(s);<br>        str = <span class="hljs-keyword">new</span> <span class="hljs-keyword">char</span>[len+<span class="hljs-number">1</span>];<br>        <span class="hljs-built_in">strcpy</span>(str,s);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Constructor\n&quot;</span>);<br>    &#125;<br>    <br>    ~<span class="hljs-built_in">Foo</span>()<br>    &#123;<br>        <span class="hljs-keyword">delete</span>[] str;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Destructor\n&quot;</span>);<br>    &#125;<br>&#125;;<br><br><span class="hljs-function">Foo <span class="hljs-title">getFoo</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Foo</span>(s);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    Foo a = <span class="hljs-built_in">getFoo</span>(<span class="hljs-string">&quot;Hello&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,a.str);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>正常来说，不应该在函数体内（栈上）返回一个对象，因为随着函数执行完毕，<code>Foo(s)</code>这个临时对象会调用析构函数删除<code>str</code>指针所指的内容。而且在这段代码中，复制构造函数没有被定义，这就意味着返回<code>Foo</code>时，默认构造函数会被调用，其<code>str</code>指针会直接被赋给对象<code>a</code>，这就导致<code>a</code>的指针指向一个没有意义的区域。</p>
+<p>但是，在现代的IDE中执行这段代码，会发现程序居然能够照常运行。实际上，这是c<ins>编译器的一种叫做<strong>返回值优化</strong>的优化手段，当在函数中试图返回一个对象时，C</ins>会直接在main函数的栈上开辟空间（而不是<code>getFoo</code>函数），这就保证在<code>getFoo</code>函数结束时对象不会调用析构函数释放空间。</p>
+<p>这段代码的运行结果为：</p>
+<figure class="highlight delphi"><table><tr><td class="code"><pre><code class="hljs delphi"><span class="hljs-function"><span class="hljs-keyword">Constructor</span></span><br><span class="hljs-function"><span class="hljs-title">Hello</span></span><br><span class="hljs-function"><span class="hljs-title">Destructor</span></span><br></code></pre></td></tr></table></figure>
+<p>可以看到，析构函数在main函数结尾才被调用。如果在编译使用<code>-fno-elide-constructors</code>参数将返回值优化关闭，则运行结果会出错。</p>
+<p>返回值优化减少了调用析构函数的次数，在一些情况下可以很好地提高程序的性能。但是程序员不应该过分依赖返回值优化，即使这个优化存在，也应该为类定义好复制构造函数，以防出现野指针的情况。而且，在函数的返回分支较多的情况下，编译器可能无法启用返回值优化。</p>
 ]]></content>
       <categories>
         <category>编程语言</category>
