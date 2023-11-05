@@ -1919,7 +1919,7 @@ rules元组冲包含了Rule类，包含以下参数</p>
 <p>考虑下面一段代码：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span></span><br><span class="hljs-class">&#123;</span><br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">char</span> *str;<br>    <span class="hljs-built_in">Foo</span>(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s)<br>    &#123;<br>        <span class="hljs-keyword">int</span> len = <span class="hljs-built_in">strlen</span>(s);<br>        str = <span class="hljs-keyword">new</span> <span class="hljs-keyword">char</span>[len+<span class="hljs-number">1</span>];<br>        <span class="hljs-built_in">strcpy</span>(str,s);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Constructor\n&quot;</span>);<br>    &#125;<br>    <br>    ~<span class="hljs-built_in">Foo</span>()<br>    &#123;<br>        <span class="hljs-keyword">delete</span>[] str;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Destructor\n&quot;</span>);<br>    &#125;<br>&#125;;<br><br><span class="hljs-function">Foo <span class="hljs-title">getFoo</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *s)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Foo</span>(s);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    Foo a = <span class="hljs-built_in">getFoo</span>(<span class="hljs-string">&quot;Hello&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,a.str);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>正常来说，不应该在函数体内（栈上）返回一个对象，因为随着函数执行完毕，<code>Foo(s)</code>这个临时对象会调用析构函数删除<code>str</code>指针所指的内容。而且在这段代码中，复制构造函数没有被定义，这就意味着返回<code>Foo</code>时，默认构造函数会被调用，其<code>str</code>指针会直接被赋给对象<code>a</code>，这就导致<code>a</code>的指针指向一个没有意义的区域。</p>
-<p>但是，在现代的IDE中执行这段代码，会发现程序居然能够照常运行。实际上，这是c<ins>编译器的一种叫做<strong>返回值优化</strong>的优化手段，当在函数中试图返回一个对象时，C</ins>会直接在main函数的栈上开辟空间（而不是<code>getFoo</code>函数），这就保证在<code>getFoo</code>函数结束时对象不会调用析构函数释放空间。</p>
+<p>但是，在现代的IDE中执行这段代码，会发现程序居然能够照常运行。实际上，这是c++编译器的一种叫做<strong>返回值优化</strong>的优化手段，当在函数中试图返回一个对象时，C++会直接在main函数的栈上开辟空间（而不是<code>getFoo</code>函数），这就保证在<code>getFoo</code>函数结束时对象不会调用析构函数释放空间。</p>
 <p>这段代码的运行结果为：</p>
 <figure class="highlight delphi"><table><tr><td class="code"><pre><code class="hljs delphi"><span class="hljs-function"><span class="hljs-keyword">Constructor</span></span><br><span class="hljs-function"><span class="hljs-title">Hello</span></span><br><span class="hljs-function"><span class="hljs-title">Destructor</span></span><br></code></pre></td></tr></table></figure>
 <p>可以看到，析构函数在main函数结尾才被调用。如果在编译使用<code>-fno-elide-constructors</code>参数将返回值优化关闭，则运行结果会出错。</p>
@@ -6035,5 +6035,10 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
         <tag>爬虫</tag>
         <tag>实验</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>C++类的继承</title>
+    <url>/2023/11/05/C-%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF/</url>
+    <content><![CDATA[]]></content>
   </entry>
 </search>
