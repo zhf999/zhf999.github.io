@@ -16,15 +16,15 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="C是一门很高深的语言，曾经上高中学了“C with STL”就以为自己学会了C，实际上只是管中窥豹。如今捧起《C++ primer plus》拜读，才知道自己的渺小。C的语言特新甚至还不断随着新标准的发布而更新。这篇博客会概括一下C11之前的高级语言特性。由于这些高级用法过于尖端，实际使用到的很少，所以各个版块之间也毫无关联，权当走马观花，简单了解一些，以致于在看到别人写的代码时不至于看不懂。">
+    <meta name="description" content="C++是一门很高深的语言，曾经上高中学了“C with STL”就以为自己学会了C++，实际上只是管中窥豹。如今捧起《C++ primer plus》拜读，才知道自己的渺小。C++的语言特新甚至还不断随着新标准的发布而更新。这篇博客会概括一下C++11之前的高级语言特性。由于这些高级用法过于尖端，实际使用到的很少，所以各个版块之间也毫无关联，权当走马观花，简单了解一些，以致于在看到别人写的代码时不">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++语言高级特性">
 <meta property="og:url" content="http://zhf-xdu.top/2023/11/16/C-%E8%AF%AD%E8%A8%80%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="C是一门很高深的语言，曾经上高中学了“C with STL”就以为自己学会了C，实际上只是管中窥豹。如今捧起《C++ primer plus》拜读，才知道自己的渺小。C的语言特新甚至还不断随着新标准的发布而更新。这篇博客会概括一下C11之前的高级语言特性。由于这些高级用法过于尖端，实际使用到的很少，所以各个版块之间也毫无关联，权当走马观花，简单了解一些，以致于在看到别人写的代码时不至于看不懂。">
+<meta property="og:description" content="C++是一门很高深的语言，曾经上高中学了“C with STL”就以为自己学会了C++，实际上只是管中窥豹。如今捧起《C++ primer plus》拜读，才知道自己的渺小。C++的语言特新甚至还不断随着新标准的发布而更新。这篇博客会概括一下C++11之前的高级语言特性。由于这些高级用法过于尖端，实际使用到的很少，所以各个版块之间也毫无关联，权当走马观花，简单了解一些，以致于在看到别人写的代码时不">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-16T05:59:01.000Z">
-<meta property="article:modified_time" content="2023-11-17T09:14:29.790Z">
+<meta property="article:modified_time" content="2023-11-17T09:45:46.181Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="编程语言">
 <meta property="article:tag" content="C++">
@@ -304,7 +304,7 @@
             
             <div class="markdown-body">
               
-              <p>C<ins>是一门很高深的语言，曾经上高中学了“C with STL”就以为自己学会了C</ins>，实际上只是管中窥豹。如今捧起《C++ primer plus》拜读，才知道自己的渺小。C<ins>的语言特新甚至还不断随着新标准的发布而更新。这篇博客会概括一下C</ins>11之前的高级语言特性。由于这些高级用法过于尖端，实际使用到的很少，所以各个版块之间也毫无关联，权当走马观花，简单了解一些，以致于在看到别人写的代码时不至于看不懂。</p>
+              <p>C++是一门很高深的语言，曾经上高中学了“C with STL”就以为自己学会了C++，实际上只是管中窥豹。如今捧起《C++ primer plus》拜读，才知道自己的渺小。C++的语言特新甚至还不断随着新标准的发布而更新。这篇博客会概括一下C++11之前的高级语言特性。由于这些高级用法过于尖端，实际使用到的很少，所以各个版块之间也毫无关联，权当走马观花，简单了解一些，以致于在看到别人写的代码时不至于看不懂。</p>
 <h1 id="友元类"><a class="markdownIt-Anchor" href="#友元类"></a> 友元类</h1>
 <p>之前有提到过友元函数，这是一种允许外部函数访问私有成员的技术。友元类也十分类似，在类中声明另一个类为友元类之后，这个友元类就可以访问类的所有私有成员。友元类可以声明在类的私有、保护、公有部分，这是无关紧要的，因为友元类并不是类的一个成员。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TV</span></span><br><span class="hljs-class">&#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">friend</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Remote</span>;</span><br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Remote</span></span><br><span class="hljs-class">&#123;</span><br>	<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -335,7 +335,7 @@
 <h2 id="reinterpret_cast"><a class="markdownIt-Anchor" href="#reinterpret_cast"></a> <code>reinterpret_cast</code></h2>
 <p>这是一种“天生危险”的转换，会产生一些“令人生厌”的操作，非到万不得已不要使用。</p>
 <h1 id="智能指针模板类"><a class="markdownIt-Anchor" href="#智能指针模板类"></a> 智能指针模板类</h1>
-<p>C<ins>最令人诟病的另一个问题是堆上内存的释放，特别是在分支流程较多，或者存在异常处理语句的程序中，释放内存这个过程很容易被程序员遗忘，造成内存泄露。于是C</ins>就诞生了智能指针类，智能指针能够在变量的生存期到时自动释放指针所指向的内存，智能指针类分为三种：</p>
+<p>C++最令人诟病的另一个问题是堆上内存的释放，特别是在分支流程较多，或者存在异常处理语句的程序中，释放内存这个过程很容易被程序员遗忘，造成内存泄露。于是C++就诞生了智能指针类，智能指针能够在变量的生存期到时自动释放指针所指向的内存，智能指针类分为三种：</p>
 <ul>
 <li><code>auto_ptr</code></li>
 <li><code>unique_ptr</code></li>
@@ -361,7 +361,7 @@
 <h1 id="泛型编程"><a class="markdownIt-Anchor" href="#泛型编程"></a> 泛型编程</h1>
 <p>模板使得能够按泛型定义函数或者类，而泛型编程试图将算法运用到这些模板对象中，使得算法与数据的存在形式相对地独立。</p>
 <h2 id="迭代器"><a class="markdownIt-Anchor" href="#迭代器"></a> 迭代器</h2>
-<p>想要在容器上运用某种算法，就必须先尝试用通用的办法来遍历。C<ins>提供了迭代器来完成这个操作，每种容器都定义了自己的迭代器类型，想要使用迭代器，需要先使用域解析运算符。根据迭代器的用法，C</ins>提供了5种迭代器的类型：</p>
+<p>想要在容器上运用某种算法，就必须先尝试用通用的办法来遍历。C++提供了迭代器来完成这个操作，每种容器都定义了自己的迭代器类型，想要使用迭代器，需要先使用域解析运算符。根据迭代器的用法，C++提供了5种迭代器的类型：</p>
 <ul>
 <li>输入迭代器：（输入是相对程序而言）该迭代器只能从容器读取数据，而不能修改容器的数据，是单向迭代器，只能递增，不能倒退。</li>
 <li>输出迭代器：与输入迭代器相反，只能够修改容器的数据，而不能读取。</li>
