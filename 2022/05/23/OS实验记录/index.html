@@ -19,23 +19,23 @@
     <meta name="description" content="操作系统实验报告 姓名：周洪锋 	学号：20009200766	上课班级：周二、周四56节  实验一：进程的建立  实验目的  创建进程及子进程 在父子进程间实现通信   实验内容  创建进程并显示标识等进程控制块的属性信息； 显示父子进程的通信信息和相应的应答信息（进程间通信机制任选）   实验要求  显示创建的进程和控制参数； 显示进程间关系参数。   实验设计与实现 在Linux操作系统中">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OS实验记录">
-<meta property="og:url" content="http://zhf-xdu.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:url" content="http://zhouhf.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="操作系统实验报告 姓名：周洪锋 	学号：20009200766	上课班级：周二、周四56节  实验一：进程的建立  实验目的  创建进程及子进程 在父子进程间实现通信   实验内容  创建进程并显示标识等进程控制块的属性信息； 显示父子进程的通信信息和相应的应答信息（进程间通信机制任选）   实验要求  显示创建的进程和控制参数； 显示进程间关系参数。   实验设计与实现 在Linux操作系统中">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhf-xdu.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p1.png">
+<meta property="og:image" content="http://zhouhf.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p1.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210409234555517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2EwNDE3MTI4Mw==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="http://zhf-xdu.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p2.png">
-<meta property="og:image" content="http://zhf-xdu.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p3.png">
-<meta property="og:image" content="http://zhf-xdu.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p4.png">
-<meta property="og:image" content="http://zhf-xdu.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p5.png">
+<meta property="og:image" content="http://zhouhf.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p2.png">
+<meta property="og:image" content="http://zhouhf.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p3.png">
+<meta property="og:image" content="http://zhouhf.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p4.png">
+<meta property="og:image" content="http://zhouhf.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p5.png">
 <meta property="article:published_time" content="2022-05-23T12:14:17.000Z">
 <meta property="article:modified_time" content="2022-06-04T15:40:33.064Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="实验">
 <meta property="article:tag" content="操作系统">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://zhf-xdu.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p1.png">
+<meta name="twitter:image" content="http://zhouhf.top/2022/05/23/OS%E5%AE%9E%E9%AA%8C%E8%AE%B0%E5%BD%95/os_exp/p1.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -81,7 +81,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -529,7 +529,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>OS实验记录</div>
-      <div>http://zhf-xdu.top/2022/05/23/OS实验记录/</div>
+      <div>http://zhouhf.top/2022/05/23/OS实验记录/</div>
     </div>
     <div class="license-meta">
       

@@ -19,21 +19,21 @@
     <meta name="description" content="背景 好久没写博客了，也许是因为前段时间大作业写的报告内容太多，有点厌倦了，坚持果然是件难事。 寒假放假在家想和朋友联机玩《Minecraft》，但苦于没有服务器可以用，于是便尝试自己开一个私服。因为学过计算机网络的知识，我知道自己的PC在路由器LAN口的内网下，于是便考虑了很多种方法来使自己能被公网的其他用户发现。顺便还研究了一下组网的原理。  理论部分  NAT协议 全称Network Ad">
 <meta property="og:type" content="article">
 <meta property="og:title" content="学习NAT协议，在家中架设服务器">
-<meta property="og:url" content="http://zhf-xdu.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:url" content="http://zhouhf.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="背景 好久没写博客了，也许是因为前段时间大作业写的报告内容太多，有点厌倦了，坚持果然是件难事。 寒假放假在家想和朋友联机玩《Minecraft》，但苦于没有服务器可以用，于是便尝试自己开一个私服。因为学过计算机网络的知识，我知道自己的PC在路由器LAN口的内网下，于是便考虑了很多种方法来使自己能被公网的其他用户发现。顺便还研究了一下组网的原理。  理论部分  NAT协议 全称Network Ad">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhf-xdu.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/nat.webp">
-<meta property="og:image" content="http://zhf-xdu.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/v2-625236e44506487bf716ce0d8c8c3db8_720w.webp">
-<meta property="og:image" content="http://zhf-xdu.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse1.png">
-<meta property="og:image" content="http://zhf-xdu.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse2.png">
-<meta property="og:image" content="http://zhf-xdu.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20221226155500696.png">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/nat.webp">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/v2-625236e44506487bf716ce0d8c8c3db8_720w.webp">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse1.png">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse2.png">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20221226155500696.png">
 <meta property="article:published_time" content="2022-12-26T06:03:58.000Z">
 <meta property="article:modified_time" content="2023-03-13T11:51:42.609Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://zhf-xdu.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/nat.webp">
+<meta name="twitter:image" content="http://zhouhf.top/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/nat.webp">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -79,7 +79,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -417,7 +417,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>学习NAT协议，在家中架设服务器</div>
-      <div>http://zhf-xdu.top/2022/12/26/学习NAT协议，在家中架设服务器/</div>
+      <div>http://zhouhf.top/2022/12/26/学习NAT协议，在家中架设服务器/</div>
     </div>
     <div class="license-meta">
       

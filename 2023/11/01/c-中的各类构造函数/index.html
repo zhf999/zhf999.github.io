@@ -19,7 +19,7 @@
     <meta name="description" content="本篇博客讨论C++中的各种构造函数，包括列表初始化、隐式&#x2F;显式构造函数、类的自动转换和强制转换、复制构造函数，还会顺带提一下相关的重载赋值运算符和返回值优化。  构造函数 最简单的构造函数就是使用类名作为构造函数的名称（无返回值），但是构造函数签名可以有多种，以表示对其重载。如果类中没有定义构造函数，编译器就会提供一个空的默认构造函数。 123456789Stock::Stock(const st">
 <meta property="og:type" content="article">
 <meta property="og:title" content="c++中的各类构造函数、类型转换和赋值">
-<meta property="og:url" content="http://zhf-xdu.top/2023/11/01/c-%E4%B8%AD%E7%9A%84%E5%90%84%E7%B1%BB%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:url" content="http://zhouhf.top/2023/11/01/c-%E4%B8%AD%E7%9A%84%E5%90%84%E7%B1%BB%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="本篇博客讨论C++中的各种构造函数，包括列表初始化、隐式&#x2F;显式构造函数、类的自动转换和强制转换、复制构造函数，还会顺带提一下相关的重载赋值运算符和返回值优化。  构造函数 最简单的构造函数就是使用类名作为构造函数的名称（无返回值），但是构造函数签名可以有多种，以表示对其重载。如果类中没有定义构造函数，编译器就会提供一个空的默认构造函数。 123456789Stock::Stock(const st">
 <meta property="og:locale" content="zh_CN">
@@ -74,7 +74,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -419,7 +419,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>c++中的各类构造函数、类型转换和赋值</div>
-      <div>http://zhf-xdu.top/2023/11/01/c-中的各类构造函数/</div>
+      <div>http://zhouhf.top/2023/11/01/c-中的各类构造函数/</div>
     </div>
     <div class="license-meta">
       

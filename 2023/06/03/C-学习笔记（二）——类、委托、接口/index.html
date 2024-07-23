@@ -19,7 +19,7 @@
     <meta name="description" content="静态成员 所谓静态成员，就是与实例无关、只与类有关的字段、方法、或者属性。静态成员的存在不依赖于实例的存在，即使没有任何该类的实例，静态成员也会存在与堆上。如果静态成员有初始化字段，那么会在该类的任何静态成员之前初始化该字。  静态成员的访问方式 静态成员可以使用实例.成员的方式来访问，也可以直接使用类.成员的方式来访问，个人认为后一种更合理。 也可以使用using static结构来引用静态属">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C#学习笔记（二）——类、委托、接口">
-<meta property="og:url" content="http://zhf-xdu.top/2023/06/03/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E3%80%81%E5%A7%94%E6%89%98%E3%80%81%E6%8E%A5%E5%8F%A3/index.html">
+<meta property="og:url" content="http://zhouhf.top/2023/06/03/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E3%80%81%E5%A7%94%E6%89%98%E3%80%81%E6%8E%A5%E5%8F%A3/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="静态成员 所谓静态成员，就是与实例无关、只与类有关的字段、方法、或者属性。静态成员的存在不依赖于实例的存在，即使没有任何该类的实例，静态成员也会存在与堆上。如果静态成员有初始化字段，那么会在该类的任何静态成员之前初始化该字。  静态成员的访问方式 静态成员可以使用实例.成员的方式来访问，也可以直接使用类.成员的方式来访问，个人认为后一种更合理。 也可以使用using static结构来引用静态属">
 <meta property="og:locale" content="zh_CN">
@@ -73,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -432,7 +432,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>C#学习笔记（二）——类、委托、接口</div>
-      <div>http://zhf-xdu.top/2023/06/03/C-学习笔记（二）——类、委托、接口/</div>
+      <div>http://zhouhf.top/2023/06/03/C-学习笔记（二）——类、委托、接口/</div>
     </div>
     <div class="license-meta">
       

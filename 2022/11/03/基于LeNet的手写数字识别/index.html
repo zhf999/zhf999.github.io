@@ -19,21 +19,21 @@
     <meta name="description" content="基于LeNet的手写数字识别 作者：周洪锋 学号：20009200766 [TOC]  0、环境配置 需要用到的Python包有matplotlib、pytorch、torchvision，其中pytorch可以使用GPU版本的，但需要按照好CUDA。  1、数据集下载 使用torchvision封装的数据集类来下载MNIST数据集，保存在工作文件夹下。 12345678down_path &#x3D;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于LeNet的手写数字识别">
-<meta property="og:url" content="http://zhf-xdu.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/index.html">
+<meta property="og:url" content="http://zhouhf.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="基于LeNet的手写数字识别 作者：周洪锋 学号：20009200766 [TOC]  0、环境配置 需要用到的Python包有matplotlib、pytorch、torchvision，其中pytorch可以使用GPU版本的，但需要按照好CUDA。  1、数据集下载 使用torchvision封装的数据集类来下载MNIST数据集，保存在工作文件夹下。 12345678down_path &#x3D;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhf-xdu.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/LeNet.jpg">
-<meta property="og:image" content="http://zhf-xdu.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/batch_small_no_decay.png">
-<meta property="og:image" content="http://zhf-xdu.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/small_batch.png">
-<meta property="og:image" content="http://zhf-xdu.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/recognition.png">
+<meta property="og:image" content="http://zhouhf.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/LeNet.jpg">
+<meta property="og:image" content="http://zhouhf.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/batch_small_no_decay.png">
+<meta property="og:image" content="http://zhouhf.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/small_batch.png">
+<meta property="og:image" content="http://zhouhf.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/recognition.png">
 <meta property="article:published_time" content="2022-11-03T14:25:56.000Z">
 <meta property="article:modified_time" content="2022-11-03T15:29:09.046Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="分类问题">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://zhf-xdu.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/LeNet.jpg">
+<meta name="twitter:image" content="http://zhouhf.top/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/LeNet.jpg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -79,7 +79,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -415,7 +415,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>基于LeNet的手写数字识别</div>
-      <div>http://zhf-xdu.top/2022/11/03/基于LeNet的手写数字识别/</div>
+      <div>http://zhouhf.top/2022/11/03/基于LeNet的手写数字识别/</div>
     </div>
     <div class="license-meta">
       

@@ -19,18 +19,18 @@
     <meta name="description" content="Unity引擎提供了很多工具类和接口，但是在游戏存档这方面为开发者提供的帮助十分优先，毕竟存档不是什么简单的事，不同游戏的存档方式差距还是比较大的。 像网上说的通过PlayerPrefs、JsonUtility等类虽然确实能够提供一些存储的手段，但是局限性较大。前者只能存储整型、单精度浮点、字符串类型的数据，而后者对序列化对象有一定要求，需要开发者在设计类时就提前考虑好。 所以，最好的方法还是自己">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在Unity3D中实现存档系统">
-<meta property="og:url" content="http://zhf-xdu.top/2022/09/05/%E5%9C%A8Unity3D%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%AD%98%E6%A1%A3%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:url" content="http://zhouhf.top/2022/09/05/%E5%9C%A8Unity3D%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%AD%98%E6%A1%A3%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="Unity引擎提供了很多工具类和接口，但是在游戏存档这方面为开发者提供的帮助十分优先，毕竟存档不是什么简单的事，不同游戏的存档方式差距还是比较大的。 像网上说的通过PlayerPrefs、JsonUtility等类虽然确实能够提供一些存储的手段，但是局限性较大。前者只能存储整型、单精度浮点、字符串类型的数据，而后者对序列化对象有一定要求，需要开发者在设计类时就提前考虑好。 所以，最好的方法还是自己">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhf-xdu.top/2022/09/05/%E5%9C%A8Unity3D%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%AD%98%E6%A1%A3%E7%B3%BB%E7%BB%9F/image-20220906200839509.png">
+<meta property="og:image" content="http://zhouhf.top/2022/09/05/%E5%9C%A8Unity3D%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%AD%98%E6%A1%A3%E7%B3%BB%E7%BB%9F/image-20220906200839509.png">
 <meta property="article:published_time" content="2022-09-05T15:21:29.499Z">
 <meta property="article:modified_time" content="2022-09-06T12:39:22.171Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="编程语言">
 <meta property="article:tag" content="Unity">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://zhf-xdu.top/2022/09/05/%E5%9C%A8Unity3D%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%AD%98%E6%A1%A3%E7%B3%BB%E7%BB%9F/image-20220906200839509.png">
+<meta name="twitter:image" content="http://zhouhf.top/2022/09/05/%E5%9C%A8Unity3D%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%AD%98%E6%A1%A3%E7%B3%BB%E7%BB%9F/image-20220906200839509.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -76,7 +76,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -399,7 +399,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>在Unity3D中实现存档系统</div>
-      <div>http://zhf-xdu.top/2022/09/05/在Unity3D中实现存档系统/</div>
+      <div>http://zhouhf.top/2022/09/05/在Unity3D中实现存档系统/</div>
     </div>
     <div class="license-meta">
       

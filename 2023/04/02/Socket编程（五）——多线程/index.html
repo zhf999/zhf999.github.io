@@ -19,7 +19,7 @@
     <meta name="description" content="本篇博客应该会是Socket编程系列的最后一篇博客，之后可能会集中精力用于实际应用方面或者Unix高级编程方面。  什么是线程 在之前的博客中介绍过多进程客户端的概念，多进程可以并行地执行多段代码，从而提高IO的效率。但是使用多进程客户端（服务端）用于通信也有一定的不足，比如进程过于占用内存、进程间通信需要特殊的IPC技术、进程的上下文切换会占用大量资源。于是线程的概念就被提出。线程是小于进程的概">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Socket编程（五）——多线程">
-<meta property="og:url" content="http://zhf-xdu.top/2023/04/02/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:url" content="http://zhouhf.top/2023/04/02/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="本篇博客应该会是Socket编程系列的最后一篇博客，之后可能会集中精力用于实际应用方面或者Unix高级编程方面。  什么是线程 在之前的博客中介绍过多进程客户端的概念，多进程可以并行地执行多段代码，从而提高IO的效率。但是使用多进程客户端（服务端）用于通信也有一定的不足，比如进程过于占用内存、进程间通信需要特殊的IPC技术、进程的上下文切换会占用大量资源。于是线程的概念就被提出。线程是小于进程的概">
 <meta property="og:locale" content="zh_CN">
@@ -73,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -375,7 +375,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Socket编程（五）——多线程</div>
-      <div>http://zhf-xdu.top/2023/04/02/Socket编程（五）——多线程/</div>
+      <div>http://zhouhf.top/2023/04/02/Socket编程（五）——多线程/</div>
     </div>
     <div class="license-meta">
       

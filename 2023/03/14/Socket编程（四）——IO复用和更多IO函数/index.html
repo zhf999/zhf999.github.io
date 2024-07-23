@@ -19,7 +19,7 @@
     <meta name="description" content="select函数实现的IO复用 想要一次与多个客户端通信，可以使用之前提到过的多进程的方法。但是多个进程会各自占有独立的内存空间，每次CPU调度进程时切换上下文需要耗费很多时间。而IO复用技术可以减少需要使用的服务端进程数，使用尽量少的资源来争取尽量高的通信效率。  书中举的例子是学生向老师提问的例子，如果要回答10名学生的问题就需要分配10名教室，IO复用就是可以使用一位“超级教师”，他可以应">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Socket编程（四）——IO复用和更多IO函数">
-<meta property="og:url" content="http://zhf-xdu.top/2023/03/14/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94IO%E5%A4%8D%E7%94%A8%E5%92%8C%E6%9B%B4%E5%A4%9AIO%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:url" content="http://zhouhf.top/2023/03/14/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94IO%E5%A4%8D%E7%94%A8%E5%92%8C%E6%9B%B4%E5%A4%9AIO%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="select函数实现的IO复用 想要一次与多个客户端通信，可以使用之前提到过的多进程的方法。但是多个进程会各自占有独立的内存空间，每次CPU调度进程时切换上下文需要耗费很多时间。而IO复用技术可以减少需要使用的服务端进程数，使用尽量少的资源来争取尽量高的通信效率。  书中举的例子是学生向老师提问的例子，如果要回答10名学生的问题就需要分配10名教室，IO复用就是可以使用一位“超级教师”，他可以应">
 <meta property="og:locale" content="zh_CN">
@@ -73,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -436,7 +436,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Socket编程（四）——IO复用和更多IO函数</div>
-      <div>http://zhf-xdu.top/2023/03/14/Socket编程（四）——IO复用和更多IO函数/</div>
+      <div>http://zhouhf.top/2023/03/14/Socket编程（四）——IO复用和更多IO函数/</div>
     </div>
     <div class="license-meta">
       

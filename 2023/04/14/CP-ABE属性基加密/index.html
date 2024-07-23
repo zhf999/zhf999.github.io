@@ -19,19 +19,19 @@
     <meta name="description" content="前言  这个实验是课程《大数据安全与隐私》的附加实验，实验难度确实挺大的，首先是实验的设计到比较深的数学原理，其次是实验环境不太好配置，需要用到很多库。个人感觉这个实验做起来还是很枯燥的，就是照着PPT调库就完事，做完了也没理解多少内容。  环境准备 首先需要一个Linux虚拟机，然后根据课件上的内容到官网下载好PBC库（以及安装前置GMP等），然后本地编译一下。我的代码还用到了OpenSSL库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CP-ABE属性基加密">
-<meta property="og:url" content="http://zhf-xdu.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/index.html">
+<meta property="og:url" content="http://zhouhf.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
 <meta property="og:description" content="前言  这个实验是课程《大数据安全与隐私》的附加实验，实验难度确实挺大的，首先是实验的设计到比较深的数学原理，其次是实验环境不太好配置，需要用到很多库。个人感觉这个实验做起来还是很枯燥的，就是照着PPT调库就完事，做完了也没理解多少内容。  环境准备 首先需要一个Linux虚拟机，然后根据课件上的内容到官网下载好PBC库（以及安装前置GMP等），然后本地编译一下。我的代码还用到了OpenSSL库">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhf-xdu.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/IMG_20230327_115132-1681448903410-1.jpg">
-<meta property="og:image" content="http://zhf-xdu.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/image-20230414125008621-1681448936227-6.png">
-<meta property="og:image" content="http://zhf-xdu.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/image-20230414125124790-1681448949857-10.png">
+<meta property="og:image" content="http://zhouhf.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/IMG_20230327_115132-1681448903410-1.jpg">
+<meta property="og:image" content="http://zhouhf.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/image-20230414125008621-1681448936227-6.png">
+<meta property="og:image" content="http://zhouhf.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/image-20230414125124790-1681448949857-10.png">
 <meta property="article:published_time" content="2023-04-14T05:07:21.000Z">
 <meta property="article:modified_time" content="2023-04-14T05:36:49.644Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="大数据安全">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://zhf-xdu.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/IMG_20230327_115132-1681448903410-1.jpg">
+<meta name="twitter:image" content="http://zhouhf.top/2023/04/14/CP-ABE%E5%B1%9E%E6%80%A7%E5%9F%BA%E5%8A%A0%E5%AF%86/IMG_20230327_115132-1681448903410-1.jpg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -77,7 +77,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"zhf-xdu.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -417,7 +417,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>CP-ABE属性基加密</div>
-      <div>http://zhf-xdu.top/2023/04/14/CP-ABE属性基加密/</div>
+      <div>http://zhouhf.top/2023/04/14/CP-ABE属性基加密/</div>
     </div>
     <div class="license-meta">
       
