@@ -6731,6 +6731,30 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <p><strong>设计模式</strong>（design pattern）是对中普遍存在（反复出现）的各种问题，所提出的解决方案。</p>
 <div align="right">——来自<a href="https://zh.wikipedia.org/wiki/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F_(%E8%AE%A1%E7%AE%97%E6%9C%BA)">Wikipedia</a></div>
 </blockquote>
+<h1 id="uml类图"><a class="markdownIt-Anchor" href="#uml类图"></a> UML类图</h1>
+<p>本篇博客用到了大量UML类图，我也是刚刚学习UML工具，所以顺便地做一下类图的学习笔记，以免今后遗忘。</p>
+<p>本文中的类图，有一部分是来源于互联网，但大部分是自己画的。在这过程中我尝试了许多工具，如Visio、Vscode、draw.io等，所以图像的风格比较多变，最后发现draw.io比较好用，<a href="http://xn--draw-494f50ai2ckw3cuyvwycj18c.io">于是定下来使用draw.io</a>。</p>
+<h2 id="类"><a class="markdownIt-Anchor" href="#类"></a> 类</h2>
+<p><img src="/2024/09/08/Design_Patterns/Singleton.png" alt="单例模式示意图"></p>
+<h2 id="关系"><a class="markdownIt-Anchor" href="#关系"></a> 关系</h2>
+<h3 id="单向关联"><a class="markdownIt-Anchor" href="#单向关联"></a> 单向关联</h3>
+<p>一个最简单的箭头表示单向关联，简单地说就是表示has-a的关系。</p>
+<p><img src="/2024/09/08/Design_Patterns/uml_association.jpg" alt="关联关系"></p>
+<h3 id="依赖关系"><a class="markdownIt-Anchor" href="#依赖关系"></a> 依赖关系</h3>
+<p>依赖关系表示一种动态的关系，表明一个类在运行时可能会使用到另一个类，与关联关系不同的是，它是一种临时关系。</p>
+<p><img src="/2024/09/08/Design_Patterns/uml_dependency.jpg" alt="依赖关系"></p>
+<h3 id="实现关系"><a class="markdownIt-Anchor" href="#实现关系"></a> 实现关系</h3>
+<p>实现关系是用于表达对接口或抽象类的视线，用一个三角箭头+虚线表示。</p>
+<p><img src="/2024/09/08/Design_Patterns/uml_realize.jpg" alt="实现关系"></p>
+<h3 id="继承关系"><a class="markdownIt-Anchor" href="#继承关系"></a> 继承关系</h3>
+<p>继承关系用一个三角箭头+实线表示。</p>
+<p><img src="/2024/09/08/Design_Patterns/uml_realize-1728011506750-13.jpg" alt="继承关系"></p>
+<h3 id="聚合关系"><a class="markdownIt-Anchor" href="#聚合关系"></a> 聚合关系</h3>
+<p>聚合关系表示一种一对多的关系，带菱形箭头的一边是“多”的关系。与组合关系不同的是，整体和部分不是强依赖的，即使整体不存在了，部分仍然存在；例如， 部门撤销了，人员不会消失，他们依然存在。</p>
+<p><img src="/2024/09/08/Design_Patterns/uml_aggregation.jpg" alt="聚合关系"></p>
+<h3 id="组合关系"><a class="markdownIt-Anchor" href="#组合关系"></a> 组合关系</h3>
+<p>组合关系是一种强依赖的特殊聚合关系，如果整体不存在了，则部分也不存在了；例如， 公司不存在了，部门也将不存在了。</p>
+<p><img src="/2024/09/08/Design_Patterns/uml_composition.jpg" alt="组合关系"></p>
 <h1 id="创建模式"><a class="markdownIt-Anchor" href="#创建模式"></a> 创建模式</h1>
 <h2 id="简单工厂模式simple-factory"><a class="markdownIt-Anchor" href="#简单工厂模式simple-factory"></a> 简单工厂模式Simple Factory</h2>
 <p>简单工厂模式非常好理解，主要的抽象是由产品类提供的。从产品类中分化出产品A、B、C等，而工厂会根据输入的参数来决定返回何种产品，具体地说，就是输入一个字符串，在工厂的创建方法中使用if语句逐个判断，决定返回何类产品。</p>
@@ -6766,7 +6790,7 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <p>在单例模式中，主要思路是将类的构造函数和实例对象声明为私有，想要获得实例，必须通过<code>getInstance</code>方法。而<code>getInstance</code>方法正是用于管理“单例”的：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function">Singleton* <span class="hljs-title">Singleton::getInstance</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-keyword">if</span> (instance == <span class="hljs-literal">NULL</span>)<br>	&#123;<br>		instance = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Singleton</span>();<br>	&#125;<br>	<br>	<span class="hljs-keyword">return</span>  instance;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h1 id="构造型模式"><a class="markdownIt-Anchor" href="#构造型模式"></a> 构造型模式</h1>
-<h2 id="适配器模式"><a class="markdownIt-Anchor" href="#适配器模式"></a> 适配器模式</h2>
+<h2 id="适配器模式adapter"><a class="markdownIt-Anchor" href="#适配器模式adapter"></a> 适配器模式Adapter</h2>
 <p>适配器模式在思维上很简单，类似插座的转接，由于每个国家对插座的标准制定的不一样，所以用户在使用另一个国家的插座时便不得不使用这样的一个转接口来进行转接。在非面向对象的语言中，可能也存在着这样的设计思想，就是把第三方库或调用方式复杂的内容重新封装后暴露给用户。</p>
 <p><img src="/2024/09/08/Design_Patterns/6477d44a8ed781508.jpg_e1080.jpg" alt="适配器模式"></p>
 <p>适配器模式可以分为<strong>对象适配器和类适配器</strong>，具体的继承和组合关系如下图。</p>
@@ -6780,14 +6804,14 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 </ul>
 <h3 id="辨析类适配器模式和对象适配器模式"><a class="markdownIt-Anchor" href="#辨析类适配器模式和对象适配器模式"></a> 辨析类适配器模式和对象适配器模式</h3>
 <p>对象适配器模式可以组合多个被适配者，使用起来功能更强大，也更简单；类适配器可以重写被适配者的方法，使用起来更加灵活。对象适配器很难置换适配者的方法，需要通过继承自原适配者来实现，操作起来较麻烦；而类适配器对象无法在不支持多继承的语言中实现。</p>
-<h2 id="外观模式"><a class="markdownIt-Anchor" href="#外观模式"></a> 外观模式</h2>
+<h2 id="外观模式facade"><a class="markdownIt-Anchor" href="#外观模式facade"></a> 外观模式Facade</h2>
 <p>外观模式和适配器模式十分相似，都是用于封装。但不同的是，适配器模式强调的是对旧接口或者第三方接口的改变，使其适应新的接口；而外观模式强调的是对复杂系统的整合，使得客户只能接触到简单的系统。</p>
 <p><img src="/2024/09/08/Design_Patterns/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F.drawio.png" alt="外观模式.drawio"></p>
 <p>外观模式的UML类图看起来还是很简单的，所见即所得。</p>
 <h3 id="模式分析-5"><a class="markdownIt-Anchor" href="#模式分析-5"></a> 模式分析</h3>
 <p>外观模式虽然简单，但是在程序设计中却十分重要。首先，在软件系统中将一个大型系统分割为多个小型系统有利于使系统之间的通信和相互依赖达到最小，遵循的是<strong>单一职责原则</strong>。其次，外观模式可以降低客户和内部复杂系统的耦合性。最后，外观模式也是<strong>迪米特</strong>原则的体现，即最小知识原则。</p>
 <p>但是，外观模式也有一定的缺点，例如，如果要增加新的子系统，则需要对外观类进行修改。</p>
-<h2 id="桥接模式"><a class="markdownIt-Anchor" href="#桥接模式"></a> 桥接模式</h2>
+<h2 id="桥接模式bridge"><a class="markdownIt-Anchor" href="#桥接模式bridge"></a> 桥接模式Bridge</h2>
 <h3 id="问题场景"><a class="markdownIt-Anchor" href="#问题场景"></a> 问题场景</h3>
 <p>理解桥接模式首先需要了解桥接模式为了解决什么样的问题。设想这样一种情况：汽车分有许多种类，包含SUV、轿车、跑车等，而这些种类又有许多种品牌，例如奔驰、宝马、奥迪等。实现这样的一个场景，最容易想到的方法就是设计一个抽象父类Car，接下来由三个<strong>抽象的子类</strong>奔驰、宝马、奥迪继承，每个抽象子类再由SUV、轿车、跑车继承，形成一种树形结构。这样的设计模式在汽车种类、品牌种类少的情况下还可以使用，然而当品牌和汽车种类变多时，就会发生子类爆炸的情况，最多需要实现<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>∗</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">m*n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.46528em;vertical-align:0em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>个子类，维护变得十分困难。</p>
 <p>桥接方式是使用了类似<strong>笛卡尔积</strong>的方式来实现这种场景，既然汽车可以从具体的<strong>种类</strong>和抽象的<strong>品牌</strong>上分出来两个维度，那我们将种类设计为抽象类，品牌设计为接口，就可以较为简单地实现上述场景。</p>
@@ -6795,7 +6819,7 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <p>关于设计时将哪个维度设计为接口，哪个维度设计为抽象类，根据ChatGPT的建议，将变化频繁的维度设计为接口更加合适，并且如果有一个维度需要共享一些数据，则将这个维度设计为抽象类。<em>在实际设计中，右边的接口也可以设计为抽象类。</em></p>
 <h3 id="模式分析-6"><a class="markdownIt-Anchor" href="#模式分析-6"></a> 模式分析</h3>
 <p>桥接模式可以看成是多继承（特别是两层继承）的一种替代，可以大大减少类的数量，并且只需要较少的修改就可以增加一系列的类。但是桥接模式的缺点也很明显，桥接模式的理解和设计的难度较大，需要程序员去主动“发现”两个维度，对程序员的要求较高。</p>
-<h2 id="装饰器模式"><a class="markdownIt-Anchor" href="#装饰器模式"></a> 装饰器模式</h2>
+<h2 id="装饰器模式decorator"><a class="markdownIt-Anchor" href="#装饰器模式decorator"></a> 装饰器模式Decorator</h2>
 <p>装饰器模式某种意义上缓解了继承的滥用。众所周知，在面向对象语言中，一个类的所有父类，在编译时就已经确定了。或者更具体地说，如果使用继承来描述类之间的关系，那么继承链在编译时就确定了，运行时不能进行修改，很大地限制了灵活性和可扩展性。</p>
 <p>装饰器模式下的关键对象，可以分为<strong>组件（Component）<strong>和</strong>装饰者（Decorator）</strong>。下面是装饰器模式的示意图（个人任务，打叉的那条线不要画更容易理解）。<em>之后的例子中可以看到，装饰者在使用上和组件没有差异</em>。参考书中用于阐述装饰器模式的例子是咖啡，为了更好地本土化，本文采用奶茶来理解。</p>
 <p><img src="/2024/09/08/Design_Patterns/image-20240911114704046.png" alt="装饰器模式示意图"></p>
@@ -6806,13 +6830,13 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <h3 id="典型实践"><a class="markdownIt-Anchor" href="#典型实践"></a> 典型实践</h3>
 <p>java的IO包中的输入输出流就是用装饰器模式来设计的。以输入流模式为例，其父类是<code>InputStream</code>，在实际的编程中，我们可以根据场景来实例化不同的Stream，而不需要管手上原有的Stream到底是什么。</p>
 <p><img src="/2024/09/08/Design_Patterns/a77bb4adfad84fa6bcf8c5026ae37afftplv-k3u1fbpfcp-zoom-in-crop-mark1512000.webp" alt="Java中的装饰器模式"></p>
-<h2 id="享元模式"><a class="markdownIt-Anchor" href="#享元模式"></a> 享元模式</h2>
+<h2 id="享元模式flyweight"><a class="markdownIt-Anchor" href="#享元模式flyweight"></a> 享元模式Flyweight</h2>
 <p>享元模式的应用场景似乎比较少，这里就简单介绍一下。享元模式的思想是，如果程序中用到大量重复的对象，就不再重复创建新的对象，而是使用<strong>享元工厂</strong>来获取。享元工厂会维护一个Hash表，当发现当前需要创建的对象在内存中已经存在时，就直接返回这个对象。实际上，“重复的对象”并不是非要完全相同，在设计时可以分离出对象的不可变的<strong>内部状态</strong>和可变的<strong>外部状态</strong>，将内部状态作为享元来使用。</p>
 <h3 id="典型实践-2"><a class="markdownIt-Anchor" href="#典型实践-2"></a> 典型实践</h3>
 <p>享元模式在Java标准库中大量使用，对Integer进行封装时，没有必要对所有的Integer都创建一个对象进行包装，而是将-127~128之间的Integer提前创建好对象放置在内存中，需要这个范围内的包装时，就直接返回内存中的实例。</p>
 <p>另一个典型场景就是各种编辑器软件，例如，一个文档中，若同样的图片出现多次，就没有必要为其创建多个相同的对象，而是将图片的数据作为内部对象储存，将图片的外在格式（如大小、位置）等信息作为外部对象。</p>
 <h1 id="行为型模式"><a class="markdownIt-Anchor" href="#行为型模式"></a> 行为型模式</h1>
-<h2 id="观察者模式"><a class="markdownIt-Anchor" href="#观察者模式"></a> 观察者模式</h2>
+<h2 id="观察者模式observer"><a class="markdownIt-Anchor" href="#观察者模式observer"></a> 观察者模式Observer</h2>
 <p><strong>观察者模式</strong>可以类比成对报纸、杂志的订阅，当报社有新一期的报纸出版时，就会向所有订阅该报纸的用户发送通知，而未订阅报纸的用户则不会接收到通知。所以观察者模式的两个关键对象就是<strong>出版者</strong>和<strong>订阅者</strong>，或者更学术地，<strong>主题（Subject）<strong>和</strong>观察者（Observer）</strong></p>
 <p>观察者模式的思路十分简单，从编程语言的角度，主题对象中会有一个存储所有观察者的数据结构，观察者也会记录自己所订阅的主题，当观察者开始新的订阅或取消订阅时，主题对象就修改自己的数据结构。而当主题对象的某事件（通常是数据变化）触发时，就会逐个通知所有订阅的观察者。通常，<strong>观察者需要实现某个接口函数（如：<code>update()</code>）</strong>，以便让观察者调用。</p>
 <p>观察者模式又可以细分为两种，“推”和“拉”。</p>
@@ -6829,6 +6853,24 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <li>命令模式使得每个命令都成为对象，使得命令可以被存储和传递，在一些编辑器软件中也使得用户可以进行撤销和重做。</li>
 <li>命令模式还可以将多个命令组合起来形成一个宏命令，或者是命令队列。</li>
 </ul>
+<h2 id="中介者模式mediator"><a class="markdownIt-Anchor" href="#中介者模式mediator"></a> 中介者模式Mediator</h2>
+<p>当系统结构复杂时，对象之间可能会存在着大量的相互引用，这样会使得系统的耦合性很强。举个例子，就是网络聊天室。如果希望用户之间可以互相发消息，则需要每个用户都保留着对其他用户的引用，这样需要维护大量的用户状态，使得系统十分复杂。所以，我们非常自然地想到引入一个<strong>中介者</strong>来代为管理，这些用户则被称为<strong>同事类</strong></p>
+<p>在中介者模式中，同事类只知道中介者的存在，知道如何想向中介者发送通知或改变状态，而不知道其他同事的存在。这样的模式就大大降低了同事对象之间的耦合度。</p>
+<p><img src="/2024/09/08/Design_Patterns/%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F.drawio.png" alt="中介者模式"></p>
+<p>中介者模式的UML类图如上，实际上，在简单的系统中，两个抽像类的存在都不是必要的。</p>
+<h3 id="模式分析-8"><a class="markdownIt-Anchor" href="#模式分析-8"></a> 模式分析</h3>
+<p>中介者模式可以简化对象之间的交互，将各个同事解耦，在特定情况下可以大大降低各个同事类之间的耦合程度。但是，中介者类包含了同事之间的交互细节，可能会导致中介者类非常复杂，使得系统难以维护。</p>
+<h2 id="状态模式state"><a class="markdownIt-Anchor" href="#状态模式state"></a> 状态模式State</h2>
+<p>状态模式大致的思路就是将状态设计为抽象类，并作为一个成员变量放到上下文对象中。这样一来，在修改状态的同时也可以修改上下文的行为。</p>
+<p><img src="/2024/09/08/Design_Patterns/%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F.drawio.png" alt="状态模式.drawio"></p>
+<h3 id="模式分析-9"><a class="markdownIt-Anchor" href="#模式分析-9"></a> 模式分析</h3>
+<p>状态模式封装了转换规则，在切换状态时便可以自动改变上下文对象的相应字段和行为（可以将行为放在状态中），减少了状态之间切换的复杂度。这样的设计还将状态转换逻辑与状态对象合为一体，而不是一个巨大的条件语句块。</p>
+<h2 id="策略模式strategy"><a class="markdownIt-Anchor" href="#策略模式strategy"></a> 策略模式Strategy</h2>
+<p>策略模式理解起来很简单，只要结合一个实例即可，那就是排序算法。在C++、Java的标准库中，都提供了排序算法，用户可以向其传入参数来决定元素之间的对比策略，这里用到的就是策略模式。更宽泛地说，策略模式将程序执行过程中的控制流封装成了对象，以方便替换，就像搭积木一样。</p>
+<p><img src="/2024/09/08/Design_Patterns/%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F.drawio.png" alt="策略模式"></p>
+<h1 id="设计模式总结"><a class="markdownIt-Anchor" href="#设计模式总结"></a> 设计模式总结</h1>
+<p>在设计面向对象程序时，经常会纠结“这个方法放到哪个类中”“如何使用类的继承和组合关系”这样类似的问题，设计模式就是解决这类问题的范式。合理地运用设计模式可以降低程序之间的耦合性，简化开发难度。然而，正如《Head First 设计模式》中提到的那样，设计模式的运用不是必要的。当开发一个简单的系统时，不必要地使用设计模式可能会让代码变得很复杂。这也是在学习设计模式时，看到代码总会想“这么做难道不是更复杂了？”的原因，因为简单的系统中，直接使用最自然的思路就是最好的。</p>
+<p>所以学习设计模式，并不是要把所有设计模式学通，然后想方设法在程序中应用它。而是学习设计模式是如何通过继承和组合等关系来解决问题，如何降低程序的耦合性，如何设计出优雅的程序。希望通过这段时间的学习，对我的程序开发能力有所帮助。</p>
 ]]></content>
       <categories>
         <category>编程语言</category>
