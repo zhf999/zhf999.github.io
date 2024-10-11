@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Json_Parser</title>
+    <link href="/2024/10/11/Json-Parser/"/>
+    <url>/2024/10/11/Json-Parser/</url>
+    
+    <content type="html"><![CDATA[<p>本篇博客用以总结在实现Json Tutorial时获得的经验和心得，项目仓库地址<a href="https://github.com/miloyip/json-tutorial">json_tutorial</a>。</p><p>个人认为这个项目还是一个非常适合的入门项目，作者深入浅出地讲解如何从零用C语言实现一个自己的Json解析库。虽然Json解析的算法并不算难，但是项目教程中提到如<strong>单元测试</strong>等实践中常用的开发方法，以及关于指针的一些陷阱，并且解释了之前困扰我的许多问题，非常适合学习。</p><h1 id="程序的编译和链接"><a class="markdownIt-Anchor" href="#程序的编译和链接"></a> 程序的编译和链接</h1><p>在教程的CMake文件中，是这么写的：</p><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">add_library</span>(leptjson leptjson.c)<br><span class="hljs-keyword">add_executable</span>(tutorial <span class="hljs-keyword">test</span>.c)<br><span class="hljs-keyword">target_link_libraries</span>(tutorial leptjson)<br></code></pre></td></tr></table></figure><p>其实从字面意思就可以读出大致的意思了，因为我们想编写的只是一个库，所以将<code>leptjson.c</code>这个文件编译为一个<code>leptjson</code>库，最后在构建的项目中可以看到<code>leptjson.a</code>这个静态库，就是编译的结果。</p><p>然而我们需要对这个库进行调试，所以还引入了<code>test.c</code>这个单元测试程序，把它编译成一个可执行文件<code>tutorial.exe</code>，同时，因为<code>tutorial</code>需要使用我们的库来测试，所以还要将<code>leptjson</code>库链接到<code>tutorial</code>上，最终形成可执行文件。</p><p>之前一直搞不懂C/C++的项目是如何构建的，现在大致明白了。头文件仅仅是提供函数、类的声明，而源文件才是提供定义的。所以只有源文件需要进行编译，而头文件不用。将源文件编译后，与库文件链接到一起，就形成了可执行文件。</p><h1 id="单元测试"><a class="markdownIt-Anchor" href="#单元测试"></a> 单元测试</h1><p>之前在写代码的时候，往往是在main函数中写一些简单的代码用于测试程序的结果，或是使用<code>printf</code>等打印函数来检查变量的值，这样的方法在大型项目的开发中会遇到许多困难。所以作者在这个项目中使用了**单元测试（Unit Test）**的方法来确保程序开发的准确性。</p><p>软件开发的周期，一般是提出一个需求后，编写代码，再编写单元测试，看代码是否通过测试。然而也有一种<strong>测试驱动开发（test-driven development, TDD）</strong>，是先编写单元测试，验证原来的程序不能通过通过测试，再编写代码使其通过测试。</p><p>本项目自行编写了一个极简的单元测试框架，每次运行会输出单元测试的通过个数，以及通过率。代码过于冗长，就不进行解析了，在之后学习单元测试的有关框架后，再编写一篇博客进行记录。</p><h1 id="断言"><a class="markdownIt-Anchor" href="#断言"></a> 断言</h1><p>断言的语法：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;assert.h&gt;</span></span><br>assert(cond);<br></code></pre></td></tr></table></figure><p>断言语句仅在debug状态下会生效。当<code>cond</code>的结果为假时，程序会崩溃，并输出相关的信息。那么，要在何时使用断言，何时抛出异常呢？当一个错误是由程序员的编写代码失误导致时，就使用断言；当一个错误是程序员无法预期的（如网络、文件异常）时，就要使用异常处理。</p><p>另一个要注意的事，不要在断言中改变变量的值，这可能导致debug版本和release版本的程序行为不一致。</p><h1 id="内存泄漏检测"><a class="markdownIt-Anchor" href="#内存泄漏检测"></a> 内存泄漏检测</h1><p>使用Visual Studio进行编程时可以在代码中嵌入一些语句来实现，但是我更喜欢使用Clion，所以这里介绍另一种方法：Valgrind。</p><p>Valgrind仅在Linux和macOS上可以使用，但是在Windows上，我们也可以使用**WSL（Windows Subsystem for Linux）**来完成。安装WSL后，在命令行安装Valgrind，然后在Clion中设置好toolchain和CMake，运行时点击右上方<code>run xxx with Valgrind Memcheck</code>即可，当发生内存泄漏时，Clion的debug窗口会进行提示，并显示调用栈。</p><h1 id="悬挂指针问题"><a class="markdownIt-Anchor" href="#悬挂指针问题"></a> 悬挂指针问题</h1><p>在tutorial5中，作者提到了一个难以察觉的bug：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">for</span> (;;) &#123;<br>    <span class="hljs-comment">/* bug! */</span><br>    lept_value* e = lept_context_push(c, <span class="hljs-keyword">sizeof</span>(lept_value));<br>    lept_init(e);<br>    size++;<br>    <span class="hljs-keyword">if</span> ((ret = lept_parse_value(c, e)) != LEPT_PARSE_OK)<br>        <span class="hljs-keyword">return</span> ret;<br>    <span class="hljs-comment">/* ... */</span><br>&#125;<br></code></pre></td></tr></table></figure><p>在这里，先获得了栈中的一个位置的指针<code>e</code>，以供写入解析后的值。但是在<code>lept_parse_value</code>后，栈的大小可能会变大，此时栈会调用<code>realloc</code>重新分配内存，所以原来的内存就失效了，导致指针<code>e</code>指向的内容也失效了。</p><p>在C++的容器中也会遇到类似的问题，当我们获得了一个容器的指针或迭代器后，如果在指针的生存周期内，容器发生了内存的重新分配，则原先指针指向的内容很可能会失效。<strong>所以在编程时，一定要清楚变量，特别是指针的生存周期。</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>项目</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>C语言</tag>
+      
+      <tag>项目</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>设计模式学习笔记</title>
     <link href="/2024/09/08/Design_Patterns/"/>
     <url>/2024/09/08/Design_Patterns/</url>
@@ -325,7 +352,7 @@
     
     <categories>
       
-      <category>心得</category>
+      <category>项目</category>
       
     </categories>
     
@@ -335,6 +362,8 @@
       <tag>编程</tag>
       
       <tag>项目</tag>
+      
+      <tag>C#</tag>
       
     </tags>
     
