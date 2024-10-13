@@ -16,25 +16,25 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本篇博客用以总结在实现Json Tutorial时获得的经验和心得，项目仓库地址json_tutorial。 个人认为这个项目还是一个非常适合的入门项目，作者深入浅出地讲解如何从零用C语言实现一个自己的Json解析库。虽然Json解析的算法并不算难，但是项目教程中提到如单元测试等实践中常用的开发方法，以及关于指针的一些陷阱，并且解释了之前困扰我的许多问题，非常适合学习。  程序的编译和链接 在教程">
+    <meta name="description" content="最近在恶补CMU 15-213 CSAPP，课程的质量是非常高的，但是其中有不少内容在西电的《计算机组成原理》、《微机原理与接口技术》等课程学过了，于是就只能“略读”一下。但是这门课的LAB质量也是很高的，于是便尝试了一下。体验了一下LAB1:bomb和LAB2:attack后，发现难度真的很大，基本上都是看着网上的答案来做的。 因为汇编语言在本科就学过了（而且实验基本上也是看网上做的），所以这篇">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【项目心得】使用C语言写一个Json解析器">
-<meta property="og:url" content="http://zhouhf.top/2024/10/11/Json-Parser/index.html">
+<meta property="og:title" content="GDB学习笔记">
+<meta property="og:url" content="http://zhouhf.top/2024/10/13/gdb-note/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="本篇博客用以总结在实现Json Tutorial时获得的经验和心得，项目仓库地址json_tutorial。 个人认为这个项目还是一个非常适合的入门项目，作者深入浅出地讲解如何从零用C语言实现一个自己的Json解析库。虽然Json解析的算法并不算难，但是项目教程中提到如单元测试等实践中常用的开发方法，以及关于指针的一些陷阱，并且解释了之前困扰我的许多问题，非常适合学习。  程序的编译和链接 在教程">
+<meta property="og:description" content="最近在恶补CMU 15-213 CSAPP，课程的质量是非常高的，但是其中有不少内容在西电的《计算机组成原理》、《微机原理与接口技术》等课程学过了，于是就只能“略读”一下。但是这门课的LAB质量也是很高的，于是便尝试了一下。体验了一下LAB1:bomb和LAB2:attack后，发现难度真的很大，基本上都是看着网上的答案来做的。 因为汇编语言在本科就学过了（而且实验基本上也是看网上做的），所以这篇">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-10-11T06:39:02.000Z">
-<meta property="article:modified_time" content="2024-10-13T11:23:53.020Z">
+<meta property="article:published_time" content="2024-10-13T11:17:29.000Z">
+<meta property="article:modified_time" content="2024-10-13T14:18:08.890Z">
 <meta property="article:author" content="周洪锋">
-<meta property="article:tag" content="C语言">
-<meta property="article:tag" content="项目">
+<meta property="article:tag" content="gdb">
+<meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>【项目心得】使用C语言写一个Json解析器 - 周洪锋的博客</title>
+  <title>GDB学习笔记 - 周洪锋的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -215,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="【项目心得】使用C语言写一个Json解析器"></span>
+            <span id="subtitle" data-typed-text="GDB学习笔记"></span>
           
         </div>
 
@@ -231,8 +231,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-11 14:39" pubdate>
-          2024年10月11日 下午
+        <time datetime="2024-10-13 19:17" pubdate>
+          2024年10月13日 晚上
         </time>
       </span>
     
@@ -243,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          2.3k 字
         
       </span>
     
@@ -254,7 +254,7 @@
         
         
         
-          16 分钟
+          20 分钟
         
       </span>
     
@@ -300,35 +300,56 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【项目心得】使用C语言写一个Json解析器</h1>
+            <h1 style="display: none">GDB学习笔记</h1>
             
             <div class="markdown-body">
               
-              <p>本篇博客用以总结在实现Json Tutorial时获得的经验和心得，项目仓库地址<a target="_blank" rel="noopener" href="https://github.com/miloyip/json-tutorial">json_tutorial</a>。</p>
-<p>个人认为这个项目还是一个非常适合的入门项目，作者深入浅出地讲解如何从零用C语言实现一个自己的Json解析库。虽然Json解析的算法并不算难，但是项目教程中提到如<strong>单元测试</strong>等实践中常用的开发方法，以及关于指针的一些陷阱，并且解释了之前困扰我的许多问题，非常适合学习。</p>
-<h1 id="程序的编译和链接"><a class="markdownIt-Anchor" href="#程序的编译和链接"></a> 程序的编译和链接</h1>
-<p>在教程的CMake文件中，是这么写的：</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">add_library</span>(leptjson leptjson.c)<br><span class="hljs-keyword">add_executable</span>(tutorial <span class="hljs-keyword">test</span>.c)<br><span class="hljs-keyword">target_link_libraries</span>(tutorial leptjson)<br></code></pre></td></tr></table></figure>
-<p>其实从字面意思就可以读出大致的意思了，因为我们想编写的只是一个库，所以将<code>leptjson.c</code>这个文件编译为一个<code>leptjson</code>库，最后在构建的项目中可以看到<code>leptjson.a</code>这个静态库，就是编译的结果。</p>
-<p>然而我们需要对这个库进行调试，所以还引入了<code>test.c</code>这个单元测试程序，把它编译成一个可执行文件<code>tutorial.exe</code>，同时，因为<code>tutorial</code>需要使用我们的库来测试，所以还要将<code>leptjson</code>库链接到<code>tutorial</code>上，最终形成可执行文件。</p>
-<p>之前一直搞不懂C/C++的项目是如何构建的，现在大致明白了。头文件仅仅是提供函数、类的声明，而源文件才是提供定义的。所以只有源文件需要进行编译，而头文件不用。将源文件编译后，与库文件链接到一起，就形成了可执行文件。</p>
-<h1 id="单元测试"><a class="markdownIt-Anchor" href="#单元测试"></a> 单元测试</h1>
-<p>之前在写代码的时候，往往是在main函数中写一些简单的代码用于测试程序的结果，或是使用<code>printf</code>等打印函数来检查变量的值，这样的方法在大型项目的开发中会遇到许多困难。所以作者在这个项目中使用了**单元测试（Unit Test）**的方法来确保程序开发的准确性。</p>
-<p>软件开发的周期，一般是提出一个需求后，编写代码，再编写单元测试，看代码是否通过测试。然而也有一种<strong>测试驱动开发（test-driven development, TDD）</strong>，是先编写单元测试，验证原来的程序不能通过通过测试，再编写代码使其通过测试。</p>
-<p>本项目自行编写了一个极简的单元测试框架，每次运行会输出单元测试的通过个数，以及通过率。代码过于冗长，就不进行解析了，在之后学习单元测试的有关框架后，再编写一篇博客进行记录。</p>
-<h1 id="断言"><a class="markdownIt-Anchor" href="#断言"></a> 断言</h1>
-<p>断言的语法：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;assert.h&gt;</span></span><br>assert(cond);<br></code></pre></td></tr></table></figure>
-<p>断言语句仅在debug状态下会生效。当<code>cond</code>的结果为假时，程序会崩溃，并输出相关的信息。那么，要在何时使用断言，何时抛出异常呢？当一个错误是由程序员的编写代码失误导致时，就使用断言；当一个错误是程序员无法预期的（如网络、文件异常）时，就要使用异常处理。</p>
-<p>另一个要注意的事，不要在断言中改变变量的值，这可能导致debug版本和release版本的程序行为不一致。</p>
-<h1 id="内存泄漏检测"><a class="markdownIt-Anchor" href="#内存泄漏检测"></a> 内存泄漏检测</h1>
-<p>使用Visual Studio进行编程时可以在代码中嵌入一些语句来实现，但是我更喜欢使用Clion，所以这里介绍另一种方法：Valgrind。</p>
-<p>Valgrind仅在Linux和macOS上可以使用，但是在Windows上，我们也可以使用**WSL（Windows Subsystem for Linux）**来完成。安装WSL后，在命令行安装Valgrind，然后在Clion中设置好toolchain和CMake，运行时点击右上方<code>run xxx with Valgrind Memcheck</code>即可，当发生内存泄漏时，Clion的debug窗口会进行提示，并显示调用栈。</p>
-<h1 id="悬挂指针问题"><a class="markdownIt-Anchor" href="#悬挂指针问题"></a> 悬挂指针问题</h1>
-<p>在tutorial5中，作者提到了一个难以察觉的bug：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">for</span> (;;) &#123;<br>    <span class="hljs-comment">/* bug! */</span><br>    lept_value* e = lept_context_push(c, <span class="hljs-keyword">sizeof</span>(lept_value));<br>    lept_init(e);<br>    size++;<br>    <span class="hljs-keyword">if</span> ((ret = lept_parse_value(c, e)) != LEPT_PARSE_OK)<br>        <span class="hljs-keyword">return</span> ret;<br>    <span class="hljs-comment">/* ... */</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>在这里，先获得了栈中的一个位置的指针<code>e</code>，以供写入解析后的值。但是在<code>lept_parse_value</code>后，栈的大小可能会变大，此时栈会调用<code>realloc</code>重新分配内存，所以原来的内存就失效了，导致指针<code>e</code>指向的内容也失效了。</p>
-<p>在C++的容器中也会遇到类似的问题，当我们获得了一个容器的指针或迭代器后，如果在指针的生存周期内，容器发生了内存的重新分配，则原先指针指向的内容很可能会失效。<strong>所以在编程时，一定要清楚变量，特别是指针的生存周期。</strong></p>
+              <p>最近在恶补<a target="_blank" rel="noopener" href="http://csapp.cs.cmu.edu/">CMU 15-213 CSAPP</a>，课程的质量是非常高的，但是其中有不少内容在西电的《计算机组成原理》、《微机原理与接口技术》等课程学过了，于是就只能“略读”一下。但是这门课的LAB质量也是很高的，于是便尝试了一下。体验了一下LAB1:bomb和LAB2:attack后，发现难度真的很大，基本上都是看着网上的答案来做的。</p>
+<p>因为汇编语言在本科就学过了（而且实验基本上也是看网上做的），所以这篇博客主要记录一下在做实验的过程中学到最有用的东西：GDB（到现在才学GDB感觉好像有点晚了）。</p>
+<h1 id="启动"><a class="markdownIt-Anchor" href="#启动"></a> 启动</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">gdb <span class="hljs-comment"># start gdb</span><br>gdb &lt;file&gt; <span class="hljs-comment"># indicate excutable file</span><br></code></pre></td></tr></table></figure>
+<h1 id="运行"><a class="markdownIt-Anchor" href="#运行"></a> 运行</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">quit <span class="hljs-comment"># exit gdb</span><br>run <span class="hljs-comment"># run program</span><br>run [arg1] [arg2] <span class="hljs-comment"># run with arguments</span><br><span class="hljs-built_in">kill</span> <span class="hljs-comment"># stop program</span><br>quit <span class="hljs-comment"># exit gdb</span><br>ctrl-d <span class="hljs-comment"># exit gdb</span><br>ctrl-c <span class="hljs-comment"># halts the current gdb command</span><br></code></pre></td></tr></table></figure>
+<h1 id="添加断点"><a class="markdownIt-Anchor" href="#添加断点"></a> 添加断点</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">break</span> func <span class="hljs-comment"># set the breakpoint at the entry of func</span><br><span class="hljs-built_in">break</span> *&lt;address&gt; <span class="hljs-comment"># set the breakpoint at address</span><br>delete 1 <span class="hljs-comment"># delete breakpoint 1</span><br><span class="hljs-built_in">disable</span> 1 <span class="hljs-comment"># disable breakpoint 1</span><br><span class="hljs-built_in">enable</span> 1 <span class="hljs-comment"># enable breakponit 1</span><br>delete <span class="hljs-comment"># delete all breakpoints</span><br>clear func <span class="hljs-comment"># delete breakpoints at the entry of func</span><br></code></pre></td></tr></table></figure>
+<h1 id="执行"><a class="markdownIt-Anchor" href="#执行"></a> 执行</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">stepi <span class="hljs-comment"># execute one instruction</span><br>stepi 4 <span class="hljs-comment"># execute four instructions</span><br>nexti <span class="hljs-comment"># execute one instruction but don&#x27;t step into function</span><br>step <span class="hljs-comment"># execute one C statement</span><br>next <span class="hljs-comment"># execute one C statement but don&#x27;t step into function</span><br><span class="hljs-built_in">continue</span> <span class="hljs-comment"># resume execution until the next breakpoint</span><br>until 3 <span class="hljs-comment"># continue executing until breakpoint 3</span><br>finish <span class="hljs-comment"># execute until current function returns</span><br>call func(1,2) <span class="hljs-comment"># call func with param 1, 2  and return value</span><br></code></pre></td></tr></table></figure>
+<h1 id="查看代码"><a class="markdownIt-Anchor" href="#查看代码"></a> 查看代码</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">disas <span class="hljs-comment"># disassemble current function</span><br>disas func <span class="hljs-comment"># disassemble func</span><br>disas &lt;address&gt; <span class="hljs-comment"># disasseble function around address</span><br></code></pre></td></tr></table></figure>
+<h1 id="查看数据"><a class="markdownIt-Anchor" href="#查看数据"></a> 查看数据</h1>
+<h2 id="print命令"><a class="markdownIt-Anchor" href="#print命令"></a> print命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">print</span> [format] &lt;expession&gt;<br></code></pre></td></tr></table></figure>
+<p>打印数据，其中format可以是：</p>
+<ul>
+<li><code>\d</code> 按十进制格式显示</li>
+<li><code>\x </code>按十六进制格式显示</li>
+<li><code>\a</code> 按十六进制格式显示</li>
+<li><code>\u</code>按十六进制格式显示无符号整型</li>
+<li><code>\o</code> 按八进制格式显示</li>
+<li><code>\t</code> 按二进制格式显示</li>
+<li><code>\c</code> 按字符格式显示</li>
+<li><code>\f</code> 按浮点数格式显示</li>
+</ul>
+<p><code>&lt;expression&gt;</code>可以是寄存器、变量、表达式、地址，还可以使用指针的强制类型转换来改变数据的长度，可以说在C中支持的表达式（包括解引用<code>*</code>和取地址符<code>&amp;</code>）在这里都可以支持。</p>
+<h2 id="x命令"><a class="markdownIt-Anchor" href="#x命令"></a> x命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">x/nwd &lt;address&gt;<br></code></pre></td></tr></table></figure>
+<p>功能比较强大的x命令，n表示要输出的个数，使用数字来表达；w表示一个数据的长度，<code>b</code>、<code>h</code>、<code>w</code>、<code>g</code>分别表示单字节、双字节、四字节、八字节，d就是输出格式，参考上文的format。</p>
+<h2 id="display命令"><a class="markdownIt-Anchor" href="#display命令"></a> display命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">display/fmt &lt;expression&gt;<br></code></pre></td></tr></table></figure>
+<p>每当到达断点时，显示表达式的值，可以使用<code>info display</code>和来查看表达式的信息，使用<code>undisplay num</code>、<code>delete display num</code>、<code>disable display num</code>来关闭第<code>num</code>个表达式的打印，如字面意思，前两个是删除，最后一个是暂时禁用，可以用<code>enable display num</code>来重新启用。</p>
+<h2 id="watch命令"><a class="markdownIt-Anchor" href="#watch命令"></a> watch命令</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">watch &lt;expression&gt;<br></code></pre></td></tr></table></figure>
+<p>这个命令和上述几个命令也很像，但是行为不同。<code>watch</code>命令会在指定的表达式发生改变时中断程序的运行。</p>
+<h3 id="rwatch命令"><a class="markdownIt-Anchor" href="#rwatch命令"></a> rwatch命令</h3>
+<p>当表达式被读取的时候中断程序。</p>
+<h3 id="awatch命令"><a class="markdownIt-Anchor" href="#awatch命令"></a> awatch命令</h3>
+<p>每次读写表达式的值都会中断程序。</p>
+<h1 id="修改数据"><a class="markdownIt-Anchor" href="#修改数据"></a> 修改数据</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">set</span> var key=value<br></code></pre></td></tr></table></figure>
+<p>将某个变量<code>key</code>的值设置为<code>value</code>，当然也可以用<code>print</code>命令来修改，也支持寄存器的值，只要把<code>key</code>改成如<code>$edx</code>即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">print</span> key=value<br></code></pre></td></tr></table></figure>
+<h1 id="执行信息"><a class="markdownIt-Anchor" href="#执行信息"></a> 执行信息</h1>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">backtrace <span class="hljs-comment"># print the current address and stack backtrace</span><br>info program <span class="hljs-comment"># print the current status of the program</span><br>info funcions <span class="hljs-comment"># print functions in program</span><br>info stack <span class="hljs-comment">#  print backtrace of stack</span><br>info frame <span class="hljs-comment"># print infomation about the current stack frame</span><br>info registers <span class="hljs-comment"># print resgiters and their contents</span><br>info breakpoints <span class="hljs-comment"># print status of user-settable breakpoints</span><br><span class="hljs-built_in">help</span> <span class="hljs-comment"># get help about gdb</span><br></code></pre></td></tr></table></figure>
 
               
             </div>
@@ -346,7 +367,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E9%A1%B9%E7%9B%AE/" class="category-chain-item">项目</a>
+  <a href="/categories/%E5%BF%83%E5%BE%97/" class="category-chain-item">心得</a>
   
   
 
@@ -361,9 +382,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/C%E8%AF%AD%E8%A8%80/">#C语言</a>
+        <a href="/tags/gdb/">#gdb</a>
       
-        <a href="/tags/%E9%A1%B9%E7%9B%AE/">#项目</a>
+        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
       
     </div>
   
@@ -375,8 +396,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>【项目心得】使用C语言写一个Json解析器</div>
-      <div>http://zhouhf.top/2024/10/11/Json-Parser/</div>
+      <div>GDB学习笔记</div>
+      <div>http://zhouhf.top/2024/10/13/gdb-note/</div>
     </div>
     <div class="license-meta">
       
@@ -388,7 +409,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年10月11日</div>
+          <div>2024年10月13日</div>
         </div>
       
       
@@ -418,18 +439,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/13/gdb-note/" title="GDB学习笔记">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">GDB学习笔记</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/09/08/Design_Patterns/" title="设计模式学习笔记">
-                        <span class="hidden-mobile">设计模式学习笔记</span>
+                      <a href="/2024/10/11/Json-Parser/" title="【项目心得】使用C语言写一个Json解析器">
+                        <span class="hidden-mobile">【项目心得】使用C语言写一个Json解析器</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -450,7 +465,7 @@
         var options = Object.assign(
           {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: '732fbd09364739f438735991f5854a77'
+            id: '69262c5bae2adc6d921d721f7a98640c'
           }
         )
         var gitalk = new Gitalk(options);
