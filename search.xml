@@ -6975,4 +6975,27 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
         <tag>工具</tag>
       </tags>
   </entry>
+  <entry>
+    <title>leetcode_note</title>
+    <url>/2024/10/15/leetcode-note/</url>
+    <content><![CDATA[<p>自从上了大学，高中的算法竞赛的内容就逐渐地忘记了，到现在已经快退化到平均水平了。上了研也应该重新收拾一下，开始准备实习、找工作了。本篇博客长期更新，记录算法题的做题思路，只记录思路，不是特殊情况不记录代码。</p>
+<h1 id="leetcode"><a class="markdownIt-Anchor" href="#leetcode"></a> LeetCode</h1>
+<h2 id="25-k个一组翻转链表"><a class="markdownIt-Anchor" href="#25-k个一组翻转链表"></a> 25. K个一组翻转链表</h2>
+<p><a href="https://leetcode.cn/problems/reverse-nodes-in-k-group/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面"><a class="markdownIt-Anchor" href="#题面"></a> 题面</h3>
+<p>给你一个链表，要求每k个链表为一组，将它们翻转。当剩余的链表不足k个时，不做任何操作。</p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog">输入：head = <span class="hljs-string">[1,2,3,4,5]</span>, k = <span class="hljs-number">2</span><br>输出：<span class="hljs-string">[2,1,4,3,5]</span><br></code></pre></td></tr></table></figure>
+<h3 id="思路"><a class="markdownIt-Anchor" href="#思路"></a> 思路</h3>
+<p>首先，可以再定义一个函数<code>reverse(ListNode *head,ListNode *tail)</code>用来转置<code>head</code>到<code>tail</code>的左闭右开区间的链表。接下来就是如何确定这些区间，我们可以用一个循环，位移指针来确定每次翻转的左右边界。</p>
+<p>组内翻转是很容易的，但是翻转后还要考虑如何将各个组链接起来。注意这里有一个坑，就是翻转完第<code>i</code>组后，我们并不知道第<code>i</code>组的尾巴要连接到哪里，因为下一组也是需要翻转的。所以要等到第<code>i+1</code>组翻转完，才能确定尾巴并连接。这样就很自然地想到了递归。<s>好像看代码更好理解。</s></p>
+<p><a href="./leetcode-note/k-reverse.txt">代码</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
 </search>

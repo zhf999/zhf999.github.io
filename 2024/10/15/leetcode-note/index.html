@@ -16,25 +16,25 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="最近在恶补CMU 15-213 CSAPP，课程的质量是非常高的，但是其中有不少内容在西电的《计算机组成原理》、《微机原理与接口技术》等课程学过了，于是就只能“略读”一下。但是这门课的LAB质量也是很高的，于是便尝试了一下。体验了一下LAB1:bomb和LAB2:attack后，发现难度真的很大，基本上都是看着网上的答案来做的。 因为汇编语言在本科就学过了（而且实验基本上也是看网上做的），所以这篇">
+    <meta name="description" content="自从上了大学，高中的算法竞赛的内容就逐渐地忘记了，到现在已经快退化到平均水平了。上了研也应该重新收拾一下，开始准备实习、找工作了。本篇博客长期更新，记录算法题的做题思路，只记录思路，不是特殊情况不记录代码。  LeetCode  25. K个一组翻转链表 题目链接  题面 给你一个链表，要求每k个链表为一组，将它们翻转。当剩余的链表不足k个时，不做任何操作。 12输入：head &#x3D; [1,2,3,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GDB学习笔记">
-<meta property="og:url" content="http://zhouhf.top/2024/10/13/gdb-note/index.html">
+<meta property="og:title" content="leetcode_note">
+<meta property="og:url" content="http://zhouhf.top/2024/10/15/leetcode-note/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="最近在恶补CMU 15-213 CSAPP，课程的质量是非常高的，但是其中有不少内容在西电的《计算机组成原理》、《微机原理与接口技术》等课程学过了，于是就只能“略读”一下。但是这门课的LAB质量也是很高的，于是便尝试了一下。体验了一下LAB1:bomb和LAB2:attack后，发现难度真的很大，基本上都是看着网上的答案来做的。 因为汇编语言在本科就学过了（而且实验基本上也是看网上做的），所以这篇">
+<meta property="og:description" content="自从上了大学，高中的算法竞赛的内容就逐渐地忘记了，到现在已经快退化到平均水平了。上了研也应该重新收拾一下，开始准备实习、找工作了。本篇博客长期更新，记录算法题的做题思路，只记录思路，不是特殊情况不记录代码。  LeetCode  25. K个一组翻转链表 题目链接  题面 给你一个链表，要求每k个链表为一组，将它们翻转。当剩余的链表不足k个时，不做任何操作。 12输入：head &#x3D; [1,2,3,">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-10-13T11:17:29.000Z">
-<meta property="article:modified_time" content="2024-10-13T14:18:08.890Z">
+<meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
+<meta property="article:modified_time" content="2024-10-15T15:17:55.141Z">
 <meta property="article:author" content="周洪锋">
-<meta property="article:tag" content="gdb">
-<meta property="article:tag" content="工具">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="LeetCode">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>GDB学习笔记 - 周洪锋的博客</title>
+  <title>leetcode_note - 周洪锋的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -215,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="GDB学习笔记"></span>
+            <span id="subtitle" data-typed-text="leetcode_note"></span>
           
         </div>
 
@@ -231,8 +231,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-13 19:17" pubdate>
-          2024年10月13日 晚上
+        <time datetime="2024-10-15 22:08" pubdate>
+          2024年10月15日 晚上
         </time>
       </span>
     
@@ -243,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k 字
+          455 字
         
       </span>
     
@@ -254,7 +254,7 @@
         
         
         
-          20 分钟
+          4 分钟
         
       </span>
     
@@ -300,57 +300,22 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">GDB学习笔记</h1>
+            <h1 style="display: none">leetcode_note</h1>
             
             <div class="markdown-body">
               
-              <p>最近在恶补<a target="_blank" rel="noopener" href="http://csapp.cs.cmu.edu/">CMU 15-213 CSAPP</a>，课程的质量是非常高的，但是其中有不少内容在西电的《计算机组成原理》、《微机原理与接口技术》等课程学过了，于是就只能“略读”一下。但是这门课的LAB质量也是很高的，于是便尝试了一下。体验了一下LAB1:bomb和LAB2:attack后，发现难度真的很大，基本上都是看着网上的答案来做的。</p>
-<p>因为汇编语言在本科就学过了（而且实验基本上也是看网上做的），所以这篇博客主要记录一下在做实验的过程中学到最有用的东西：GDB（到现在才学GDB感觉好像有点晚了）。</p>
-<h1 id="启动"><a class="markdownIt-Anchor" href="#启动"></a> 启动</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">gdb <span class="hljs-comment"># start gdb</span><br>gdb &lt;file&gt; <span class="hljs-comment"># indicate excutable file</span><br></code></pre></td></tr></table></figure>
-<h1 id="运行"><a class="markdownIt-Anchor" href="#运行"></a> 运行</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">quit <span class="hljs-comment"># exit gdb</span><br>run <span class="hljs-comment"># run program</span><br>run [arg1] [arg2] <span class="hljs-comment"># run with arguments</span><br><span class="hljs-built_in">kill</span> <span class="hljs-comment"># stop program</span><br>quit <span class="hljs-comment"># exit gdb</span><br>ctrl-d <span class="hljs-comment"># exit gdb</span><br>ctrl-c <span class="hljs-comment"># halts the current gdb command</span><br></code></pre></td></tr></table></figure>
-<h1 id="添加断点"><a class="markdownIt-Anchor" href="#添加断点"></a> 添加断点</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">break</span> func <span class="hljs-comment"># set the breakpoint at the entry of func</span><br><span class="hljs-built_in">break</span> *&lt;address&gt; <span class="hljs-comment"># set the breakpoint at address</span><br>delete 1 <span class="hljs-comment"># delete breakpoint 1</span><br><span class="hljs-built_in">disable</span> 1 <span class="hljs-comment"># disable breakpoint 1</span><br><span class="hljs-built_in">enable</span> 1 <span class="hljs-comment"># enable breakponit 1</span><br>delete <span class="hljs-comment"># delete all breakpoints</span><br>clear func <span class="hljs-comment"># delete breakpoints at the entry of func</span><br></code></pre></td></tr></table></figure>
-<h1 id="执行"><a class="markdownIt-Anchor" href="#执行"></a> 执行</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">stepi <span class="hljs-comment"># execute one instruction</span><br>stepi 4 <span class="hljs-comment"># execute four instructions</span><br>nexti <span class="hljs-comment"># execute one instruction but don&#x27;t step into function</span><br>step <span class="hljs-comment"># execute one C statement</span><br>next <span class="hljs-comment"># execute one C statement but don&#x27;t step into function</span><br><span class="hljs-built_in">continue</span> <span class="hljs-comment"># resume execution until the next breakpoint</span><br>until 3 <span class="hljs-comment"># continue executing until breakpoint 3</span><br>finish <span class="hljs-comment"># execute until current function returns</span><br>call func(1,2) <span class="hljs-comment"># call func with param 1, 2  and return value</span><br></code></pre></td></tr></table></figure>
-<h1 id="查看代码"><a class="markdownIt-Anchor" href="#查看代码"></a> 查看代码</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">disas <span class="hljs-comment"># disassemble current function</span><br>disas func <span class="hljs-comment"># disassemble func</span><br>disas &lt;address&gt; <span class="hljs-comment"># disasseble function around address</span><br></code></pre></td></tr></table></figure>
-<h1 id="查看数据"><a class="markdownIt-Anchor" href="#查看数据"></a> 查看数据</h1>
-<h2 id="print命令"><a class="markdownIt-Anchor" href="#print命令"></a> print命令</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">print</span> [format] &lt;expession&gt;<br></code></pre></td></tr></table></figure>
-<p>打印数据，其中format可以是：</p>
-<ul>
-<li><code>\d</code> 按十进制格式显示</li>
-<li><code>\x </code>按十六进制格式显示</li>
-<li><code>\a</code> 按十六进制格式显示</li>
-<li><code>\u</code>按十六进制格式显示无符号整型</li>
-<li><code>\o</code> 按八进制格式显示</li>
-<li><code>\t</code> 按二进制格式显示</li>
-<li><code>\c</code> 按字符格式显示</li>
-<li><code>\f</code> 按浮点数格式显示</li>
-</ul>
-<p><code>&lt;expression&gt;</code>可以是寄存器、变量、表达式、地址，还可以使用指针的强制类型转换来改变数据的长度，可以说在C中支持的表达式（包括解引用<code>*</code>和取地址符<code>&amp;</code>）在这里都可以支持。</p>
-<h2 id="x命令"><a class="markdownIt-Anchor" href="#x命令"></a> x命令</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">x/nwd &lt;address&gt;<br></code></pre></td></tr></table></figure>
-<p>功能比较强大的x命令，n表示要输出的个数，使用数字来表达；w表示一个数据的长度，<code>b</code>、<code>h</code>、<code>w</code>、<code>g</code>分别表示单字节、双字节、四字节、八字节，d就是输出格式，参考上文的format。</p>
-<h2 id="display命令"><a class="markdownIt-Anchor" href="#display命令"></a> display命令</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">display/fmt &lt;expression&gt;<br></code></pre></td></tr></table></figure>
-<p>每当到达断点时，显示表达式的值，可以使用<code>info display</code>和来查看表达式的信息，使用<code>undisplay num</code>、<code>delete display num</code>、<code>disable display num</code>来关闭第<code>num</code>个表达式的打印，如字面意思，前两个是删除，最后一个是暂时禁用，可以用<code>enable display num</code>来重新启用。</p>
-<h2 id="watch命令"><a class="markdownIt-Anchor" href="#watch命令"></a> watch命令</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">watch &lt;expression&gt;<br></code></pre></td></tr></table></figure>
-<p>这个命令和上述几个命令也很像，但是行为不同。<code>watch</code>命令会在指定的表达式发生改变时中断程序的运行。</p>
-<h3 id="rwatch命令"><a class="markdownIt-Anchor" href="#rwatch命令"></a> rwatch命令</h3>
-<p>当表达式被读取的时候中断程序。</p>
-<h3 id="awatch命令"><a class="markdownIt-Anchor" href="#awatch命令"></a> awatch命令</h3>
-<p>每次读写表达式的值都会中断程序。</p>
-<h1 id="修改数据"><a class="markdownIt-Anchor" href="#修改数据"></a> 修改数据</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">set</span> var key=value<br></code></pre></td></tr></table></figure>
-<p>将某个变量<code>key</code>的值设置为<code>value</code>，当然也可以用<code>print</code>命令来修改，也支持寄存器的值，只要把<code>key</code>改成如<code>$edx</code>即可。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">print</span> key=value<br></code></pre></td></tr></table></figure>
-<h1 id="执行信息"><a class="markdownIt-Anchor" href="#执行信息"></a> 执行信息</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">backtrace <span class="hljs-comment"># print the current address and stack backtrace</span><br>info program <span class="hljs-comment"># print the current status of the program</span><br>info funcions <span class="hljs-comment"># print functions in program</span><br>info stack <span class="hljs-comment">#  print backtrace of stack</span><br>info frame <span class="hljs-comment"># print infomation about the current stack frame</span><br>info registers <span class="hljs-comment"># print resgiters and their contents</span><br>info breakpoints <span class="hljs-comment"># print status of user-settable breakpoints</span><br><span class="hljs-built_in">help</span> <span class="hljs-comment"># get help about gdb</span><br></code></pre></td></tr></table></figure>
-
+              <p>自从上了大学，高中的算法竞赛的内容就逐渐地忘记了，到现在已经快退化到平均水平了。上了研也应该重新收拾一下，开始准备实习、找工作了。本篇博客长期更新，记录算法题的做题思路，只记录思路，不是特殊情况不记录代码。</p>
+<h1 id="leetcode"><a class="markdownIt-Anchor" href="#leetcode"></a> LeetCode</h1>
+<h2 id="25-k个一组翻转链表"><a class="markdownIt-Anchor" href="#25-k个一组翻转链表"></a> 25. K个一组翻转链表</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/reverse-nodes-in-k-group/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面"><a class="markdownIt-Anchor" href="#题面"></a> 题面</h3>
+<p>给你一个链表，要求每k个链表为一组，将它们翻转。当剩余的链表不足k个时，不做任何操作。</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs accesslog">输入：head = <span class="hljs-string">[1,2,3,4,5]</span>, k = <span class="hljs-number">2</span><br>输出：<span class="hljs-string">[2,1,4,3,5]</span><br></code></pre></td></tr></table></figure>
+<h3 id="思路"><a class="markdownIt-Anchor" href="#思路"></a> 思路</h3>
+<p>首先，可以再定义一个函数<code>reverse(ListNode *head,ListNode *tail)</code>用来转置<code>head</code>到<code>tail</code>的左闭右开区间的链表。接下来就是如何确定这些区间，我们可以用一个循环，位移指针来确定每次翻转的左右边界。</p>
+<p>组内翻转是很容易的，但是翻转后还要考虑如何将各个组链接起来。注意这里有一个坑，就是翻转完第<code>i</code>组后，我们并不知道第<code>i</code>组的尾巴要连接到哪里，因为下一组也是需要翻转的。所以要等到第<code>i+1</code>组翻转完，才能确定尾巴并连接。这样就很自然地想到了递归。<s>好像看代码更好理解。</s></p>
+<p><a href="./leetcode-note/k-reverse.txt">代码</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
             <hr/>
@@ -367,7 +332,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%BF%83%E5%BE%97/" class="category-chain-item">心得</a>
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
   
   
 
@@ -382,9 +347,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/gdb/">#gdb</a>
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
       
-        <a href="/tags/%E5%B7%A5%E5%85%B7/">#工具</a>
+        <a href="/tags/LeetCode/">#LeetCode</a>
       
     </div>
   
@@ -396,8 +361,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>GDB学习笔记</div>
-      <div>http://zhouhf.top/2024/10/13/gdb-note/</div>
+      <div>leetcode_note</div>
+      <div>http://zhouhf.top/2024/10/15/leetcode-note/</div>
     </div>
     <div class="license-meta">
       
@@ -409,7 +374,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年10月13日</div>
+          <div>2024年10月15日</div>
         </div>
       
       
@@ -439,18 +404,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/15/leetcode-note/" title="leetcode_note">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">leetcode_note</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/11/Json-Parser/" title="【项目心得】使用C语言写一个Json解析器">
-                        <span class="hidden-mobile">【项目心得】使用C语言写一个Json解析器</span>
+                      <a href="/2024/10/13/gdb-note/" title="GDB学习笔记">
+                        <span class="hidden-mobile">GDB学习笔记</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -471,7 +430,7 @@
         var options = Object.assign(
           {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: '69262c5bae2adc6d921d721f7a98640c'
+            id: 'e2dc123fa8da57d007d2b87fa1de326a'
           }
         )
         var gitalk = new Gitalk(options);
