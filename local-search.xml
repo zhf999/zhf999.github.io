@@ -4,7 +4,34 @@
   
   
   <entry>
-    <title>leetcode_note</title>
+    <title>单元测试与测试驱动开发</title>
+    <link href="/2024/10/19/Unit-Test/"/>
+    <url>/2024/10/19/Unit-Test/</url>
+    
+    <content type="html"><![CDATA[<p>在学着做<a href="https://github.com/miloyip/json-tutorial">lept_json</a>这个项目时，作者在教程中介绍了单元测试的概念，并使用测试驱动开发（Test Driven Development）的方法来循序渐进地完善程序的功能。这篇博客就简单地展开讲一下单元测试和测试驱动开发，并介绍一下在Java中如何使用JUnit库来对代码进行单元测试。</p><h1 id="单元测试"><a class="markdownIt-Anchor" href="#单元测试"></a> 单元测试</h1><p>单元测试其实挺好理解的，平时在写代码时，有经验的程序员经常会将不同的功能拆分成函数，这样便于对每个函数的正确性进行验证。单元测试大概就是利用这样的思想，对每个模块的功能进行分开检查，以便更快地找到错误所再。其实我们平时写一些简单的程序也会用到单元测试，只不过我们往往会在整个程序运行出错后再进行开发，并且往往是通过调用<code>cout</code>、<code>printf</code>等输出函数来检查的。</p><p>“正规”的单元测试，是使用断言或第三方的库来对程序的各个功能进行验证的，稍后会介绍用于单元测试Java的JUnit库。</p><h1 id="测试驱动开发"><a class="markdownIt-Anchor" href="#测试驱动开发"></a> 测试驱动开发</h1><p>前面提到过，单元测试是对程序的子模块进行正确性验证，测试驱动开发就是<strong>将验证这一步提前到开发前</strong>，也就是先编写测试代码确定需要的功能，再进行开发，使得代码能通过测试。</p><p><img src="/2024/10/19/Unit-Test/%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91.drawio.png" alt="测试驱动开发流程示意图"></p><p>测试驱动开发的好处有两点，一是可以在开发前就有明确的目标，在开发过程中可以专注功能的实现；二是在功能代码编写完成后，可能需要对代码进行优化、重构，在此过程中有可能会造成功能代码出错，使用测试驱动开发就可以在保持单元测试通过的前提下，随意地进行代码的重构。</p><p>当然，测试驱动开发也有缺点，测试开发可能会拖慢开发的进度。另外，一些场景也不适合使用测试驱动开发，例如数据驱动的算法（深度学习）、有物理边界的开发（硬件开发）、无法快速测试的开发等。</p><h1 id="junit库"><a class="markdownIt-Anchor" href="#junit库"></a> JUnit库</h1><blockquote><p>这里仅介绍JUnit5。</p></blockquote><p>JUnit是Java语言的比较著名的单元测试库，可以在Maven中加入以下依赖来引入：</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.junit.jupiter<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>junit-jupiter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.9.1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure><h2 id="开发习惯"><a class="markdownIt-Anchor" href="#开发习惯"></a> 开发习惯</h2><p>在进行Java开发（其他语言应该也类似），会在放置源码的同级目录下放一个<code>test</code>包，其中放着专门用于测试的代码。如果使用Maven进行项目构建，Maven也会帮你自动创建相关的包。</p><p>实际上，不用这么按部就班也可以将代码跑起来，但是这样可以让代码看起来更规范，就像main函数执行成功通常返回0一样。</p><h2 id="程序入口"><a class="markdownIt-Anchor" href="#程序入口"></a> 程序入口</h2><p>使用JUnit库进行测试时，不需要将main函数作为程序入口，只需要在你希望进行的单元测试函数前面加上<code>@Test</code>注解即可，便可以在IDEA中直接运行这个单元测试。</p><h2 id="断言"><a class="markdownIt-Anchor" href="#断言"></a> 断言</h2><p>TODO</p><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+    
+    
+    <categories>
+      
+      <category>开发</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>测试</tag>
+      
+      <tag>开发</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【长期更新】LeetCode刷题笔记</title>
     <link href="/2024/10/15/leetcode-note/"/>
     <url>/2024/10/15/leetcode-note/</url>
     
