@@ -7073,7 +7073,36 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <h2 id="程序入口"><a class="markdownIt-Anchor" href="#程序入口"></a> 程序入口</h2>
 <p>使用JUnit库进行测试时，不需要将main函数作为程序入口，只需要在你希望进行的单元测试函数前面加上<code>@Test</code>注解即可，便可以在IDEA中直接运行这个单元测试。</p>
 <h2 id="断言"><a class="markdownIt-Anchor" href="#断言"></a> 断言</h2>
-<p>TODO</p>
+<p>断言类似C中的<code>assert</code>，当条件不满足时就会提前终止测试并提供相关信息。只不过JUnit5提供了多种封装，方便在多种数据之间进行比较，常用到的有：<code>assertEquals</code>、<code>assertNotEquals</code>、<code>assertTrue</code>、<code>assertThrows</code>等，用法也很简单，望文生义就可以知道它们的用途。</p>
+<p>但是令人非常难以接受的一点是，这些函数都是<code>Assertions</code>类的静态成员函数，使用时必须通过<code>Assertions</code>类调用，IDEA似乎并不会自动从类中导入这些静态成员函数，所以如果图省事需要手动<code>import</code>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.jupiter.api.Assertions.*;<br></code></pre></td></tr></table></figure>
+<h2 id="注解"><a class="markdownIt-Anchor" href="#注解"></a> 注解</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">注解类</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">@RepeatedTest(n)</td>
+<td style="text-align:center">重复测试n次</td>
+</tr>
+<tr>
+<td style="text-align:center">@DisplayName(name)</td>
+<td style="text-align:center">设置显示名称，``name`可以包含特殊字符</td>
+</tr>
+<tr>
+<td style="text-align:center">@BeforeEach/@AfterEach</td>
+<td style="text-align:center">在每个测试前/后运行的函数（不能为静态函数）</td>
+</tr>
+<tr>
+<td style="text-align:center">@BeforeAll/@AfterAll</td>
+<td style="text-align:center">所有测试开始前/后运行的函数（必须为静态函数）</td>
+</tr>
+</tbody>
+</table>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>开发</category>
