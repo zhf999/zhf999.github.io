@@ -7019,7 +7019,27 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <h3 id="思路-4"><a class="markdownIt-Anchor" href="#思路-4"></a> 思路</h3>
 <p>这题看似简单，但是有点小坑。乍一看我是想寻找中序遍历、后序遍历、先序遍历能不能用上，想了一下，应该只要根节点的左右子树的中序遍历是相反的就可以了。确实，如果这棵树是对称的，那么左右字数的中序遍历就是相反的，但是后者并不是前者的充分条件，因为还要考虑节点值相同的情况，如下图：</p>
 <p><img src="/2024/10/15/leetcode-note/image-20241018101533822.png" alt="先序遍历出错的情况"></p>
-<p>所以只能放弃先序遍历，使用递归或者迭代的方法来做。其实题解中那么多方法，有用递归的，也有用迭代的，本质上都是搜索，只不过是深度优先还是广度优先的区别罢了。</p>
+<p>所以只能放弃先序遍历，使用双指针递归或者迭代的方法来做。其实题解中那么多方法，有用递归的，也有用迭代的，本质上都是搜索，只不过是深度优先还是广度优先的区别罢了。</p>
+<h2 id="108-将有序数组转化为二叉树"><a class="markdownIt-Anchor" href="#108-将有序数组转化为二叉树"></a> 108. 将有序数组转化为二叉树</h2>
+<p><a href="https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-5"><a class="markdownIt-Anchor" href="#题面-5"></a> 题面</h3>
+<p>提供一个严格递增的数组，要求将其转换成二叉搜索树。</p>
+<figure class="highlight subunit"><table><tr><td class="code"><pre><code class="hljs subunit">输入：nums = [<span class="hljs-string">-10</span>,<span class="hljs-string">-3</span>,0,5,9]<br>输出：[0,<span class="hljs-string">-3</span>,9,<span class="hljs-string">-10</span>,null,5]<br>解释：[0,<span class="hljs-string">-10</span>,5,null,<span class="hljs-string">-3</span>,null,9] 也将被视为正确答案：<br></code></pre></td></tr></table></figure>
+<p><img src="/2024/10/15/leetcode-note/btree1.jpg" alt="结果示意图"></p>
+<h3 id="思路-5"><a class="markdownIt-Anchor" href="#思路-5"></a> 思路</h3>
+<p>刚拿到这题，想到的就是如何构造一个二叉搜索树。但是突然想到，不管原始的数据输入是怎么样的，都可以构造成二叉搜索树，这题给了一个<strong>数组严格递增</strong>的条件，肯定有更好的解法。</p>
+<p>查看题解，看到一条重要性质：<strong>二叉搜索树的中序遍历是严格递增的</strong>，又联想到题目给的数组也是严格递增的，所以可以考虑直接从数组入手。使用二分法，每次选择数组的中间元素，将其作为根节点，不断递归。当数组长度是偶数时，不管选择偏左的节点还是偏右的节点都是可行的。</p>
+<p><a href="./leetcode-note/146.txt">代码</a></p>
+<h2 id="98验证二叉搜索树"><a class="markdownIt-Anchor" href="#98验证二叉搜索树"></a> 98.验证二叉搜索树</h2>
+<p><a href="https://leetcode.cn/problems/validate-binary-search-tree/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-6"><a class="markdownIt-Anchor" href="#题面-6"></a> 题面</h3>
+<p>提供一个二叉树，要求检查其是否为二叉搜索树。</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">root</span> = [<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>]<br>输出：<span class="hljs-literal">true</span><br></code></pre></td></tr></table></figure>
+<h3 id="思路-6"><a class="markdownIt-Anchor" href="#思路-6"></a> 思路</h3>
+<p>最开始的思路，直接使用递归，对于当前节点只需要左儿子小于根，右儿子大于根即可，然后以左右儿子为根继续判断。实际上这样会有问题，例如下面这棵树：</p>
+<p>![节点3小于根节点，显然不是二叉搜索树](./leetcode-note/graphviz (1).svg)</p>
+<p>所以不能仅在局部进行判断，我们还需要在函数内维护一个全局的允许区间<code>[l,r]</code>，并在每次递归的时候设置新的允许区间。总觉得这个方法有一些不那么优雅，毕竟要求我们预先知道值的范围。</p>
+<p>另一个方法还是利用了<strong>二叉搜索树的中序遍历严格递增</strong>这个性质，只需要获得二叉树的中序遍历，然后判断是否严格递增即可。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>算法</category>
