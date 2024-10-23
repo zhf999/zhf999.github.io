@@ -28,8 +28,9 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/image-20241018101533822.png">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/btree1.jpg">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/flaten.jpg">
+<meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/pathsum3-1-tree.jpg">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-10-21T15:36:37.903Z">
+<meta property="article:modified_time" content="2024-10-23T02:30:17.266Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -249,7 +250,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k 字
+          3.7k 字
         
       </span>
     
@@ -260,7 +261,7 @@
         
         
         
-          22 分钟
+          32 分钟
         
       </span>
     
@@ -380,6 +381,41 @@
 <h3 id="思路-7"><a class="markdownIt-Anchor" href="#思路-7"></a> 思路</h3>
 <p>一个非常弱智的做法是先进行前序遍历并记录节点顺序，然后再将其链接，但是这样空间复杂度为<code>O(n)</code>。我想到的做法是在前序遍历的时候顺便修改树的结构，当然了，因为在递归的时候是需要修改左右子树的，所以需要使用局部变量临时记录一下。这个算法看似优化了，但实际上空间复杂度还是要来到<code>O(n)</code>，主要是因为递归时需要使用栈的空间，具体空间取决于树的高度。</p>
 <p>最优的做法是<code>O(1)</code>的复杂度，直接在树上进行修改。如上图节点2，我们可以将其作为1的右子树，然后将节点5连接到节点4（即2子树的“最右边”）的右子树，依此循环即可。这个算法可能需要一点洞察力和灵性，之后在做算法题的时候也可以多从几何直观来入手。</p>
+<h2 id="437路径总和iii"><a class="markdownIt-Anchor" href="#437路径总和iii"></a> 437.路径总和III</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/path-sum-iii/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-8"><a class="markdownIt-Anchor" href="#题面-8"></a> 题面</h3>
+<p>给定一个二叉树的根节点 <code>root</code> ，和一个整数 <code>targetSum</code>，求该二叉树里节点值之和等于 <code>targetSum</code> 的 路径 的数目。</p>
+<p>路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。</p>
+<p><img src="/2024/10/15/leetcode-note/pathsum3-1-tree.jpg" srcset="/img/loading.gif" lazyload alt="路径示意图"></p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">root</span> = [<span class="hljs-number">10</span>,<span class="hljs-number">5</span>,-<span class="hljs-number">3</span>,<span class="hljs-number">3</span>,<span class="hljs-number">2</span>,<span class="hljs-literal">null</span>,<span class="hljs-number">11</span>,<span class="hljs-number">3</span>,-<span class="hljs-number">2</span>,<span class="hljs-literal">null</span>,<span class="hljs-number">1</span>], <span class="hljs-attr">targetSum</span> = <span class="hljs-number">8</span><br>输出：<span class="hljs-number">3</span><br>解释：和等于 <span class="hljs-number">8</span> 的路径有 <span class="hljs-number">3</span> 条，如图所示。<br></code></pre></td></tr></table></figure>
+<h3 id="思路-8"><a class="markdownIt-Anchor" href="#思路-8"></a> 思路</h3>
+<p>涉及到连续一个序列的和，很自然的就想到使用前缀和，所以首先进行一次前序遍历，维护每个节点到根节点的路径的和。</p>
+<p>接下来就是判断有多少条路径之和为<code>targetSum</code>，最朴素的想法就是使用<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>的算法来枚举，但是这样效率可能有点低。题解中使用到<code>map</code>数据结构，记录前缀和为<code>x</code>的路径有多少条，这样就可以用<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>的复杂度来计算出路径的条数。</p>
+<p>实际上，如果按上面说的那样分两次进行处理，会重复计算很多路径，而且不符合路径“只能向下走”的特定。所以我们需要在遍历的过程中实时地维护<code>map</code>，使得<code>map</code>只记录当前节点到根节点的路径条数。</p>
+<p>这题和之前遇到的某些题很类似，给我的启发是，当遇到求解“和为<code>sum</code>的路径条数”问题时，使用哈希可以更快地解决问题。</p>
+<p><a href="leetcode-note%5C437.txt">代码</a></p>
+<h2 id="236二叉树的最近公共祖先"><a class="markdownIt-Anchor" href="#236二叉树的最近公共祖先"></a> 236.二叉树的最近公共祖先</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-9"><a class="markdownIt-Anchor" href="#题面-9"></a> 题面</h3>
+<p>给定一个二叉树，以及树上两个节点，求其最近公共祖先（LCA）。</p>
+<h3 id="思路-9"><a class="markdownIt-Anchor" href="#思路-9"></a> 思路</h3>
+<p>很经典的一个问题，在洛谷中这题是一个模板题，需要使用倍增算法来加速求解。但是LeetCode只要求求一对节点的LCA，所以可以直接用递归的方法来求解。</p>
+<h4 id="递归解法"><a class="markdownIt-Anchor" href="#递归解法"></a> 递归解法</h4>
+<p>从根节点向下遍历，令函数的返回值为与这对节点“关系最大”的节点，即：有公共祖先就返回公共祖先，有<code>p</code>就返回<code>p</code>，有<code>q</code>就返回<code>q</code>，两者都没有就返回<code>nullptr</code>。对于每棵子树的根节点root，有以下几种情况：</p>
+<ul>
+<li><code>p</code>和<code>q</code>都在这棵子树上，返回<code>root</code>；</li>
+<li><code>p</code>在子树上，<code>q</code>不在，返回<code>p</code>；反之同理；</li>
+<li><code>p</code>、<code>q</code>都不在，返回<code>nullptr</code>。</li>
+</ul>
+<p>我们肯定无法在当前这一层函数直接知道哪些节点在子树上，所以使用递归，分别处理左右子树的情况。</p>
+<p>Talk is cheap, show me the code:</p>
+<p><a href="leetcode-note%5C236.1.txt">递归解法代码</a></p>
+<h4 id="倍增求法"><a class="markdownIt-Anchor" href="#倍增求法"></a> 倍增求法</h4>
+<p>先不考虑<strong>最近</strong>这个条件，单是求公共祖先的问题，在树的路径上是有单调性的，所以可以使用类似二分的思想。但是树上是没有办法进行二分的，所以采用倍增的思想。</p>
+<p>倍增求LCA的难度主要来源于预处理，在计算前需要计算各个节点的深度，以及父节点信息。所以倍增算法在加速计算的同时，会消耗较多的空间，LeetCode的这题只需要求一对节点的LCA，所以没有必要使用倍增。但是本着复习的原则，还是把算法也回顾一下。</p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3379">洛谷P3379</a></p>
+<p><a href="leetcode-note%5C236.2.txt">倍增求LCA</a></p>
+<p>代码是洛谷风格的输入输出，这里面的<code>log</code>预处理，前向星存图都比较值得复习。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>

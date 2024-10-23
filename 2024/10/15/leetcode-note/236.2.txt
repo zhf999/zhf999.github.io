@@ -1,0 +1,79 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+struct E{
+	int to,next;
+}edge[1000010];
+int head[500010],tot;
+int n,m,s;
+int deep[500010],fa[500010][50];
+int lg[500010];
+
+void add(int x,int y);
+void dfs(int u,int father);
+int lca(int x,int y);
+
+int main()
+{
+	cin>>n>>m>>s;
+	for(int i=1;i<=n;i++)lg[i]=lg[i-1]+(1<<lg[i-1]==i);
+	for(int i=1;i<n;i++)
+	{
+		int x,y;
+		cin>>x>>y;
+		add(x,y);
+		add(y,x);
+	}
+	dfs(s,0);
+	for(int i=1;i<=m;i++)
+	{
+		int x,y;
+		cin>>x>>y;
+		cout<<lca(x,y)<<endl;
+	}
+	return 0;
+}
+
+void add(int x,int y)
+{
+	tot++;
+	edge[tot].to=y;
+	edge[tot].next=head[x];
+	head[x]=tot;
+}
+
+void dfs(int u,int father)
+{
+	fa[u][0]=father;
+	deep[u]=deep[father]+1;
+	for(int i=1;i<=lg[deep[u]];i++)
+	{
+		fa[u][i]=fa[fa[u][i-1]][i-1];
+	}
+	for(int i=head[u];i;i=edge[i].next)
+	{
+		if(edge[i].to!=father)
+		{
+			dfs(edge[i].to,u);
+		}
+	}
+}
+
+int lca(int x,int y)
+{
+	if(deep[x]<deep[y])swap(x,y);
+	while(deep[x]>deep[y])
+	{
+		x=fa[x][lg[deep[x]-deep[y]]-1];
+	}
+	if(x==y)return x;
+	for(int k=lg[deep[x]]-1;k>=0;k--)
+	{
+		if(fa[x][k]!=fa[y][k])
+		{
+			x=fa[x][k],y=fa[y][k];
+		}
+	}
+	return fa[x][0];
+}
