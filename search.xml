@@ -7083,6 +7083,24 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <p><a href="https://www.luogu.com.cn/problem/P3379">洛谷P3379</a></p>
 <p><a href="leetcode-note%5C236.2.txt">倍增求LCA</a></p>
 <p>代码是洛谷风格的输入输出，这里面的<code>log</code>预处理，前向星存图都比较值得复习。</p>
+<h2 id="124二叉树的最大路径和"><a class="markdownIt-Anchor" href="#124二叉树的最大路径和"></a> 124.二叉树的最大路径和</h2>
+<p><a href="https://leetcode.cn/problems/binary-tree-maximum-path-sum/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-10"><a class="markdownIt-Anchor" href="#题面-10"></a> 题面</h3>
+<p>二叉树中的 <strong>路径</strong> 被定义为一条节点序列，序列中每对相邻节点之间都存在一条边。同一个节点在一条路径序列中 <strong>至多出现一次</strong> 。该路径 <strong>至少包含一个</strong> 节点，且不一定经过根节点。</p>
+<p><strong>路径和</strong> 是路径中各节点值的总和。</p>
+<p>给你一个二叉树的根节点 <code>root</code> ，返回其 <strong>最大路径和</strong> 。</p>
+<h3 id="思路-10"><a class="markdownIt-Anchor" href="#思路-10"></a> 思路</h3>
+<p>题目描述的略复杂。这题其实和最大子序列和类似，都是判断连续的一段序列之和的最大值，所以这题也可以用到类似动态规划的思想。但是由于是在树上，所以直接维护最大路径和是不可行的，以为这里路径是不可以分岔的，不满足动态规划的<strong>无后效性</strong>原则。</p>
+<p>但是这个路径是可以有拐弯的，即从某个节点的左节点上来，经过这个节点，再从右节点下去。所以，我们可以维护以<code>root</code>为起点的不带拐弯的路径，这个是很容易的，利用<em>子序列和最大值</em>问题的思想就可以解决。然后再判断从哪个结点发生拐弯即可（两个过程可以只用一个深度优先搜索达到）。</p>
+<p><a href="leetcode-note%5C124.txt">代码</a></p>
+<h2 id="994-腐烂的橘子"><a class="markdownIt-Anchor" href="#994-腐烂的橘子"></a> 994. 腐烂的橘子</h2>
+<p><a href="https://leetcode.cn/problems/rotting-oranges/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-11"><a class="markdownIt-Anchor" href="#题面-11"></a> 题面</h3>
+<p>一个矩阵，里面有新鲜的橘子和腐烂的橘子，腐烂的橘子每一个单位时间会传染给邻接的新鲜橘子，问传染完所有橘子需要多少时间。如果有橘子永远不会被传染，就返回-1。</p>
+<p><img src="/2024/10/15/leetcode-note/oranges.png" alt="腐烂的橘子"></p>
+<h3 id="思路-11"><a class="markdownIt-Anchor" href="#思路-11"></a> 思路</h3>
+<p>开始认为使用模拟去做肯定不太可行，于是想对于每个橘子，判断离其最近的腐烂橘子的距离，然后再取这些距离的最大值。后来发现这个复杂度有可能会更高，取决于什么橘子更多。</p>
+<p>题解做法是使用<em>多源广度优先搜索</em>，思想比较简单，其实望文生义就可以知道大概做法了，这里不再赘述了。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>算法</category>
