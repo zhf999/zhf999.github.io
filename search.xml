@@ -6966,9 +6966,9 @@ E[G_{t+1}|S_t=s]&amp;=\sum_{s&#x27;}E[G_{t+1}|S_t=s,S_{t+1}=s&#x27;]p(s&#x27;|s)
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">print</span> key=value<br></code></pre></td></tr></table></figure>
 <h1 id="执行信息"><a class="markdownIt-Anchor" href="#执行信息"></a> 执行信息</h1>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">backtrace <span class="hljs-comment"># print the current address and stack backtrace</span><br>info program <span class="hljs-comment"># print the current status of the program</span><br>info funcions <span class="hljs-comment"># print functions in program</span><br>info stack <span class="hljs-comment">#  print backtrace of stack</span><br>info frame <span class="hljs-comment"># print infomation about the current stack frame</span><br>info registers <span class="hljs-comment"># print resgiters and their contents</span><br>info breakpoints <span class="hljs-comment"># print status of user-settable breakpoints</span><br><span class="hljs-built_in">help</span> <span class="hljs-comment"># get help about gdb</span><br></code></pre></td></tr></table></figure>
-]]></content>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
-        <category>心得</category>
+        <category>笔记</category>
       </categories>
       <tags>
         <tag>gdb</tag>
