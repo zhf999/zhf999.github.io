@@ -16,27 +16,25 @@
   <meta name="author" content="周洪锋">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在学着做lept_json这个项目时，作者在教程中介绍了单元测试的概念，并使用测试驱动开发（Test Driven Development）的方法来循序渐进地完善程序的功能。这篇博客就简单地展开讲一下单元测试和测试驱动开发，并介绍一下在Java中如何使用JUnit库来对代码进行单元测试。  单元测试 单元测试其实挺好理解的，平时在写代码时，有经验的程序员经常会将不同的功能拆分成函数，这样便于对每个">
+    <meta name="description" content="写在前面 本文开始撰写于2024年10月25日，按理来说像这样总结回顾性的内容应该在毕业的那几天完成的，但是一面是当时还沉浸在毕业的喜悦中；另一面是，我本来就有写年度总结的习惯，1月份刚写的2023年度总结，6月份又要写毕业总结，在过几个月又要写2024的年度总结，总感觉写的过于频繁以至于无内容可写了。 恰逢最近给自己定下了一个每天坚持刷LeetCode并做笔记的flag，于是借此机会，把这篇文">
 <meta property="og:type" content="article">
-<meta property="og:title" content="单元测试与测试驱动开发">
-<meta property="og:url" content="http://zhouhf.top/2024/10/19/Unit-Test/index.html">
+<meta property="og:title" content="我的大学">
+<meta property="og:url" content="http://zhouhf.top/2024/10/26/my-college/index.html">
 <meta property="og:site_name" content="周洪锋的博客">
-<meta property="og:description" content="在学着做lept_json这个项目时，作者在教程中介绍了单元测试的概念，并使用测试驱动开发（Test Driven Development）的方法来循序渐进地完善程序的功能。这篇博客就简单地展开讲一下单元测试和测试驱动开发，并介绍一下在Java中如何使用JUnit库来对代码进行单元测试。  单元测试 单元测试其实挺好理解的，平时在写代码时，有经验的程序员经常会将不同的功能拆分成函数，这样便于对每个">
+<meta property="og:description" content="写在前面 本文开始撰写于2024年10月25日，按理来说像这样总结回顾性的内容应该在毕业的那几天完成的，但是一面是当时还沉浸在毕业的喜悦中；另一面是，我本来就有写年度总结的习惯，1月份刚写的2023年度总结，6月份又要写毕业总结，在过几个月又要写2024的年度总结，总感觉写的过于频繁以至于无内容可写了。 恰逢最近给自己定下了一个每天坚持刷LeetCode并做笔记的flag，于是借此机会，把这篇文">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zhouhf.top/2024/10/19/Unit-Test/%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91.drawio.png">
-<meta property="article:published_time" content="2024-10-19T14:52:33.000Z">
-<meta property="article:modified_time" content="2024-10-20T15:32:18.275Z">
+<meta property="article:published_time" content="2024-10-26T15:38:56.000Z">
+<meta property="article:modified_time" content="2024-10-26T15:38:56.137Z">
 <meta property="article:author" content="周洪锋">
-<meta property="article:tag" content="测试">
-<meta property="article:tag" content="开发">
+<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="大学生涯">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://zhouhf.top/2024/10/19/Unit-Test/%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91.drawio.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>单元测试与测试驱动开发 - 周洪锋的博客</title>
+  <title>我的大学 - 周洪锋的博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -217,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="单元测试与测试驱动开发"></span>
+            <span id="subtitle" data-typed-text="我的大学"></span>
           
         </div>
 
@@ -233,8 +231,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-10-19 22:52" pubdate>
-          2024年10月19日 晚上
+        <time datetime="2024-10-26 23:38" pubdate>
+          2024年10月26日 晚上
         </time>
       </span>
     
@@ -245,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          873 字
         
       </span>
     
@@ -256,7 +254,7 @@
         
         
         
-          14 分钟
+          8 分钟
         
       </span>
     
@@ -302,61 +300,21 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">单元测试与测试驱动开发</h1>
+            <h1 style="display: none">我的大学</h1>
             
             <div class="markdown-body">
               
-              <p>在学着做<a target="_blank" rel="noopener" href="https://github.com/miloyip/json-tutorial">lept_json</a>这个项目时，作者在教程中介绍了单元测试的概念，并使用测试驱动开发（Test Driven Development）的方法来循序渐进地完善程序的功能。这篇博客就简单地展开讲一下单元测试和测试驱动开发，并介绍一下在Java中如何使用JUnit库来对代码进行单元测试。</p>
-<h1 id="单元测试"><a class="markdownIt-Anchor" href="#单元测试"></a> 单元测试</h1>
-<p>单元测试其实挺好理解的，平时在写代码时，有经验的程序员经常会将不同的功能拆分成函数，这样便于对每个函数的正确性进行验证。单元测试大概就是利用这样的思想，对每个模块的功能进行分开检查，以便更快地找到错误所再。其实我们平时写一些简单的程序也会用到单元测试，只不过我们往往会在整个程序运行出错后再进行开发，并且往往是通过调用<code>cout</code>、<code>printf</code>等输出函数来检查的。</p>
-<p>“正规”的单元测试，是使用断言或第三方的库来对程序的各个功能进行验证的，稍后会介绍用于单元测试Java的JUnit库。</p>
-<h1 id="测试驱动开发"><a class="markdownIt-Anchor" href="#测试驱动开发"></a> 测试驱动开发</h1>
-<p>前面提到过，单元测试是对程序的子模块进行正确性验证，测试驱动开发就是<strong>将验证这一步提前到开发前</strong>，也就是先编写测试代码确定需要的功能，再进行开发，使得代码能通过测试。</p>
-<p><img src="/2024/10/19/Unit-Test/%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91.drawio.png" srcset="/img/loading.gif" lazyload alt="测试驱动开发流程示意图"></p>
-<p>测试驱动开发的好处有两点，一是可以在开发前就有明确的目标，在开发过程中可以专注功能的实现；二是在功能代码编写完成后，可能需要对代码进行优化、重构，在此过程中有可能会造成功能代码出错，使用测试驱动开发就可以在保持单元测试通过的前提下，随意地进行代码的重构。</p>
-<p>当然，测试驱动开发也有缺点，测试开发可能会拖慢开发的进度。另外，一些场景也不适合使用测试驱动开发，例如数据驱动的算法（深度学习）、有物理边界的开发（硬件开发）、无法快速测试的开发等。</p>
-<h1 id="junit库"><a class="markdownIt-Anchor" href="#junit库"></a> JUnit库</h1>
-<blockquote>
-<p>这里仅介绍JUnit5。</p>
-</blockquote>
-<p>JUnit是Java语言的比较著名的单元测试库，可以在Maven中加入以下依赖来引入：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.junit.jupiter<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>junit-jupiter<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>  	<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.9.1<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
-<h2 id="开发习惯"><a class="markdownIt-Anchor" href="#开发习惯"></a> 开发习惯</h2>
-<p>在进行Java开发（其他语言应该也类似），会在放置源码的同级目录下放一个<code>test</code>包，其中放着专门用于测试的代码。如果使用Maven进行项目构建，Maven也会帮你自动创建相关的包。</p>
-<p>实际上，不用这么按部就班也可以将代码跑起来，但是这样可以让代码看起来更规范，就像main函数执行成功通常返回0一样。</p>
-<h2 id="程序入口"><a class="markdownIt-Anchor" href="#程序入口"></a> 程序入口</h2>
-<p>使用JUnit库进行测试时，不需要将main函数作为程序入口，只需要在你希望进行的单元测试函数前面加上<code>@Test</code>注解即可，便可以在IDEA中直接运行这个单元测试。</p>
-<h2 id="断言"><a class="markdownIt-Anchor" href="#断言"></a> 断言</h2>
-<p>断言类似C中的<code>assert</code>，当条件不满足时就会提前终止测试并提供相关信息。只不过JUnit5提供了多种封装，方便在多种数据之间进行比较，常用到的有：<code>assertEquals</code>、<code>assertNotEquals</code>、<code>assertTrue</code>、<code>assertThrows</code>等，用法也很简单，望文生义就可以知道它们的用途。</p>
-<p>但是令人非常难以接受的一点是，这些函数都是<code>Assertions</code>类的静态成员函数，使用时必须通过<code>Assertions</code>类调用，IDEA似乎并不会自动从类中导入这些静态成员函数，所以如果图省事需要手动<code>import</code>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.jupiter.api.Assertions.*;<br></code></pre></td></tr></table></figure>
-<h2 id="注解"><a class="markdownIt-Anchor" href="#注解"></a> 注解</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">注解类</th>
-<th style="text-align:center">作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">@RepeatedTest(n)</td>
-<td style="text-align:center">重复测试n次</td>
-</tr>
-<tr>
-<td style="text-align:center">@DisplayName(name)</td>
-<td style="text-align:center">设置显示名称，``name`可以包含特殊字符</td>
-</tr>
-<tr>
-<td style="text-align:center">@BeforeEach/@AfterEach</td>
-<td style="text-align:center">在每个测试前/后运行的函数（不能为静态函数）</td>
-</tr>
-<tr>
-<td style="text-align:center">@BeforeAll/@AfterAll</td>
-<td style="text-align:center">所有测试开始前/后运行的函数（必须为静态函数）</td>
-</tr>
-</tbody>
-</table>
+              <h1 id="写在前面"><a class="markdownIt-Anchor" href="#写在前面"></a> 写在前面</h1>
+<p>本文开始撰写于2024年10月25日，按理来说像这样总结回顾性的内容应该在毕业的那几天完成的，但是一面是当时还沉浸在毕业的喜悦中；另一面是，我本来就有写年度总结的习惯，1月份刚写的2023年度总结，6月份又要写毕业总结，在过几个月又要写2024的年度总结，总感觉写的过于频繁以至于无内容可写了。</p>
+<p>恰逢最近给自己定下了一个每天坚持刷LeetCode并做笔记的flag，于是借此机会，把这篇文章一直续写到年底，来一个大乱炖。</p>
+<h1 id="大〇"><a class="markdownIt-Anchor" href="#大〇"></a> 大〇</h1>
+<p>我的高中，宁德第一中学，至今我还对这所学校留有一种特别的情感，可以说是感激吧。福建的教育，在全国应该算是压力比较小的，宁德一中也是如此，学校里有许多的学生会和社团，极大地丰富了我们的课余生活，所以回忆起来，大部分记忆也是愉快的。</p>
+<p>宁德一中的学科竞赛，虽然说背景不是很强，但是有总比没有好，起码每个学科都有几个教练在带，最强的大概就是物理竞赛了吧。我和CS（Computer Science，而非Counter Strike）甚至是西电的情缘也归功于学科竞赛。</p>
+<h2 id="裴老师"><a class="markdownIt-Anchor" href="#裴老师"></a> 裴老师</h2>
+<p>在高一，某节信息课的时候，我们老师在黑板上写了一个“裴”字，然后又写了一个电话号码，告诉我们，对信息学竞赛有兴趣的同学可以联系这位老师。我把这个号码记到了本子上。回家后，我又把它抄到了我初三时候买的、盗版的《C primer plus》的扉页上，又纠结了几天之后，我联系上了这位老师——也就是后来我的信息学竞赛教练，我的恩师——裴老师。</p>
+<p>裴老师为人非常的随和、谦逊，他对技术也有非常高的热情，每次上课的内容，他都会自己先学习并把代码手写一遍，再给我们讲解，以至于在一些细节上，他讲解的非常到位。向他提问时，他也总是像朋友一样，和我们一起交流解决问题的思路，架子小到不让人觉得他是一位老师。高三的时候，他把四楼林老师的创客空间开放给我备赛，偶尔也会带着几杯奶茶来看望我们，当时只觉得有种被“礼贤下士”的感觉，心里充满了感动。</p>
+<h2 id="fj-000865"><a class="markdownIt-Anchor" href="#fj-000865"></a> “fj-000865”</h2>
+<p>后来，我跟着裴老师学习了两年的算法竞赛，在这段竞赛生涯中，我确实学习到了很多东西，不仅是技术上，还有一些所谓的人生道理。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
@@ -374,7 +332,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%BC%80%E5%8F%91/" class="category-chain-item">开发</a>
+  <a href="/categories/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" class="category-chain-item">年度总结</a>
   
   
 
@@ -389,9 +347,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%B5%8B%E8%AF%95/">#测试</a>
+        <a href="/tags/%E9%9A%8F%E7%AC%94/">#随笔</a>
       
-        <a href="/tags/%E5%BC%80%E5%8F%91/">#开发</a>
+        <a href="/tags/%E5%A4%A7%E5%AD%A6%E7%94%9F%E6%B6%AF/">#大学生涯</a>
       
     </div>
   
@@ -403,8 +361,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>单元测试与测试驱动开发</div>
-      <div>http://zhouhf.top/2024/10/19/Unit-Test/</div>
+      <div>我的大学</div>
+      <div>http://zhouhf.top/2024/10/26/my-college/</div>
     </div>
     <div class="license-meta">
       
@@ -416,7 +374,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年10月19日</div>
+          <div>2024年10月26日</div>
         </div>
       
       
@@ -446,18 +404,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/10/26/my-college/" title="我的大学">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">我的大学</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/10/15/leetcode-note/" title="【长期更新】LeetCode刷题笔记">
-                        <span class="hidden-mobile">【长期更新】LeetCode刷题笔记</span>
+                      <a href="/2024/10/19/Unit-Test/" title="单元测试与测试驱动开发">
+                        <span class="hidden-mobile">单元测试与测试驱动开发</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -478,7 +430,7 @@
         var options = Object.assign(
           {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'a05e25bb5eeba78049af494e56540603'
+            id: '9362b61e936f0a40cf18154a79f6dca8'
           }
         )
         var gitalk = new Gitalk(options);
