@@ -30,8 +30,9 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/flaten.jpg">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/pathsum3-1-tree.jpg">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/oranges.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/word2.jpg">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-10-27T07:12:25.824Z">
+<meta property="article:modified_time" content="2024-10-28T11:12:09.657Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -251,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5k 字
+          5.9k 字
         
       </span>
     
@@ -262,7 +263,7 @@
         
         
         
-          42 分钟
+          49 分钟
         
       </span>
     
@@ -446,6 +447,27 @@
 <p>看了题解，豁然开朗，使用搜索的策略是没有问题的，但搜索的对象上不太对。这里引用一下<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/generate-parentheses/solutions/35947/hui-su-suan-fa-by-liweiwei1419">这篇题解</a>的图：</p>
 <p>![括号匹配的搜索树](./leetcode-note/7ec04f84e936e95782aba26c4663c5fe7aaf94a2a80986a97d81574467b0c513-LeetCode 第 22 题：“括号生出”题解配图.png)</p>
 <p>正解是直接去匹配字符串里下一个的左右括号的可能性，而我去枚举括号的嵌套关系了。</p>
+<h2 id="79单词搜索"><a class="markdownIt-Anchor" href="#79单词搜索"></a> 79.单词搜索</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/word-search/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-13"><a class="markdownIt-Anchor" href="#题面-13"></a> 题面</h3>
+<p>在一个含有大小写字符的矩阵中搜索指定的字符串，字符之间只要上下左右挨在一起就算是连续的。</p>
+<p><img src="/2024/10/15/leetcode-note/word2.jpg" srcset="/img/loading.gif" lazyload alt="单词搜索"></p>
+<h3 id="思路-13"><a class="markdownIt-Anchor" href="#思路-13"></a> 思路</h3>
+<p>非常简单的搜索题，记录这题主要是想记录一下剪枝的思路。首先，“把尝试的字符全部置空”肯定是不行的，很容易就可以找出反例。一个表现非常优秀的剪枝思路是，记录字符的出现次数，当单词中某个字符的出现次数不足其在单词中出现的次数时，就直接返回<code>false</code>。另外，当结尾字符的出现次数较少时，可以考虑倒过来搜索，可能会有更高的效率。</p>
+<h2 id="131分割回文字符串"><a class="markdownIt-Anchor" href="#131分割回文字符串"></a> 131.分割回文字符串</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/palindrome-partitioning/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-14"><a class="markdownIt-Anchor" href="#题面-14"></a> 题面</h3>
+<p>给你一个字符串 <code>s</code>，请你将 <code>s</code> 分割成一些子串，使每个子串都是回文串 。返回 <code>s</code> 所有可能的分割方案。</p>
+<h3 id="思路-14"><a class="markdownIt-Anchor" href="#思路-14"></a> 思路</h3>
+<p>暴力枚举分割点，当然，分割的前提是子串为回文串。注意到枚举的过程中，可能会重复判断子串是否为回文串，那么可以用<strong>记忆化搜索</strong>，或者使用<strong>动态规划</strong>来预处理，动态规划的转移方程为：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo><mo stretchy="false">[</mo><mi>j</mi><mo stretchy="false">]</mo><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.3599999999999999em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi><mo separator="true">,</mo><mtext> </mtext></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>i</mi><mo>≥</mo><mi>j</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>f</mi><mo stretchy="false">[</mo><mi>i</mi><mo>+</mo><mn>1</mn><mo stretchy="false">]</mo><mo stretchy="false">[</mo><mi>j</mi><mo>−</mo><mn>1</mn><mo stretchy="false">]</mo><mi mathvariant="normal">&amp;</mi><mi mathvariant="normal">&amp;</mi><mi>s</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo><mo>=</mo><mo>=</mo><mi>s</mi><mo stretchy="false">[</mo><mi>j</mi><mo stretchy="false">]</mo><mo separator="true">,</mo><mtext> </mtext></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">f[i][j] = 
+\begin{cases}
+true, \ &amp;i\ge j \\
+f[i+1][j-1]\&amp;\&amp;s[i]==s[j], \ &amp;i&lt;j
+\end{cases}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mclose">]</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span><span class="mpunct">,</span><span class="mspace"> </span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mclose">]</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mclose">]</span><span class="mord">&amp;</span><span class="mord">&amp;</span><span class="mord mathnormal">s</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathnormal">s</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace"> </span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>发现评论区一个使用python+动态规划做的，感觉思路也很巧妙，但是可惜C++并不适合做这种需要记录解集的，如果是记录解的个数，可以尝试一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span>:</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">partition</span>(<span class="hljs-params">self, s: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-type">List</span>[<span class="hljs-type">List</span>[<span class="hljs-built_in">str</span>]]:</span><br>        dp = [[[]]]<br>        <span class="hljs-comment"># dp[i]表示s[:i]所有可能的分割方案</span><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-built_in">len</span>(s) + <span class="hljs-number">1</span>):<br>            dp.append([])<br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(i):<br>                tmp = s[j:i]<br>                <span class="hljs-keyword">if</span> tmp == tmp[::-<span class="hljs-number">1</span>]:<br>                    dp[-<span class="hljs-number">1</span>].extend(l + [tmp] <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> dp[j])<br>        <span class="hljs-keyword">return</span> dp[-<span class="hljs-number">1</span>]<br></code></pre></td></tr></table></figure>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
