@@ -1,0 +1,864 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="《服务计算基础》这门课质量是很高，但是课程作业也可以说是非常折磨人。作业里要求编程的内容并不多，但是每个实验都需要配置环境，非常的麻烦。所以把这个作业的实验报告稍加修改，作为一篇博客发表，希望可以帮助到后来的人。  服务计算基础 Homework1  作业1: 服务开发和调用 12345678910111213&gt;Class person&gt;&amp;#123;String name;int ag">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《服务计算基础》作业1">
+<meta property="og:url" content="http://zhouhf.top/2024/10/29/service-computing-homework1/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="《服务计算基础》这门课质量是很高，但是课程作业也可以说是非常折磨人。作业里要求编程的内容并不多，但是每个实验都需要配置环境，非常的麻烦。所以把这个作业的实验报告稍加修改，作为一篇博客发表，希望可以帮助到后来的人。  服务计算基础 Homework1  作业1: 服务开发和调用 12345678910111213&gt;Class person&gt;&amp;#123;String name;int ag">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241026160613091.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241026173939286.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241026174101831.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241028193611892.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241029160535684.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241029160816305.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241029161141402.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241029161934475.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241029162300240.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241029163645769.png">
+<meta property="og:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241029164002442.png">
+<meta property="article:published_time" content="2024-10-29T08:41:02.000Z">
+<meta property="article:modified_time" content="2024-10-29T08:49:52.131Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="编程语言">
+<meta property="article:tag" content="服务端">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhouhf.top/2024/10/29/service-computing-homework1/image-20241026160613091.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>《服务计算基础》作业1 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="《服务计算基础》作业1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-29 16:41" pubdate>
+          2024年10月29日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          113 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">《服务计算基础》作业1</h1>
+            
+            <div class="markdown-body">
+              
+              <p>《服务计算基础》这门课质量是很高，但是课程作业也可以说是非常折磨人。作业里要求编程的内容并不多，但是每个实验都需要配置环境，非常的麻烦。所以把这个作业的实验报告稍加修改，作为一篇博客发表，希望可以帮助到后来的人。</p>
+<h1 id="服务计算基础-homework1"><a class="markdownIt-Anchor" href="#服务计算基础-homework1"></a> 服务计算基础 Homework1</h1>
+<blockquote>
+<p>作业1: 服务开发和调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java">&gt;Class person<br>&gt;&#123;<br>String name;<br><span class="hljs-keyword">int</span> age;<br><span class="hljs-keyword">boolean</span> gender;<br>set/<span class="hljs-function">get <span class="hljs-title">Name</span><span class="hljs-params">()</span></span>;<br>set/<span class="hljs-function">get <span class="hljs-title">Age</span><span class="hljs-params">()</span></span>;<br>set/<span class="hljs-function">get <span class="hljs-title">Gender</span><span class="hljs-params">()</span></span>;<br><span class="hljs-function">String <span class="hljs-title">sayHello</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	Return “Hello world!”+name;<br>&#125;<br>&gt;&#125;<br></code></pre></td></tr></table></figure>
+<p>1.1  基于Apache Dubbo 将上述类的方法对外提供RPC服务并调用；</p>
+<p>1.2  基于Java Spring将上述类的方法对外提供RESTful服务并调用；</p>
+<p>1.3  基于Apache Axis2将上述类的方法对外提供Web服务，生成WSDL文件，以及调用服务。</p>
+</blockquote>
+<h2 id="solution-for-homework-11"><a class="markdownIt-Anchor" href="#solution-for-homework-11"></a> Solution for  Homework 1.1</h2>
+<h3 id="环境配置"><a class="markdownIt-Anchor" href="#环境配置"></a> 环境配置</h3>
+<p>在Windows操作系统下进行开发，集成开发环境为IDEA。在IDEA下创建一个Maven项目，并编写<code>pom.xml</code>，在其中添加如下的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span><br>       <span class="hljs-tag">&lt;<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="hljs-tag">&lt;/<span class="hljs-name">project.build.sourceEncoding</span>&gt;</span><br>       <span class="hljs-tag">&lt;<span class="hljs-name">dubbo.version</span>&gt;</span>3.3.0-beta.1<span class="hljs-tag">&lt;/<span class="hljs-name">dubbo.version</span>&gt;</span><br>       <span class="hljs-tag">&lt;<span class="hljs-name">log4j2.version</span>&gt;</span>2.20.0<span class="hljs-tag">&lt;/<span class="hljs-name">log4j2.version</span>&gt;</span><br>   <span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span><br>   <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.dubbo<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>dubbo<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.3.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.logging.log4j<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>log4j-slf4j-impl<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;log4j2.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>       &lt;/dependency<br>       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.logging.log4j<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>log4j-core<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;log4j2.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>       <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.logging.log4j<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>log4j-api<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>           <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>$&#123;log4j2.version&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>       <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>   <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>为了简易起见，本次实验仅使用Dubbo的纯原生API，不使用SpringBoot，所以只需要引入一个轻量的<code>Dubbo</code>依赖，以及用于打印日志的<code>Log4j</code>即可。</p>
+<h3 id="编写接口"><a class="markdownIt-Anchor" href="#编写接口"></a> 编写接口</h3>
+<p>使用Java语言编写题设要求的接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">PersonService</span> </span>&#123;<br>    <span class="hljs-function">String <span class="hljs-title">sayHello</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> gender)</span></span>;<br>    <span class="hljs-function">String <span class="hljs-title">getName</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">boolean</span> <span class="hljs-title">getGender</span><span class="hljs-params">()</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>并编写一个实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.hello.entity;<br><br><span class="hljs-keyword">import</span> org.hello.interfaces.PersonService;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">PersonService</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> gender;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> gender)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.gender = gender;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.name;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.age;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gender;<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sayHello</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Hello world! &quot;</span> + <span class="hljs-keyword">this</span>.name;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="服务端"><a class="markdownIt-Anchor" href="#服务端"></a> 服务端</h3>
+<p>编写服务端，本次实验设计服务端在端口50052上运行，客户端可以访问50052端口来获取<code>PersonService</code>服务：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Server</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        DubboBootstrap.getInstance()<br>                .application(ApplicationBuilder.newBuilder().name(<span class="hljs-string">&quot;dubbo-samples-api&quot;</span>).logger(<span class="hljs-string">&quot;slf4j&quot;</span>).build())<br>                .protocol(<span class="hljs-keyword">new</span> ProtocolConfig(CommonConstants.TRIPLE, <span class="hljs-number">50052</span>))<br>                .service(ServiceBuilder.newBuilder().interfaceClass(PersonService.class).ref(<span class="hljs-keyword">new</span> Person()).build())<br>                .start()<br>                .await();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="客户端"><a class="markdownIt-Anchor" href="#客户端"></a> 客户端</h3>
+<p>令客户端连接本地的50052端口，然后从键盘读取输入，调用服务端提供的一系列接口函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Client</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        PersonService personService = (PersonService)<br>                ReferenceBuilder.newBuilder()<br>                        .interfaceClass(PersonService.class)<br>                        .url(<span class="hljs-string">&quot;tri://localhost:50052&quot;</span>)<br>                        .build()<br>                        .get();<br><br>        Scanner scanner = <span class="hljs-keyword">new</span> Scanner(System.in);<br>        System.out.println(<span class="hljs-string">&quot;What&#x27;s your name?&quot;</span>);<br>        String name = scanner.next();<br>        System.out.println(<span class="hljs-string">&quot;What&#x27;s your age?&quot;</span>);<br>        <span class="hljs-keyword">int</span> age = scanner.nextInt();<br>        System.out.println(<span class="hljs-string">&quot;Are you a boy?&quot;</span>);<br>        String answer = scanner.next();<br>        <span class="hljs-keyword">boolean</span> isBoy = answer.equals(<span class="hljs-string">&quot;Yes&quot;</span>)||answer.equals(<span class="hljs-string">&quot;yes&quot;</span>);<br>        personService.setName(name);<br>        personService.setAge(age);<br>        personService.setGender(isBoy);<br><br>        System.out.printf(<span class="hljs-string">&quot;Hello %s, you are a %s, your age is %d.\n&quot;</span>,<br>                personService.getName(),personService.getGender() ? <span class="hljs-string">&quot;Boy&quot;</span> : <span class="hljs-string">&quot;Girl&quot;</span>,personService.getAge());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="实验结果"><a class="markdownIt-Anchor" href="#实验结果"></a> 实验结果</h3>
+<p>设计了一个类似问答的程序，客户端通过调用服务端提供的<code>setter</code>来设置各个字段的属性，并再次调用服务端的<code>getter</code>来获取这些属性，输出在屏幕上。</p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241026160613091.png" srcset="/img/loading.gif" lazyload alt="在IDEA下运行的结果"></p>
+<h2 id="solution-for-homework-12"><a class="markdownIt-Anchor" href="#solution-for-homework-12"></a> Solution for Homework 1.2</h2>
+<h3 id="环境配置-2"><a class="markdownIt-Anchor" href="#环境配置-2"></a> 环境配置</h3>
+<p>在IDEA中新建一个<code>Spring Boot</code>工程，然后引入<code>Spring web</code>依赖。</p>
+<h3 id="编写接口-2"><a class="markdownIt-Anchor" href="#编写接口-2"></a> 编写接口</h3>
+<p>接口编写与上文相同，这里略去，但是需要在实现中为类和方法添加注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PersonController</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">PersonService</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> gender;<br><br>    <span class="hljs-meta">@PostMapping(&quot;/name&quot;)</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String name)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br>    <span class="hljs-meta">@PostMapping(&quot;/age&quot;)</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> <span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>    &#125;<br>    <span class="hljs-meta">@PostMapping(&quot;/gender&quot;)</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> gender)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.gender = gender;<br>    &#125;<br>    <span class="hljs-meta">@GetMapping(&quot;/name&quot;)</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.name;<br>    &#125;<br>    <span class="hljs-meta">@GetMapping(&quot;/age&quot;)</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.age;<br>    &#125;<br>    <span class="hljs-meta">@GetMapping(&quot;/gender&quot;)</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gender;<br>    &#125;<br><br>    <span class="hljs-meta">@PostMapping(&quot;/set&quot;)</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">set</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam</span> String name, <span class="hljs-meta">@RequestParam</span> <span class="hljs-keyword">int</span> age, <span class="hljs-meta">@RequestParam</span> <span class="hljs-keyword">boolean</span> gender)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.name = name;<br>        <span class="hljs-keyword">this</span>.age = age;<br>        <span class="hljs-keyword">this</span>.gender = gender;<br>    &#125;<br><br>    <span class="hljs-meta">@GetMapping(&quot;/sayhello&quot;)</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sayHello</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> String.format(<span class="hljs-string">&quot;Hello %s! Your age is %d, your gender is %s&quot;</span>,<br>                name, age, gender? <span class="hljs-string">&quot;boy&quot;</span>:<span class="hljs-string">&quot;girl&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>只需要对相应的URI发送请求就可以调用相应的函数。对于<code>setter</code>s，要求客户端使用POST方法来提交参数，对于<code>getter</code>s，要求客户端使用GET方法来获取。为了方便实验结果的测试，将这三个函数整合成一个<code>set</code>方法，同时设置三个字段的值，并通过<code>sayhello</code>方法同时返回给客户端。</p>
+<h3 id="实验结果-2"><a class="markdownIt-Anchor" href="#实验结果-2"></a> 实验结果</h3>
+<p>使用<code>postman</code>来发送POST和GET请求。</p>
+<p>首先通过带参数的POST方法来设置字段（调用<code>Person</code>类的<code>set</code>方法）：</p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241026173939286.png" srcset="/img/loading.gif" lazyload alt="POST方法设置字段"></p>
+<p>可以看到，返回的状态码为200，成功地设置了相应的字段。</p>
+<p>再调用GET方法来获得一个招呼（调用<code>Person</code>类的<code>sayhello</code>方法）：</p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241026174101831.png" srcset="/img/loading.gif" lazyload alt="通过GET方法获取字段"></p>
+<p>可以看到，返回的状态码为200，并且返回的响应体中也包含了我们预期的内容。</p>
+<p>也可以使用Java来发送GET请求和POST请求，实现在本地代码中调用远程服务：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.zhouf.restfuldemo.client;<br><br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.OutputStream;<br><span class="hljs-keyword">import</span> java.net.HttpURLConnection;<br><span class="hljs-keyword">import</span> java.net.URL;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Client</span> </span>&#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String BASE_URL = <span class="hljs-string">&quot;http://localhost:8080&quot;</span>; <span class="hljs-comment">// 根据你的服务地址修改</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            setName(<span class="hljs-string">&quot;John&quot;</span>);<br>            setAge(<span class="hljs-number">30</span>);<br>            setGender(<span class="hljs-keyword">true</span>);<br>            System.out.println(getName());<br>            System.out.println(getAge());<br>            System.out.println(getGender());<br>            System.out.println(sayHello());<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        sendPostRequest(<span class="hljs-string">&quot;/name&quot;</span>, <span class="hljs-string">&quot;name=&quot;</span> + name);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        sendPostRequest(<span class="hljs-string">&quot;/age&quot;</span>, <span class="hljs-string">&quot;age=&quot;</span> + age);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> gender)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        sendPostRequest(<span class="hljs-string">&quot;/gender&quot;</span>, <span class="hljs-string">&quot;gender=&quot;</span> + gender);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        <span class="hljs-keyword">return</span> sendGetRequest(<span class="hljs-string">&quot;/name&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getAge</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        <span class="hljs-keyword">return</span> sendGetRequest(<span class="hljs-string">&quot;/age&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">getGender</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        <span class="hljs-keyword">return</span> sendGetRequest(<span class="hljs-string">&quot;/gender&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">sayHello</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        <span class="hljs-keyword">return</span> sendGetRequest(<span class="hljs-string">&quot;/sayhello&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sendPostRequest</span><span class="hljs-params">(String endpoint, String params)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        URL url = <span class="hljs-keyword">new</span> URL(BASE_URL + endpoint);<br>        HttpURLConnection conn = (HttpURLConnection) url.openConnection();<br>        conn.setRequestMethod(<span class="hljs-string">&quot;POST&quot;</span>);<br>        conn.setDoOutput(<span class="hljs-keyword">true</span>);<br>        conn.setRequestProperty(<span class="hljs-string">&quot;Content-Type&quot;</span>, <span class="hljs-string">&quot;application/x-www-form-urlencoded&quot;</span>);<br><br>        <span class="hljs-keyword">try</span> (OutputStream os = conn.getOutputStream()) &#123;<br>            os.write(params.getBytes());<br>            os.flush();<br>        &#125;<br><br>        conn.getResponseCode(); <br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String <span class="hljs-title">sendGetRequest</span><span class="hljs-params">(String endpoint)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>        URL url = <span class="hljs-keyword">new</span> URL(BASE_URL + endpoint);<br>        HttpURLConnection conn = (HttpURLConnection) url.openConnection();<br>        conn.setRequestMethod(<span class="hljs-string">&quot;GET&quot;</span>);<br><br>        <span class="hljs-keyword">try</span> (BufferedReader in = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(conn.getInputStream()))) &#123;<br>            String inputLine;<br>            StringBuilder response = <span class="hljs-keyword">new</span> StringBuilder();<br>            <span class="hljs-keyword">while</span> ((inputLine = in.readLine()) != <span class="hljs-keyword">null</span>) &#123;<br>                response.append(inputLine);<br>            &#125;<br>            <span class="hljs-keyword">return</span> response.toString();<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>输出结果如下：</p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241028193611892.png" srcset="/img/loading.gif" lazyload alt="使用Java客户端的实验结果"></p>
+<h2 id="solution-for-homework-13"><a class="markdownIt-Anchor" href="#solution-for-homework-13"></a> Solution for Homework 1.3</h2>
+<h3 id="环境配置-3"><a class="markdownIt-Anchor" href="#环境配置-3"></a> 环境配置</h3>
+<h4 id="安装tomcat-85"><a class="markdownIt-Anchor" href="#安装tomcat-85"></a> 安装Tomcat 8.5</h4>
+<p>从<a target="_blank" rel="noopener" href="https://tomcat.apache.org/%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E5%8C%85%E5%90%8E%EF%BC%8C%E5%AE%89%E8%A3%85%E5%88%B0%E6%9C%AC%E5%9C%B0%EF%BC%8C%E5%B9%B6%E9%85%8D%E7%BD%AE%60%CATALINA_HOME%25%60%E7%AD%89%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%EF%BC%8C%E8%BF%90%E8%A1%8C%60Startup.bat%60%E8%84%9A%E6%9C%AC%E3%80%82%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AEhttp://localhost:8080/%EF%BC%8C%E5%87%BA%E7%8E%B0%E5%A6%82%E4%B8%8B%E9%A1%B5%E9%9D%A2%EF%BC%8C%E8%AF%B4%E6%98%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%90%E8%A1%8C%E6%88%90%E5%8A%9F%E3%80%82">https://tomcat.apache.org/下载安装包后，安装到本地，并配置`�TALINA_HOME%`等环境变量，运行`Startup.bat`脚本。在浏览器访问http://localhost:8080/，出现如下页面，说明服务端运行成功。</a></p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241029160535684.png" srcset="/img/loading.gif" lazyload alt="Tomcat页面"></p>
+<h4 id="安装axis2"><a class="markdownIt-Anchor" href="#安装axis2"></a> 安装Axis2</h4>
+<p>从官网<a target="_blank" rel="noopener" href="https://axis.apache.org/axis2/java/core/download.html%E4%B8%8B%E8%BD%BD%60axis2.war%60%EF%BC%8C%E5%B0%86%E8%AF%A5%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6%E5%88%B0Tomcat%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84Webapps%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%AD%EF%BC%8C%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E3%80%82%E8%BF%90%E8%A1%8C%E5%90%8E%E5%8F%91%E7%8E%B0Webapps%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%A4%9A%E5%87%BAaxis2%E7%9B%AE%E5%BD%95%EF%BC%8C%E5%B9%B6%E4%B8%94%E8%AE%BF%E9%97%AEhttp://localhost:8080/axis2/%EF%BC%8C%E6%98%BE%E7%A4%BA%E4%BB%A5%E4%B8%8B%E9%A1%B5%E9%9D%A2%EF%BC%8C%E8%AF%B4%E6%98%8Eaxis2%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F%E3%80%82">https://axis.apache.org/axis2/java/core/download.html下载`axis2.war`，将该文件复制到Tomcat安装目录下的Webapps文件夹中，重新运行客户端。运行后发现Webapps目录下多出axis2目录，并且访问http://localhost:8080/axis2/，显示以下页面，说明axis2安装成功。</a></p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241029160816305.png" srcset="/img/loading.gif" lazyload alt="Axis2页面"></p>
+<p>还需要下载Axis2提供的<code>wsdl2java</code>脚本，该脚本在<a target="_blank" rel="noopener" href="https://axis.apache.org/axis2/java/core/download.html%E6%8F%90%E4%BE%9B%E7%9A%84%60%60axis2-1.8.2-bin.zip%60%E4%B8%AD%EF%BC%8C%E8%A7%A3%E5%8E%8B%E8%AF%A5%E5%8E%8B%E7%BC%A9%E5%8C%85%EF%BC%8C%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%60%25AXIS_HOME%25%60%EF%BC%8C%E5%9C%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BE%93%E5%85%A5%60wsdl2java%60%EF%BC%8C%E5%87%BA%E7%8E%B0%E4%BB%A5%E4%B8%8B%E6%8F%90%E7%A4%BA%EF%BC%8C%E8%AF%B4%E6%98%8E%E8%84%9A%E6%9C%AC%E9%85%8D%E7%BD%AE%E6%88%90%E5%8A%9F%E3%80%82">https://axis.apache.org/axis2/java/core/download.html提供的``axis2-1.8.2-bin.zip`中，解压该压缩包，配置环境变量`%AXIS_HOME%`，在命令行输入`wsdl2java`，出现以下提示，说明脚本配置成功。</a></p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241029161141402.png" srcset="/img/loading.gif" lazyload alt="WSDL2JAVA"></p>
+<h3 id="编写代码-生成服务"><a class="markdownIt-Anchor" href="#编写代码-生成服务"></a> 编写代码 生成服务</h3>
+<p>按照1.1 1.2提到的方法编写Person类代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.zhouhf;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span></span>&#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> gender;<br>   <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.name = name;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.age = age;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> gender)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.gender = gender;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.name;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.age;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.gender;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sayHello</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> String.format(<span class="hljs-string">&quot;Hello %s! Your age is %d, your gender is %s&quot;</span>,<br>                name, age, gender? <span class="hljs-string">&quot;boy&quot;</span>:<span class="hljs-string">&quot;girl&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>输入以下命令编译代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">javac Person.java<br></code></pre></td></tr></table></figure>
+<p>生成<code>Person.class</code>文件，我们手动将其放到<code>org/zhouhf</code>下，以匹配包名。</p>
+<p>为了顺利发布<code>Axis2</code>服务，还需要在根目录下新建一个<code>META-INFO</code>文件夹，然后在文件夹中新建一个<code>services.xml</code>，其内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="hljs-comment">&lt;!--这里scope的作用是保持Person类的生命周期保持在整个服务端执行期间--&gt;</span> <br><span class="hljs-tag">&lt;<span class="hljs-name">service</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;PersonService&quot;</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;application&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">description</span>&gt;</span>一个简单的WebService<span class="hljs-tag">&lt;/<span class="hljs-name">description</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 必须和上面那个java代码的包名一致--&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">parameter</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;ServiceClass&quot;</span>&gt;</span>org.zhouhf.Person<span class="hljs-tag">&lt;/<span class="hljs-name">parameter</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">operation</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;getAge&quot;</span> &gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">messageReceiver</span>  <span class="hljs-attr">mep</span>=<span class="hljs-string">&quot;http://www.w3.org/2004/08/wsdl/in-out&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.apache.axis2.rpc.receivers.RPCMessageReceiver&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">operation</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">operation</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;setAge&quot;</span> &gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">messageReceiver</span>  <span class="hljs-attr">mep</span>=<span class="hljs-string">&quot;http://www.w3.org/2004/08/wsdl/in-out&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.apache.axis2.rpc.receivers.RPCMessageReceiver&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">operation</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">operation</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;setName&quot;</span> &gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">messageReceiver</span>  <span class="hljs-attr">mep</span>=<span class="hljs-string">&quot;http://www.w3.org/2004/08/wsdl/in-out&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.apache.axis2.rpc.receivers.RPCMessageReceiver&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">operation</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">operation</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;getName&quot;</span> &gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">messageReceiver</span>  <span class="hljs-attr">mep</span>=<span class="hljs-string">&quot;http://www.w3.org/2004/08/wsdl/in-out&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.apache.axis2.rpc.receivers.RPCMessageReceiver&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">operation</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">operation</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;setGender&quot;</span> &gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">messageReceiver</span>  <span class="hljs-attr">mep</span>=<span class="hljs-string">&quot;http://www.w3.org/2004/08/wsdl/in-out&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.apache.axis2.rpc.receivers.RPCMessageReceiver&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">operation</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">operation</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;getGender&quot;</span> &gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">messageReceiver</span>  <span class="hljs-attr">mep</span>=<span class="hljs-string">&quot;http://www.w3.org/2004/08/wsdl/in-out&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.apache.axis2.rpc.receivers.RPCMessageReceiver&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">operation</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">operation</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;sayHello&quot;</span> &gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">messageReceiver</span>  <span class="hljs-attr">mep</span>=<span class="hljs-string">&quot;http://www.w3.org/2004/08/wsdl/in-out&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;org.apache.axis2.rpc.receivers.RPCMessageReceiver&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">operation</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">service</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>新建完这几个文件后，目录结构如下：</p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241029161934475.png" srcset="/img/loading.gif" lazyload alt="目录结构"></p>
+<p>随后将这个项目打包成一个<code>aar</code>文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">jar -cvf Person.aar . .<br></code></pre></td></tr></table></figure>
+<p>就会在当前目录生成一个<code>Person.aar</code>文件。</p>
+<h3 id="部署服务"><a class="markdownIt-Anchor" href="#部署服务"></a> 部署服务</h3>
+<p>将上一节生成的<code>Person.aar</code>文件复制到<code>axis2/WEB-INF/services</code>目录下，重新运行Tomcat服务端，并访问<a target="_blank" rel="noopener" href="http://localhost:8080/axis2/services/listServices%EF%BC%8C%E7%9C%8B%E5%88%B0%E9%A1%B5%E9%9D%A2%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E6%88%91%E4%BB%AC%E9%85%8D%E7%BD%AE%E7%9A%84%60PersonService%60%E6%9C%8D%E5%8A%A1%E3%80%82">http://localhost:8080/axis2/services/listServices，看到页面中出现了我们配置的`PersonService`服务。</a></p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241029162300240.png" srcset="/img/loading.gif" lazyload alt="配置完后的Axis"></p>
+<p>点击<code>PersonService</code>就可以看到生成的<code>wsdl</code>文件了。我们可以在地址栏输入<code>http://localhost:8080/axis2/services/PersonService/getAge</code>来测试，输入后浏览器返回的xml文档如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">ns:getAgeResponse</span> <span class="hljs-attr">xmlns:ns</span>=<span class="hljs-string">&quot;http://zhouhf.org&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">ns:return</span>&gt;</span>0<span class="hljs-tag">&lt;/<span class="hljs-name">ns:return</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">ns:getAgeResponse</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>尝试调用<code>setAge</code>函数：<code>http://localhost:8080/axis2/services/PersonService/setAge?args0=25</code>，然后再次调用<code>getAge</code>，返回值如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">ns:getAgeResponse</span> <span class="hljs-attr">xmlns:ns</span>=<span class="hljs-string">&quot;http://zhouhf.org&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">ns:return</span>&gt;</span>25<span class="hljs-tag">&lt;/<span class="hljs-name">ns:return</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">ns:getAgeResponse</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>要想达到该效果，必须要在<code>services.xml</code>中将服务的生命周期声明为<code>application</code>。</p>
+<h3 id="客户端-2"><a class="markdownIt-Anchor" href="#客户端-2"></a> 客户端</h3>
+<p>要编写客户端，必须先将``wsdl<code>文件转化成java代码，这里就要使用前面配置的</code>wsdl2java`脚本，新建一个java项目，在项目根目录输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wsdl2java -uri http://localhost:8080/axis2/services/PersonService?wsdl -p org.zhouhf -o .<br></code></pre></td></tr></table></figure>
+<p><code>uri</code>用于指定<code>wsdl</code>的位置，<code>-p</code>用于指定生成的java文件的包名，<code>-o</code>用于指定输出目录。</p>
+<p>生成java代码后，在IDEA中打开，发现目录不符合Maven的要求，需要改变一下目录结构：</p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241029163645769.png" srcset="/img/loading.gif" lazyload alt="IDEA项目结构"></p>
+<p>并且发现代码中缺少依赖，可以从官网下载，也可以使用Maven来管理依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>     <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.axis2<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>org.apache.axis2.osgi<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>         <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.8.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>     <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br> <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>客户端的环境配置完成后就可以开始编写测试程序了。</p>
+<p>测试程序如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> org.zhouhf;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-keyword">try</span> &#123;<br>            String serviceURL = <span class="hljs-string">&quot;http://localhost:8080/axis2/services/PersonService&quot;</span>;<br>            PersonServiceStub stub = <span class="hljs-keyword">new</span> PersonServiceStub(serviceURL);<br>            <br>            PersonServiceStub.SetAge setAgeRequest = <span class="hljs-keyword">new</span> PersonServiceStub.SetAge();<br>            setAgeRequest.setArgs0(<span class="hljs-number">25</span>);<br>            stub.setAge(setAgeRequest);<br><br>            PersonServiceStub.SetName setNameRequest = <span class="hljs-keyword">new</span> PersonServiceStub.SetName();<br>            setNameRequest.setArgs0(<span class="hljs-string">&quot;Zhou hongfeng&quot;</span>);<br>            stub.setName(setNameRequest);<br><br>            PersonServiceStub.SetGender setGenderRequest = <span class="hljs-keyword">new</span> PersonServiceStub.SetGender();<br>            setGenderRequest.setArgs0(<span class="hljs-keyword">true</span>);<br>            stub.setGender(setGenderRequest);<br><br>            PersonServiceStub.SayHello sayHelloRequest = <span class="hljs-keyword">new</span> PersonServiceStub.SayHello();<br>            PersonServiceStub.SayHelloResponse sayHelloResponse = stub.sayHello(sayHelloRequest);<br><br>            System.out.println(sayHelloResponse.get_return());<br>        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="实验结果-3"><a class="markdownIt-Anchor" href="#实验结果-3"></a> 实验结果</h3>
+<p>构建并运行客户端，输出结果如下：</p>
+<p><img src="/2024/10/29/service-computing-homework1/image-20241029164002442.png" srcset="/img/loading.gif" lazyload alt="实验结果"></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF/" class="category-chain-item">后端</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">#编程语言</a>
+      
+        <a href="/tags/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">#服务端</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>《服务计算基础》作业1</div>
+      <div>http://zhouhf.top/2024/10/29/service-computing-homework1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月29日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/26/my-college/" title="我的大学">
+                        <span class="hidden-mobile">我的大学</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '876d206bcaa07c3977a95e311184ab55'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
