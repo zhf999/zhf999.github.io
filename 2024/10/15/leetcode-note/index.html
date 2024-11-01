@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/oranges.png">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/word2.jpg">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-10-31T06:06:02.832Z">
+<meta property="article:modified_time" content="2024-11-01T02:43:59.646Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -252,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          8k 字
+          9.1k 字
         
       </span>
     
@@ -263,7 +263,7 @@
         
         
         
-          67 分钟
+          76 分钟
         
       </span>
     
@@ -499,6 +499,37 @@ f[i+1][j-1]\&amp;\&amp;s[i]==s[j], \ &amp;i&lt;j
 <p>朴素地遍历是不可行的，时间复杂度会到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。观察发现左边数组的元素永远比右边的数组大，所以可以考虑用二分法搜索出中间这个分界线。</p>
 <p>这里仅给出分界线的搜索算法，最需要注意的就是，题目保证了数组一定是旋转过的，所以搜索范围应该是的<code>[0,n-1]</code>，并且11、14行的搜索条件应该覆盖所有情况，否则将进入死循环：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">int</span> l=<span class="hljs-number">0</span>, r = n<span class="hljs-number">-2</span>;<br><span class="hljs-keyword">int</span> br=<span class="hljs-number">0</span>;<br><span class="hljs-keyword">while</span>(l&lt;=r)<br>&#123;<br>	<span class="hljs-keyword">int</span> mid = (l+r)&gt;&gt;<span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">if</span>(nums[mid+<span class="hljs-number">1</span>]&lt;nums[mid])<br>	&#123;<br>		br = mid;<br>         <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(nums[mid]&gt;=nums[l])<br>    &#123;<br>    	l = mid+<span class="hljs-number">1</span>;<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(nums[mid]&lt;nums[r])<br>    &#123;<br>    	r = mid<span class="hljs-number">-1</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="4寻找两个正序数组的中位数"><a class="markdownIt-Anchor" href="#4寻找两个正序数组的中位数"></a> 4.寻找两个正序数组的中位数</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/median-of-two-sorted-arrays/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-18"><a class="markdownIt-Anchor" href="#题面-18"></a> 题面</h3>
+<p>给出两个严格递增的数组，要求求出两个数组合并之后的中位数。</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：nums1 = <span class="hljs-comment">[1,3]</span>, nums2 = <span class="hljs-comment">[2]</span><br>输出：2.00000<br>解释：合并数组 = <span class="hljs-comment">[1,2,3]</span> ，中位数 2<br></code></pre></td></tr></table></figure>
+<h3 id="思路1"><a class="markdownIt-Anchor" href="#思路1"></a> 思路1</h3>
+<p>这是官解的做法之一，找中位数，实际上就是找两个数组中排位为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>m</mi><mo>+</mo><mi>n</mi></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{m+n}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1473309999999999em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.802331em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>或<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>m</mi><mo>+</mo><mi>n</mi></mrow><mn>2</mn></mfrac><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\frac{m+n}{2}+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1473309999999999em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.802331em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>的数，我们设这个数的排位为k。然后使用二分法，去判断两个数组的第<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>k</mi><mn>2</mn></mfrac><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\frac{k}{2}-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2251079999999999em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801079999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>个值，可以分为以下三种情况（引用官方题解的话）：</p>
+<blockquote>
+<p>因此我们可以归纳出三种情况：</p>
+<ul>
+<li>
+<p>如果 A[k/2−1]&lt;B[k/2−1]，则比 A[k/2−1] 小的数最多只有 A 的前 k/2−1 个数和 B 的前 k/2−1 个数，即比 A[k/2−1] 小的数最多只有 k−2 个，因此 A[k/2−1] 不可能是第 k 个数，A[0] 到 A[k/2−1] 也都不可能是第 k 个数，可以全部排除。</p>
+</li>
+<li>
+<p>如果 A[k/2−1]&gt;B[k/2−1]，则可以排除 B[0] 到 B[k/2−1]。</p>
+</li>
+<li>
+<p>如果 A[k/2−1]=B[k/2−1]，则可以归入第一种情况处理。</p>
+</li>
+</ul>
+<p>作者：力扣官方题解<br>
+链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/median-of-two-sorted-arrays/solutions/258842/xun-zhao-liang-ge-you-xu-shu-zu-de-zhong-wei-s-114/">https://leetcode.cn/problems/median-of-two-sorted-arrays/solutions/258842/xun-zhao-liang-ge-you-xu-shu-zu-de-zhong-wei-s-114/</a><br>
+来源：力扣（LeetCode）<br>
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<p>实际上还是比较难懂的，并且需要考虑一系列边界情况，但是思路是没问题。感觉这个思路可以合并到<strong>找第k大</strong>数的问题里，这里先不展开讲了。</p>
+<h3 id="思路2"><a class="markdownIt-Anchor" href="#思路2"></a> 思路2</h3>
+<p>正难则反。想一想中位数有什么性质，发现中位数是可以将一个有序数组分成两个相等的部分的，那么就从这个思路出发。假如我在A数组中选定一个数<code>A[i]</code>，作为左边半部分的上边界，那么我可以用二分法在B数组中找到满足<code>B[j]&lt;=A[i]</code>的值，然后判断<code>i+j</code>是不是<code>m+n</code>的一半。不难发现“在A数组中选定一个数<code>A[i]</code>”的过程也是单调的，所以实际上问题就使用两个二分法来分割数组。</p>
+<p>想法很美好，但写一半发现上面这个做法不完全对，因为没法保证左半部分的上界在<code>A</code>中，那么就有可能找不到解，还需要交换A、B再找一次。</p>
+<p>但是“均分数组”这个思路是没问题的，正解是二分法选出<code>A[i]</code>，那么既然我希望找到一个<code>j</code>使得<code>i+j=(m+n+1)/2</code>成立，那么我直接令<code>j=(m+n+1)/2-i</code>，然后判断这个分割是否是符合我们想法的，即左半部分最大值小于右边部分最小值。</p>
+<p><a href="./leetcode-note/4.txt">代码</a>， 改代码基于<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/median-of-two-sorted-arrays/solutions/258842/xun-zhao-liang-ge-you-xu-shu-zu-de-zhong-wei-s-114">LeetCode官解</a>修改。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
