@@ -31,8 +31,9 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/pathsum3-1-tree.jpg">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/oranges.png">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/word2.jpg">
+<meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/histogram.jpg">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-11-01T03:16:02.870Z">
+<meta property="article:modified_time" content="2024-11-03T10:05:08.467Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -252,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.2k 字
+          9.9k 字
         
       </span>
     
@@ -263,7 +264,7 @@
         
         
         
-          77 分钟
+          83 分钟
         
       </span>
     
@@ -531,6 +532,19 @@ f[i+1][j-1]\&amp;\&amp;s[i]==s[j], \ &amp;i&lt;j
 <p>想法很美好，但写一半发现上面这个做法不完全对，因为没法保证左半部分的上界在<code>A</code>中，那么就有可能找不到解，还需要交换A、B再找一次。</p>
 <p>但是“均分数组”这个思路是没问题的，正解是二分法选出<code>A[i]</code>，那么既然我希望找到一个<code>j</code>使得<code>i+j=(m+n+1)/2</code>成立，那么我直接令<code>j=(m+n+1)/2-i</code>，然后判断这个分割是否是符合我们想法的，即左半部分最大值小于右边部分最小值。</p>
 <p><a href="./leetcode-note/4.txt">代码</a>， 改代码基于<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/median-of-two-sorted-arrays/solutions/258842/xun-zhao-liang-ge-you-xu-shu-zu-de-zhong-wei-s-114">LeetCode官解</a>修改。</p>
+<h2 id="84柱状图中的最大矩形"><a class="markdownIt-Anchor" href="#84柱状图中的最大矩形"></a> 84.柱状图中的最大矩形</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/largest-rectangle-in-histogram/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-19"><a class="markdownIt-Anchor" href="#题面-19"></a> 题面</h3>
+<p>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
+<p><img src="/2024/10/15/leetcode-note/histogram.jpg" srcset="/img/loading.gif" lazyload alt="柱状图中的最大矩形"></p>
+<h3 id="思路-18"><a class="markdownIt-Anchor" href="#思路-18"></a> 思路</h3>
+<p>暴力解法，想都没想就pass了。考虑到要维护最矮的那个柱子，于是就想到使用动态规划，但是动态规划的时间和空间代价都是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，所以也被pass了。结合这题所给的提示，想起了《接雨水》这题，于是考虑使用单调栈来维护一个“短板”，然后在维护这个单调站栈的最大值的过程中去更新最大值。</p>
+<p>但是上面这个做法显然是不太对的，虽然这题确实用到单调栈，但是最大值的出现并不一定是在单调的柱状图中的。于是只能求助题解。</p>
+<p>题解的思路还是比较清晰的，对于每一根柱子，我们可以想想，如果这根柱子就是矩形的高，也就是“短板”，那么它的左右区间最大可以扩张到多大。其实只要上面这句话出来，思路就很清晰了。对于左区间，可以用一个单调栈来维护，这样可以计算出再这根柱子左边的离这根柱子最近且小于它的柱子的序号，右区间同理。最后再枚举，谁作为这个短板时答案可以最大即可。</p>
+<p>需要注意的是，我们需要为最左边和最右边放置一个高度为无限小“哨兵”，用于防止单调栈为空的情况。另外，上述提到的区间左右都是开区间，所以最终计算面积时，宽度为<code>right[i] - left[i] - 1</code>。</p>
+<p>题解还做了另一个优化，即只需要一次遍历就可以同时求出左右区间。做法是在求左区间的过程中，每当一个栈的元素被弹出，就可以把这个元素的右区间记为当前新元素的索引。文字的表述十分苍白，可以直接看代码。</p>
+<p><a href="leetcode-note%5C84.1.txt">单调栈常规代码</a>  <a href="leetcode-note%5C84.2.txt">单调栈常数优化代码</a></p>
+<p>虽然常数优化后，右区间只能求出“小于等于”的那根柱子，但是这个实际上不影响题解。因为当有若干根相同柱子<code>i,i+1...,j</code>连在一起时，虽然第<code>i</code>根柱子会求出错误的答案，但是最终答案会通过最右边的柱子<code>j</code>来更新。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
