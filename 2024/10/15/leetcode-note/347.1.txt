@@ -1,0 +1,66 @@
+class Solution {
+    struct N{
+        int num,fre;
+    };
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        map<int,int> mp;
+        for(auto i:nums)
+            mp[i]++;
+        
+        vector<N> heap;
+        int len = 0;
+        for(auto iter:mp)
+        {
+            push_heap(heap,{iter.first,iter.second});
+        }
+        
+        vector<int> ans;
+        for(int i=1;i<=k;i++)
+        {
+            ans.push_back(pop_heap(heap).num);
+        }
+        return ans;
+    }
+
+    N pop_heap(vector<N> &heap)
+    {
+        N ret = heap[0];
+        heap[0] = heap[heap.size()-1];
+        heap.pop_back();
+
+        int len = heap.size();
+        int i = 0,son;
+        while((son=2*i+1)<len)
+        {
+            if(son+1<len&&heap[son].fre<heap[son+1].fre)
+            {
+                son++;
+            }
+
+            if(heap[i].fre<heap[son].fre)
+            {
+                swap(heap[i],heap[son]);
+                i = son;
+            }
+            else break;
+        }
+        return ret;
+    }
+
+    void push_heap(vector<N> &heap,N val)
+    {
+        heap.push_back(val);
+        int father,i = heap.size()-1;
+        while(i!=0)
+        {
+            father = (i-1)/2;
+            if(heap[father].fre<heap[i].fre)
+            {
+                swap(heap[father],heap[i]);
+                i = father;
+            }
+            else break;
+        }
+    }
+};
