@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/word2.jpg">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/histogram.jpg">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-11-05T03:17:38.267Z">
+<meta property="article:modified_time" content="2024-11-08T03:11:26.827Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -264,7 +264,7 @@
         
         
         
-          107 分钟
+          111 分钟
         
       </span>
     
@@ -578,6 +578,18 @@ f[i+1][j-1]\&amp;\&amp;s[i]==s[j], \ &amp;i&lt;j
 <p>然后就是排序，和上一题一样，可以使用堆排序，也可以使用快速排序。个人感觉堆排序和快排的时间好像差不多，但是官解说快排达到最慢时间的概率很低，所以渐进时间复杂度为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。</p>
 <p>快排在上一题已经讨论过了，这里主要说一下堆排序。看到前k个高频元素，很容易就想到建立大根堆，然后弹出前k个元素。但是似乎可以使用小根堆，建立一个元素个数最多为k的小跟堆，当新入元素小于堆顶元素时就直接返回，不用进行插入了。这个方法可以稍微优化，但是当k接近n时，性能与大根堆没有区别。</p>
 <p><a href="leetcode-note%5C347.1.txt">代码.txt</a></p>
+<h2 id="763划分字母区间"><a class="markdownIt-Anchor" href="#763划分字母区间"></a> 763.划分字母区间</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/partition-labels/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-22"><a class="markdownIt-Anchor" href="#题面-22"></a> 题面</h3>
+<p>给你一个字符串 s 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。</p>
+<p>注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 s 。</p>
+<p>返回一个表示每个字符串片段的长度的列表。</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">s</span> = <span class="hljs-string">&quot;ababcbacadefegdehijhklij&quot;</span><br>输出：[<span class="hljs-number">9</span>,<span class="hljs-number">7</span>,<span class="hljs-number">8</span>]<br>解释：<br>划分结果为 <span class="hljs-string">&quot;ababcbaca&quot;</span>、<span class="hljs-string">&quot;defegde&quot;</span>、<span class="hljs-string">&quot;hijhklij&quot;</span> 。<br>每个字母最多出现在一个片段中。<br>像 <span class="hljs-string">&quot;ababcbacadefegde&quot;</span>, <span class="hljs-string">&quot;hijhklij&quot;</span> 这样的划分是错误的，因为划分的片段数较少。<br></code></pre></td></tr></table></figure>
+<h3 id="思路-20"><a class="markdownIt-Anchor" href="#思路-20"></a> 思路</h3>
+<p>题目就是希望将字符串尽可能分割多段，并使一个字母不能出现在多个片段。很自然地想到，记录每个字母出现的左右区间，这个区间内是不能分割的，所以再用一个数组来存那些位置是可以被分割的。</p>
+<p>这个做法是对的，但是做了一些无用功，多花了一些内存，题解的思路更清晰。</p>
+<p>官解只记录当前字母的最后一次出现位置<code>last[c]</code>，然后直接进行区间划分。遍历到当前字母<code>c</code>时，就更新区间尾部为<code>last[c]</code>，当遍历到区间尾部时，就说明划分完成，将当前区间储存。</p>
+<p><a href="leetcode-note%5C763.txt">官解</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>

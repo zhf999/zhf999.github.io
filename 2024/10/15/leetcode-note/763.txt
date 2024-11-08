@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        int last[26];
+        int length = s.size();
+        for (int i = 0; i < length; i++) {
+            last[s[i] - 'a'] = i;
+        }
+        vector<int> partition;
+        int start = 0, end = 0;
+        for (int i = 0; i < length; i++) {
+            end = max(end, last[s[i] - 'a']);
+            if (i == end) {
+                partition.push_back(end - start + 1);
+                start = end + 1;
+            }
+        }
+        return partition;
+    }
+};
+
+作者：力扣官方题解
+链接：https://leetcode.cn/problems/partition-labels/solutions/455703/hua-fen-zi-mu-qu-jian-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
