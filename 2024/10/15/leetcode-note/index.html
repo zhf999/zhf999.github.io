@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/word2.jpg">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/histogram.jpg">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-11-08T03:11:26.827Z">
+<meta property="article:modified_time" content="2024-11-10T05:36:23.671Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -253,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          13k 字
+          14k 字
         
       </span>
     
@@ -264,7 +264,7 @@
         
         
         
-          111 分钟
+          116 分钟
         
       </span>
     
@@ -590,6 +590,16 @@ f[i+1][j-1]\&amp;\&amp;s[i]==s[j], \ &amp;i&lt;j
 <p>这个做法是对的，但是做了一些无用功，多花了一些内存，题解的思路更清晰。</p>
 <p>官解只记录当前字母的最后一次出现位置<code>last[c]</code>，然后直接进行区间划分。遍历到当前字母<code>c</code>时，就更新区间尾部为<code>last[c]</code>，当遍历到区间尾部时，就说明划分完成，将当前区间储存。</p>
 <p><a href="leetcode-note%5C763.txt">官解</a></p>
+<h2 id="300最长递增子序列"><a class="markdownIt-Anchor" href="#300最长递增子序列"></a> 300.最长递增子序列</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-increasing-subsequence/description/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<p>给你一个整数数组 <code>nums</code> ，找到其中最长严格递增子序列的长度。</p>
+<p>子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">10,9,2,5</span>,<span class="hljs-number">3,7,101,18</span>]<br>输出：<span class="hljs-number">4</span><br>解释：最长递增子序列是 [<span class="hljs-number">2,3,7,101</span>]，因此长度为 <span class="hljs-number">4</span> 。<br></code></pre></td></tr></table></figure>
+<h3 id="思路-21"><a class="markdownIt-Anchor" href="#思路-21"></a> 思路</h3>
+<p>这是一道很经典的动态规划题，简单的解法是使用<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>的时间复杂度，进阶一点的解法是用二分来将时间复杂度优化至<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。这里主要记录进阶解法。</p>
+<p>进阶解法就是在简单解法的基础上，将向前寻找子序列的过程使用二分来简化一下。具体做法是，维护一个数组<code>d[i]</code>，表示长度为<code>i</code>的子序列的尾元素最短是多少，不难证明这个<code>d[i]</code>数组是单调递增的。于是对于当前元素<code>num[i]</code>，可以使用二分法来寻找小于<code>num[i]</code>的<code>d[j]</code>，并更新<code>d[j+1]</code>。</p>
+<p>这个算法还是挺有意思的，首先<code>d[i]</code>这个数组没有时间这个维度，它仅仅记录当前时刻的最优值，其次就是对于当前元素<code>num[i]</code>，居然一定可以找到一个更新的值，因为如果小于所有的<code>d[i]</code>，就更新<code>d[1]</code>，如果大于所有的<code>d[i]</code>，就更新<code>d[++len]</code>。</p>
+<p><a href="leetcode-note%5C300.txt">官解</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
