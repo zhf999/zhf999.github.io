@@ -7329,6 +7329,25 @@ dp[i-1]+dp[i-1-dp[i-1]-1]+2, \quad if \  s[i]==&#x27;)&#x27; \ and\ s[i-1]==&#x2
 <p>思路有很多，其中最清奇的是随机算法，每次随便从中取一个元素，然后判断它是不是多数元素。另一个是<code>Boyer-Moore</code>算法，代码很简单，但是用自然语言描述的话可能会难懂。简而言之就是“同归于尽消杀法”：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> &#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">majorityElement</span><span class="hljs-params">(vector&lt;<span class="hljs-keyword">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> candidate = <span class="hljs-number">-1</span>;<br>        <span class="hljs-keyword">int</span> count = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> num : nums) &#123;<br>            <span class="hljs-keyword">if</span> (num == candidate)<br>                ++count;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (--count &lt; <span class="hljs-number">0</span>) &#123;<br>                candidate = num;<br>                count = <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> candidate;<br>    &#125;<br>&#125;;<br>作者：力扣官方题解<br>链接：https:<span class="hljs-comment">//leetcode.cn/problems/majority-element/solutions/146074/duo-shu-yuan-su-by-leetcode-solution/</span><br>来源：力扣（LeetCode）<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br></code></pre></td></tr></table></figure>
 <p>这个算法似乎只适合这题，因为这题保证了一定会有超过一半的多数元素，在其他情况下，例如：<code>1 4 4 4 4 1 1 3 3 3</code>这种情况就找不到正确解了。</p>
+<h2 id="31下一个排列"><a class="markdownIt-Anchor" href="#31下一个排列"></a> 31.下一个排列</h2>
+<p><a href="https://leetcode.cn/problems/next-permutation/solutions/479151/xia-yi-ge-pai-lie-by-leetcode-solution/?envType=study-plan-v2&amp;envId=top-100-liked">题目链接</a></p>
+<h3 id="题面-27"><a class="markdownIt-Anchor" href="#题面-27"></a> 题面</h3>
+<p>给定一个数组，要求原地生成其下一个全排列（按字典序）。</p>
+<figure class="highlight inform7"><table><tr><td class="code"><pre><code class="hljs inform7">输入：nums = <span class="hljs-comment">[1,2,3]</span><br>输出：<span class="hljs-comment">[1,3,2]</span><br></code></pre></td></tr></table></figure>
+<h3 id="思路-25"><a class="markdownIt-Anchor" href="#思路-25"></a> 思路</h3>
+<p>貌似思路很固定，可以看成是生成全排列的一种固定算法。下面是<a href="https://leetcode.cn/problems/next-permutation/solutions/80560/xia-yi-ge-pai-lie-suan-fa-xiang-jie-si-lu-tui-dao-">题解的算法流程</a>：</p>
+<blockquote>
+<ol>
+<li>从后向前 查找第一个 相邻升序 的元素对 (i,j)，满足 A[i] &lt; A[j]。此时 [j,end) 必然是降序</li>
+<li>在 [j,end) 从后向前 查找第一个满足 A[i] &lt; A[k] 的 k。A[i]、A[k] 分别就是上文所说的「小数」、「大数」</li>
+<li>将 A[i] 与 A[k] 交换</li>
+<li>可以断定这时 [j,end) 必然是降序，逆置 [j,end)，使其升序</li>
+<li>如果在步骤 1 找不到符合的相邻元素对，说明当前 [begin,end) 为一个降序顺序，则直接跳到步骤 4</li>
+</ol>
+</blockquote>
+<p>可以尝试发现一下规律，给定一个数组，我们需要生成更大的且尽可能小的全排列，那么应该尽量从尾部入手，因为改变头部会较大地改变字典序的位置。更具体地，入手的位置就是尾部的下降序列。为什么呢？因为如果有上升的序列，那么就说明这个上升的地方可以产生一个新的全排列。</p>
+<p>所以首先是要找到这个尾部的下降序列 [j,end)，然后我们肯定是希望生成的下一个全排列尽量小，所以选择比<code>A[i]</code>大且尽可能小的元素，与<code>A[i]</code>置换，并对尾部的下降序列求逆序。</p>
+<p><a href="leetcode-note%5C31.txt">代码</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>算法</category>
