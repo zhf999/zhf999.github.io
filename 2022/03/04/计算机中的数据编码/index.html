@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://zhouhf.top/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/data_code/bianxingbm.PNG">
 <meta property="og:image" content="http://zhouhf.top/2022/03/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/data_code/bxbm_cal.PNG">
 <meta property="article:published_time" content="2022-03-04T08:55:19.000Z">
-<meta property="article:modified_time" content="2022-06-04T15:45:19.655Z">
+<meta property="article:modified_time" content="2024-11-19T11:10:43.427Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="计算机组成原理">
 <meta name="twitter:card" content="summary_large_image">
@@ -390,7 +390,7 @@
 <p>在IEEE754标准中，其指数使用的是移码。不过这里的移码有所不同<br>
 ，移动的位数是127（单精度）/1023（双精度），这里为什么是127/1023而不是128/1024？很多人可能没有深究这里的原因。<br>
 其实原因很简单，IEEE754标准中对尾数要求规格化，即小数点后第一位必须为1，且规定把这个1给省略。这里移码比正常少位移一位，就是考虑到这里的这个1。如果位移128位，尾数的表达就是0.1xxxx，如果位移127位，尾数的表达就是1.xxxxx，<strong>这样一来，增大了浮点数可以表达的范围</strong>。</p>
-
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
             <hr/>
@@ -407,15 +407,8 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AF%BE%E5%86%85/" class="category-chain-item">课内</a>
+  <a href="/categories/%E7%AC%94%E8%AE%B0/" class="category-chain-item">笔记</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/%E8%AF%BE%E5%86%85/%E8%AE%A1%E7%BB%84/" class="category-chain-item">计组</a>
-  
-  
-
   
 
       </span>

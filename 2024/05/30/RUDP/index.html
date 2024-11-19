@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/05/30/RUDP/%E8%B6%85%E6%97%B6%E9%87%8D%E4%BC%A0.png">
 <meta property="og:image" content="http://zhouhf.top/2024/05/30/RUDP/mmexport1713775452941.jpg">
 <meta property="article:published_time" content="2024-05-30T04:42:02.000Z">
-<meta property="article:modified_time" content="2024-06-03T06:21:26.374Z">
+<meta property="article:modified_time" content="2024-11-19T11:17:35.265Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="计算机网络">
 <meta property="article:tag" content="Linux内核">
@@ -398,7 +398,7 @@
 <p>Linux内核中引入了“符号导出”这个概念，即内核源码中的符号只有被导出后才可以在内核模块中使用，否则是用不了的。这让人十分头大，网络协议栈中有很多关键函数都没有被导出，向使用它们就得自己实现，而实现的过程中又会遇到新的未导出函数，继续实现下去无疑是把内核完全再实现一遍。</p>
 <p>于是为了快捷地在内核模块中使用这些函数，就必须修改内核源码，将其导出。这个做法不算复杂，只需要在内核函数的定义后面加一行代码即可，但是每次修改源码都要进行1-2小时的编译。好在需要修改源码的机会并不多，并且可以一次性修改完再编译，节约一些时间。</p>
 <p>另一个坑点就是在给师兄复现的时候，我把内核源码通过GitHub传给他，师兄编译安装后总会出现问题，而我本地复现是没有问题的。最后又尝试将源码打成压缩包通过微信发给他，这才解决问题。为什么通过GitHub传递源码会引起源码不一致，这个至今没有找出原因。</p>
-
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
             <hr/>
@@ -415,7 +415,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%BA%E6%96%87/" class="category-chain-item">论文</a>
+  <a href="/categories/%E5%BC%80%E5%8F%91/" class="category-chain-item">开发</a>
   
   
 
