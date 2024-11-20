@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/word2.jpg">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/histogram.jpg">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-11-17T11:29:06.671Z">
+<meta property="article:modified_time" content="2024-11-20T07:13:02.355Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -264,7 +264,7 @@
         
         
         
-          156 分钟
+          160 分钟
         
       </span>
     
@@ -711,6 +711,15 @@ s \equiv -m \mod P
 <p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo>−</mo><mi>m</mi><mspace></mspace><mspace width="1em"><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mtext> </mtext><mtext> </mtext><mi>P</mi></mspace></mrow><annotation encoding="application/x-tex">-m \mod P
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathnormal">m</span><span class="mspace allowbreak"></span><span class="mspace" style="margin-right:1em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">m</span><span class="mord mathrm">o</span><span class="mord mathrm">d</span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span></span></p>
 <p>那么我们令其向前移动<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mspace></mspace><mspace width="0.6666666666666666em"><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mtext> </mtext><mtext> </mtext><mi>P</mi></mspace></mrow><annotation encoding="application/x-tex">m\mod P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">m</span><span class="mspace allowbreak"></span><span class="mspace" style="margin-right:0.6666666666666666em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathrm">m</span><span class="mord mathrm">o</span><span class="mord mathrm">d</span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span>步即可到重回0的位置。</p>
+<h2 id="274h指数"><a class="markdownIt-Anchor" href="#274h指数"></a> 274.H指数</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/h-index/description/?envType=study-plan-v2&amp;envId=top-interview-150">题目链接</a></p>
+<h3 id="题面-29"><a class="markdownIt-Anchor" href="#题面-29"></a> 题面</h3>
+<p>给你一个整数数组 <code>citations</code> ，其中 <code>citations[i]</code> 表示研究者的第 <code>i</code> 篇论文被引用的次数。计算并返回该研究者的 <strong><code>h</code> 指数</strong>。</p>
+<p>根据维基百科上 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/h-index/3991452?fr=aladdin">h 指数的定义</a>：<code>h</code> 代表“高引用次数” ，一名科研人员的 <code>h</code> <strong>指数</strong> 是指他（她）至少发表了 <code>h</code> 篇论文，并且 <strong>至少</strong> 有 <code>h</code> 篇论文被引用次数大于等于 <code>h</code> 。如果 <code>h</code> 有多种可能的值，<strong><code>h</code> 指数</strong> 是其中最大的那个。</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tap">输入：citations = [3,0,6,1,5]<br>输出：3 <br>解释：给定数组表示研究者总共有<span class="hljs-number"> 5 </span>篇论文，每篇论文相应的被引用了 3, 0, 6, 1,<span class="hljs-number"> 5 </span>次。<br>     由于研究者有<span class="hljs-number"> 3 </span>篇论文每篇 至少 被引用了<span class="hljs-number"> 3 </span>次，其余两篇论文每篇被引用 不多于<span class="hljs-number"> 3 </span>次，所以她的 h 指数是 3。<br></code></pre></td></tr></table></figure>
+<h3 id="思路-26"><a class="markdownIt-Anchor" href="#思路-26"></a> 思路</h3>
+<p>很显然解是有单调性的，那么当然可以用二分做。但是记录这题主要是想记录排序的做法，可以从大到小排序然后根据下标来递增<code>h</code>，这样的时间复杂度是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。由于<code>h</code>一定不会超过<code>n</code>，所以可以考虑桶排序，进一步优化时间复杂度，可以把引用次数超过<code>n</code>的全部计入引用次数为<code>n</code>的中，从而节约空间。</p>
+<p><a href="leetcode-note%5C274.txt">代码</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
