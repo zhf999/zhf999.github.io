@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int ans = 0;
+        stack<int> st;
+        for(int i=0;i<height.size();i++)
+        {
+            if(st.size()==0)
+            {
+                st.push(i);
+                continue;
+            }
+
+            if(height[st.top()]>=height[i])
+            {
+                st.push(i);
+                continue;
+            }
+
+            int last = 0;
+            while(st.size()!=0&&height[st.top()]<height[i])
+            {
+                last = st.top();
+                st.pop();
+                if(st.size()==0)
+                    break;
+                ans += (i-st.top()-1)*(min(height[st.top()],height[i])-height[last]);
+            }
+
+            st.push(i);
+        }
+        return ans;
+    }
+};
