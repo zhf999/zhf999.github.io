@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/rainwatertrap.png">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/image-20241123123101012.png">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-11-23T05:40:21.712Z">
+<meta property="article:modified_time" content="2024-11-27T01:57:28.408Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -255,7 +255,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          21k 字
+          22k 字
         
       </span>
     
@@ -266,7 +266,7 @@
         
         
         
-          178 分钟
+          181 分钟
         
       </span>
     
@@ -752,6 +752,15 @@ cur\_width = i-st.top()-1
 <p>来自<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/trapping-rain-water/solutions/692342/jie-yu-shui-by-leetcode-solution-tuvc/comments/1243001">AC自动机的评论</a></p>
 <figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">可算看懂了，原来双指针同时开两个柱子接水。大家题解没说清楚，害得我也没看懂。 对于每一个柱子接的水，那么它能接的水=min(左右两边最高柱子）-当前柱子高度，这个公式没有问题。同样的，两根柱子要一起求接水，同样要知道它们左右两边最大值的较小值。<br><br>问题就在这，假设两柱子分别为 i，<span class="hljs-keyword">j。那么就有 </span>iLeftMax,iRightMax,<span class="hljs-keyword">jLeftMx,jRightMax </span>这个变量。由于 <span class="hljs-keyword">j&gt;i </span>，故 <span class="hljs-keyword">jLeftMax&gt;=iLeftMax，iRigthMax&gt;=jRightMax.</span><br><span class="hljs-keyword"></span><br>那么，如果 iLeftMax&gt;<span class="hljs-keyword">jRightMax，则必有 </span><span class="hljs-keyword">jLeftMax </span>&gt;= <span class="hljs-keyword">jRightMax，所有我们能接 </span><span class="hljs-keyword">j </span>点的水。<br><br>如果 <span class="hljs-keyword">jRightMax&gt;iLeftMax，则必有 </span>iRightMax &gt;= iLeftMax，所以我们能接 i 点的水。<br><br>而上面我们实际上只用到了 iLeftMax，<span class="hljs-keyword">jRightMax </span>两个变量，故我们维护这两个即可。（题解都没说清楚，就说个 LeftMax，RightMax，谁知道为什么就可以这么做了。)<br><br></code></pre></td></tr></table></figure>
 <p><a href="leetcode-note%5C42.3.txt">双指针代码</a></p>
+<h2 id="209长度最小的子数组"><a class="markdownIt-Anchor" href="#209长度最小的子数组"></a> 209.长度最小的子数组</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-size-subarray-sum/description/?envType=study-plan-v2&amp;envId=top-interview-150">题目链接</a></p>
+<h3 id="题面-31"><a class="markdownIt-Anchor" href="#题面-31"></a> 题面</h3>
+<p>给一个数组和一个<code>target</code>，要求计算数组中总合大于等于<code>target</code>的子数组（子数组要求连续）。</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：target = 7, nums = <span class="hljs-comment">[2,3,1,2,4,3]</span><br>输出：2<br>解释：子数组 <span class="hljs-comment">[4,3]</span> 是该条件下的长度最小的子数组。<br></code></pre></td></tr></table></figure>
+<h3 id="思路-28"><a class="markdownIt-Anchor" href="#思路-28"></a> 思路</h3>
+<p>首先想到暴力，然后想到二分。然而二分的时间复杂度为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n \log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>，而空间复杂度为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>，实际上还是有很多优化空间的。使用滑动窗口的方法，时间复杂度和空间复杂度分别为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。</p>
+<p>具体做法是，使用双指针，初始在下标为0的位置。每次将<code>end</code>右移一个单位，然后查看<code>start</code>到<code>end</code>是否满足条件，然后更新答案，每次迭代还需要将<code>start</code>也右移，直到这个区间不满足条件。感觉直接看代码更好懂。</p>
+<p><a href="leetcode-note%5C209.txt">代码</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
