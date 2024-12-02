@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/rainwatertrap.png">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/image-20241123123101012.png">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-11-28T05:47:19.120Z">
+<meta property="article:modified_time" content="2024-12-02T03:37:31.217Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -255,7 +255,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          22k 字
+          23k 字
         
       </span>
     
@@ -266,7 +266,7 @@
         
         
         
-          187 分钟
+          194 分钟
         
       </span>
     
@@ -771,6 +771,29 @@ cur\_width = i-st.top()-1
 <p>可以回顾438的做法，维护一个变量和一个数组，用于描述窗口中的字符和目标字符之间的差距。每次试图将窗口右移，然后判断差距是否为0，即可更新答案。</p>
 <p>问题是如何描述字符串和目标字符之间的差距，438中使用一个数组，因为字符的数量是已知的，并用一个变量<code>differ</code>来简化判断（否则要遍历整个数组）。而本题的字符串数量是不确定的，所以大概是逃不掉使用哈希表了。以上面的样例输入输出为例，可以每3个字符划分为一个字符串（滑动窗口的移动每次也移动3格），然后用438的方法来更新答案。但是这样会有一个问题，就是起始点不一定是3的倍数，所以还需要一层循环，从0枚举到<code>2</code>，把所有情况考虑进去。</p>
 <p><a href="leetcode-note%5C30.txt">代码</a></p>
+<h2 id="425用最少数量的箭引爆气球"><a class="markdownIt-Anchor" href="#425用最少数量的箭引爆气球"></a> 425.用最少数量的箭引爆气球</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/description/?envType=study-plan-v2&amp;envId=top-interview-150">题目链接</a></p>
+<h3 id="题面-33"><a class="markdownIt-Anchor" href="#题面-33"></a> 题面</h3>
+<p>给定一系列区间，要求你放置若干个点，使得所有区间中至少有一个点。求这个点的数量的最小值。</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：points = <span class="hljs-comment">[<span class="hljs-comment">[10,16]</span>,<span class="hljs-comment">[2,8]</span>,<span class="hljs-comment">[1,6]</span>,<span class="hljs-comment">[7,12]</span>]</span><br>输出：2<br>解释：气球可以用2支箭来爆破:<br>-在x = 6处射出箭，击破气球<span class="hljs-comment">[2,8]</span>和<span class="hljs-comment">[1,6]</span>。<br>-在x = 11处发射箭，击破气球<span class="hljs-comment">[10,16]</span>和<span class="hljs-comment">[7,12]</span>。<br></code></pre></td></tr></table></figure>
+<h3 id="思路1-5"><a class="markdownIt-Anchor" href="#思路1-5"></a> 思路1</h3>
+<p>朴素做法，进行区间的合并，当然，在此之前需要对区间按照左边界进行排序。具体做法是，按左边界排序后，尝试合并两区间，如果更新成功就继续更新，更新失败就尝试下一个区间。</p>
+<p>最后剩余（不相交）区间的数量就是答案。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/solutions/2766790/you-tu-zi-wo-gan-jue-ting-hao-li-jie-de-l6ih1">朴素做法的题解</a></p>
+<h3 id="思路2-5"><a class="markdownIt-Anchor" href="#思路2-5"></a> 思路2</h3>
+<p>使用贪心算法。首先，如果一个子弹能够射穿当前这个气球，那么就无所谓具体是在哪个位置射穿的，我们可以直接每一个子弹射在左边界或右边界，这样能够保证达到最优解。</p>
+<p>假如我们每次发射子弹都射在左边界，那么其实会存在一个左边界最右的区间，这个区间是必须得耗费一颗子弹的。因此，左边界最靠右的区间应该优先处理。</p>
+<p>由此可以理出一个思路，可以将区间按左边界排序，优先处理左边界靠右的区间，在其左边界射一颗子弹，看齐能否“顺带”处理其他区间。当然，代码具体编写的时候是有些区别的。</p>
+<p>下面是射击右边界的代码。</p>
+<p><a href="leetcode-note%5C425.txt">代码</a></p>
+<h2 id="插入区间"><a class="markdownIt-Anchor" href="#插入区间"></a> 插入区间</h2>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/insert-interval/description/?envType=study-plan-v2&amp;envId=top-interview-150">题目链接</a></p>
+<h3 id="题面-34"><a class="markdownIt-Anchor" href="#题面-34"></a> 题面</h3>
+<p>给定一个无重叠的、按照区间左边界排序的区间列表，和一个新的区间，要求将这个新的区间插入到区间列表中，并且仍然要按照左区间排序，且不能重叠。</p>
+<h3 id="思路-30"><a class="markdownIt-Anchor" href="#思路-30"></a> 思路</h3>
+<p>想了很久，感觉思路混乱，直接查看题解。</p>
+<p>题解的代码思路是很清晰的，是尝试将区间列表中和新区间有重叠的区间合并到新区间中，而不是将新区间合并到列表中。这样的思路让代码非常清晰，只需要分情况讨论即可。</p>
+<p>还要注意代码中加入<code>placed</code>变量，判断新区间是否放入列表中（有可能合并后一直未找到适合放置的地方）。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>
