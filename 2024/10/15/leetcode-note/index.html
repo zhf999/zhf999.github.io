@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/rainwatertrap.png">
 <meta property="og:image" content="http://zhouhf.top/2024/10/15/leetcode-note/image-20241123123101012.png">
 <meta property="article:published_time" content="2024-10-15T14:08:47.000Z">
-<meta property="article:modified_time" content="2024-12-02T03:40:46.176Z">
+<meta property="article:modified_time" content="2024-12-06T09:34:17.608Z">
 <meta property="article:author" content="周洪锋">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="LeetCode">
@@ -255,7 +255,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          23k 字
+          24k 字
         
       </span>
     
@@ -266,7 +266,7 @@
         
         
         
-          194 分钟
+          200 分钟
         
       </span>
     
@@ -786,14 +786,28 @@ cur\_width = i-st.top()-1
 <p>由此可以理出一个思路，可以将区间按左边界排序，优先处理左边界靠右的区间，在其左边界射一颗子弹，看齐能否“顺带”处理其他区间。当然，代码具体编写的时候是有些区别的。</p>
 <p>下面是射击右边界的代码。</p>
 <p><a href="leetcode-note%5C425.txt">代码</a></p>
-<h2 id="插入区间"><a class="markdownIt-Anchor" href="#插入区间"></a> 插入区间</h2>
+<h2 id="57-插入区间"><a class="markdownIt-Anchor" href="#57-插入区间"></a> 57. 插入区间</h2>
 <p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/insert-interval/description/?envType=study-plan-v2&amp;envId=top-interview-150">题目链接</a></p>
 <h3 id="题面-34"><a class="markdownIt-Anchor" href="#题面-34"></a> 题面</h3>
 <p>给定一个无重叠的、按照区间左边界排序的区间列表，和一个新的区间，要求将这个新的区间插入到区间列表中，并且仍然要按照左区间排序，且不能重叠。</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：intervals = <span class="hljs-comment">[<span class="hljs-comment">[1,2]</span>,<span class="hljs-comment">[3,5]</span>,<span class="hljs-comment">[6,7]</span>,<span class="hljs-comment">[8,10]</span>,<span class="hljs-comment">[12,16]</span>]</span>, newInterval = <span class="hljs-comment">[4,8]</span><br>输出：<span class="hljs-comment">[<span class="hljs-comment">[1,2]</span>,<span class="hljs-comment">[3,10]</span>,<span class="hljs-comment">[12,16]</span>]</span><br>解释：这是因为新的区间 <span class="hljs-comment">[4,8]</span> 与 <span class="hljs-comment">[3,5]</span>,<span class="hljs-comment">[6,7]</span>,<span class="hljs-comment">[8,10]</span> 重叠。<br></code></pre></td></tr></table></figure>
 <h3 id="思路-30"><a class="markdownIt-Anchor" href="#思路-30"></a> 思路</h3>
 <p>想了很久，感觉思路混乱，直接查看题解。</p>
 <p>题解的代码思路是很清晰的，是尝试将区间列表中和新区间有重叠的区间合并到新区间中，而不是将新区间合并到列表中。这样的思路让代码非常清晰，只需要分情况讨论即可。</p>
 <p>还要注意代码中加入<code>placed</code>变量，判断新区间是否放入列表中（有可能合并后一直未找到适合放置的地方）。</p>
+<h2 id="224基本计算器227基本计算器ii"><a class="markdownIt-Anchor" href="#224基本计算器227基本计算器ii"></a> 224.基本计算器/227基本计算器II</h2>
+<h3 id="题面-35"><a class="markdownIt-Anchor" href="#题面-35"></a> 题面</h3>
+<p>给定一个表达式，计算它的值。</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs subunit">输入：s = &quot;(1+(4<span class="hljs-string">+5</span><span class="hljs-string">+2</span>)<span class="hljs-string">-3</span>)+(6<span class="hljs-string">+8</span>)&quot;<br>输出：23<br></code></pre></td></tr></table></figure>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">s</span> = <span class="hljs-string">&quot; 3+5 / 2 &quot;</span><br>输出：<span class="hljs-number">5</span><br></code></pre></td></tr></table></figure>
+<h3 id="思路-31"><a class="markdownIt-Anchor" href="#思路-31"></a> 思路</h3>
+<p>LeetCode上总共有三个名为“基本计算器x”的题，其实难度应该是循序渐进的，这里直接一步到位，实现最复杂的版本。</p>
+<p>实现一个基本计算器，可以考虑使用双栈法。即一个栈<code>nums</code>存储将要运算的数字，另一个栈<code>ops</code>存储运算符。由于运算符是存在优先级的，所以需要使用一个函数来判断运算符之间的优先级，具体地说，乘除次之，加减最次（括号需要特殊处理）。实际上，整个计算过程是在维护<code>ops</code>这个单调栈，但排序<code>key</code>的不是字符的值，而是优先级。也就是说<code>ops</code>这个栈，新入栈的运算符的优先级应该要比栈中所有元素的高，如果新入栈的运算符优先级的较低的（或相等），那么就可以将栈内元素弹出进行运算。</p>
+<p>对于括号，还需要特殊处理。上述说的维护<code>ops</code>单调栈的操作，有三个终止条件，一是栈空，二是栈顶优先级低于新元素，三是遇到左括号。而右括号到来时，就直接依次弹栈，进行计算（如果维护了上述所说的单调栈，那么这个栈中的优先级是非递减的）。</p>
+<p>还有一个细节，就是可能存在单元运算符负号。我的解决办法是，加入一个<code>flag</code>，当要压入减号时，判断上一个插入的元素是符号还是数字，如果是符号（右括号除外），就说明这个是一个单元运算符，应该在<code>nums</code>中先压入一个0。</p>
+<p>整个代码中，细节还是很多的，需要认真处理，使用函数式编程可以减轻编程难度。</p>
+<p>另外，发现直接使用C++的<code>stoi</code>来转化数字会导致超时，而手写则不会。</p>
+<p><a href="leetcode-note%5C224.txt">代码</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
               
             </div>

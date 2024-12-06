@@ -1,0 +1,77 @@
+
+class Solution{
+    unordered_map<char, int> precedence = {
+    {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}
+};
+
+public:
+    int calculate(string s) {
+        s = "(" + s + ")";
+        int n = s.length();
+        stack<int> nums;
+        stack<char> ops;
+        bool last_digit = false;
+        for(int i=0;i<n;i++)
+        {
+            if(s[i]==' ')
+                continue;
+
+            if(isdigit(s[i]))
+            {
+                int num = 0;
+                while(isdigit(s[i])) {
+                    num *= 10;
+                    num += s[i] - '0';
+                    i++;
+                }
+                i--;
+                nums.push(num);
+                last_digit = true;
+            }
+            else if(s[i]=='(')
+            {
+                ops.push(s[i]);
+                last_digit = false;
+            } else if(s[i]==')') {
+                while (!ops.empty() && ops.top() != '(') {
+                    evaluate(nums, ops);
+                }
+                if (!ops.empty() && ops.top() == '(') {
+                    ops.pop();
+                }
+            } else {
+                if(s[i]=='-'&&!last_digit) {
+                    nums.push(0);
+                }
+                while (!ops.empty() && ops.top() != '(' && prior(ops.top(),s[i])) {
+                    evaluate(nums, ops);
+                }
+                ops.push(s[i]);
+            }
+        }
+        return nums.top();
+    }
+
+    bool prior(char a,char b) {
+        return precedence[a]>=precedence[b];
+    }
+
+    void evaluate(stack<int>& nums, stack<char>& ops) {
+        if (nums.size() < 2 || ops.empty()) {
+            throw runtime_error("Invalid expression");
+        }
+
+        int b = nums.top(); nums.pop();
+        int a = nums.top(); nums.pop();
+        char op = ops.top(); ops.pop();
+
+        int result;
+        switch (op) {
+            case '+': result = a + b; break;
+            case '-': result = a - b; break;
+            case '*': result = a * b; break;
+            case '/': result = a / b; break;
+        }
+        nums.push(result);
+    }
+};
