@@ -7476,6 +7476,24 @@ cur\_width = i-st.top()-1
 <p>正常来说使用<code>O(n)</code>的时间复杂度是肯定可以遍历完的，现在问题是如何降低时间复杂度。既然题目强调了完全二叉树的概念，那关键肯定就是如何利用完全二叉树的性质。不难发现，完全二叉树非叶子层是满的，我们就可以先计算层数，再计算叶子层的节点个数来得出总节点个数。</p>
 <p>现在关键就是叶子节点要怎么算，直接遍历是没有办法做到的，查看题解之后确定使用二分法。首先叶节点个数是有单调性的，其次我们想知道叶节点<code>k</code>是否存在，可以通过将其二进制分解，然后得出从根节点到第<code>k</code>个叶节点的路径，然后判断路径是否存在。</p>
 <p>在实际编写代码的过程中，有许多细节需要注意，比如说叶节点的个数区间应该是<code>[1,2^level]</code>。具体的代码编写方式有很多，取决于树的高度是从0还是1开始、二分查找区间的开闭、叶节点个数的区间等。</p>
+<h2 id="399除法求值"><a class="markdownIt-Anchor" href="#399除法求值"></a> 399.除法求值</h2>
+<h3 id="题面-38"><a class="markdownIt-Anchor" href="#题面-38"></a> 题面</h3>
+<p><a href="https://leetcode.cn/problems/evaluate-division/description/?envType=study-plan-v2&amp;envId=top-interview-150">题目链接</a></p>
+<p>给你一个变量对数组 <code>equations</code> 和一个实数值数组 <code>values</code> 作为已知条件，其中 <code>equations[i] = [Ai, Bi]</code> 和 <code>values[i]</code> 共同表示等式 <code>Ai / Bi = values[i]</code> 。每个 <code>Ai</code> 或 <code>Bi</code> 是一个表示单个变量的字符串。</p>
+<p>另有一些以数组 <code>queries</code> 表示的问题，其中 <code>queries[j] = [Cj, Dj]</code> 表示第 <code>j</code> 个问题，请你根据已知条件找出 <code>Cj / Dj = ?</code> 的结果作为答案。</p>
+<p>返回 <strong>所有问题的答案</strong> 。如果存在某个无法确定的答案，则用 <code>-1.0</code> 替代这个答案。如果问题中出现了给定的已知条件中没有出现的字符串，也需要用 <code>-1.0</code> 替代这个答案。</p>
+<p>**注意：**输入总是有效的。你可以假设除法运算中不会出现除数为 0 的情况，且不存在任何矛盾的结果。</p>
+<p>**注意：**未在等式列表中出现的变量是未定义的，因此无法确定它们的答案。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight prolog"><table><tr><td class="code"><pre><code class="hljs prolog">输入：equations = [[<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;b&quot;</span>],[<span class="hljs-string">&quot;b&quot;</span>,<span class="hljs-string">&quot;c&quot;</span>]], values = [<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>], queries = [[<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;c&quot;</span>],[<span class="hljs-string">&quot;b&quot;</span>,<span class="hljs-string">&quot;a&quot;</span>],[<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;e&quot;</span>],[<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;a&quot;</span>],[<span class="hljs-string">&quot;x&quot;</span>,<span class="hljs-string">&quot;x&quot;</span>]]<br>输出：[<span class="hljs-number">6.00000</span>,<span class="hljs-number">0.50000</span>,<span class="hljs-number">-1.00000</span>,<span class="hljs-number">1.00000</span>,<span class="hljs-number">-1.00000</span>]<br>解释：<br>条件：a / b = <span class="hljs-number">2.0</span>, b / c = <span class="hljs-number">3.0</span><br>问题：a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ?<br>结果：[<span class="hljs-number">6.0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">-1.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">-1.0</span> ]<br>注意：x 是未定义的 =&gt; <span class="hljs-number">-1.0</span><br></code></pre></td></tr></table></figure>
+<h3 id="思路-34"><a class="markdownIt-Anchor" href="#思路-34"></a> 思路</h3>
+<p>题目很长，但是其实并不难理解，就是从已知的分式退出未知的分式。这题的做法应该不止一种，官解的做法是使用并查集，然而用图也是可以做的。</p>
+<p>用图论的思路来做，就是将一个分式的分子和分母看成节点，加入到图中去，然后使用Floyd算法。不一样的是，图中的节点是字符串，需要使用哈希表来存。可以直接使用二维的<code>map</code>，也可以先map一下然后再用数组。</p>
+<p>使用并查集，就是将分式的分子和父母都加到并查集中去，但是这里除了维护<code>father</code>，还要维护<code>weight</code>，即这个节点比去父节点的值。</p>
+<p><img src="/2024/10/15/leetcode-note/1609862151-XZgKGY-image.png" alt="两个并查集的合并"></p>
+<p>对于和并查集的合并，在连接根节点时需要知道<code>weight</code>，这时候就需要使用类似平行四边形定则的方法，即a不管是从d还是b比去c，这个比值都应该是相等的。</p>
+<p>图论的代码比较简单，下面是并查集的代码</p>
+<p><a href="leetcode-note%5C399.txt">399.txt</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
       <categories>
         <category>算法</category>
