@@ -1,0 +1,832 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="背景 好久没写博客了，也许是因为前段时间大作业写的报告内容太多，有点厌倦了，坚持果然是件难事。 寒假放假在家想和朋友联机玩《Minecraft》，但苦于没有服务器可以用，于是便尝试自己开一个私服。因为学过计算机网络的知识，我知道自己的PC在路由器LAN口的内网下，于是便考虑了很多种方法来使自己能被公网的其他用户发现。顺便还研究了一下组网的原理。  理论部分  NAT协议 全称Network Ad">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习NAT协议，在家中架设服务器">
+<meta property="og:url" content="http://zhouhf.top/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="背景 好久没写博客了，也许是因为前段时间大作业写的报告内容太多，有点厌倦了，坚持果然是件难事。 寒假放假在家想和朋友联机玩《Minecraft》，但苦于没有服务器可以用，于是便尝试自己开一个私服。因为学过计算机网络的知识，我知道自己的PC在路由器LAN口的内网下，于是便考虑了很多种方法来使自己能被公网的其他用户发现。顺便还研究了一下组网的原理。  理论部分  NAT协议 全称Network Ad">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/nat.webp">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/v2-625236e44506487bf716ce0d8c8c3db8_720w.webp">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse1.png">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse2.png">
+<meta property="og:image" content="http://zhouhf.top/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20221226155500696.png">
+<meta property="article:published_time" content="2022-12-26T06:03:58.000Z">
+<meta property="article:modified_time" content="2023-03-13T11:51:42.609Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhouhf.top/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/nat.webp">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>学习NAT协议，在家中架设服务器 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="学习NAT协议，在家中架设服务器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-26 14:03" pubdate>
+          2022年12月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">学习NAT协议，在家中架设服务器</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h1>
+<p>好久没写博客了，也许是因为前段时间大作业写的报告内容太多，有点厌倦了，坚持果然是件难事。</p>
+<p>寒假放假在家想和朋友联机玩《Minecraft》，但苦于没有服务器可以用，于是便尝试自己开一个私服。因为学过计算机网络的知识，我知道自己的PC在路由器LAN口的内网下，于是便考虑了很多种方法来使自己能被公网的其他用户发现。顺便还研究了一下组网的原理。</p>
+<h1 id="理论部分"><a class="markdownIt-Anchor" href="#理论部分"></a> 理论部分</h1>
+<h2 id="nat协议"><a class="markdownIt-Anchor" href="#nat协议"></a> NAT协议</h2>
+<p>全称Network Address Translation。</p>
+<p>众所周知，IPv4地址由32bit组成，也就是说，IPv4最多能给2^32次方个设备提供逻辑地址，这其中还不包括事先约定好的<strong>主机环回地址127.0.0.1，私有地址、广播地址</strong>等等，所以目前IPv4地址已经枯竭，目前我们所用的个人上网设备大都没有真正意义的公网地址。为了解决IPv4地址枯竭的问题，<em>NAT协议</em>被提出。</p>
+<blockquote>
+<p>没有特别说明，本文的IP都指IPv4地址</p>
+</blockquote>
+<h3 id="私有地址私有ip"><a class="markdownIt-Anchor" href="#私有地址私有ip"></a> 私有地址（私有IP）</h3>
+<p>国际上为IP又划分了三个地址段，用于局域网内为设备分配IP地址。也就是说，公网下存在若干的局域网，每个局域网的网关LAN口下就可以使用这些私有地址，私有地址在局域网内不可以重复，但是在公网的不同局域网中可以重复。</p>
+<p><img src="/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/nat.webp" srcset="/img/loading.gif" lazyload alt="NAT示意图"></p>
+<blockquote>
+<p>RFC1918定义了私有IP地址范围：</p>
+<p><strong>A: 10.0.0.0~10.255.255.255 即10.0.0.0/8</strong></p>
+<p><strong>B:172.16.0.0~172.31.255.255即172.16.0.0/12</strong></p>
+<p><strong>C:192.168.0.0~192.168.255.255 即192.168.0.0/16</strong></p>
+</blockquote>
+<h3 id="nat协议的工作原理"><a class="markdownIt-Anchor" href="#nat协议的工作原理"></a> NAT协议的工作原理</h3>
+<p>如上图所示，使用私有地址后，个人的上网设备不需要时时刻刻占用公网IP也可以上网。例如，路由器获得了3个公网IP（X1,X2,X3），局域网内有5台上网设备，当某台设备（私有地址为<strong>A1</strong>）需要上网时，路由器就会从地址池中选择一个公网地址（X2)，建立一个二元组（A1,X2）在映射表中，此后从A1地址发出来的数据报都会利用路由器转化后以X2地址的身份发出，同样，路由器收到发给X2的数据报时都会转发给A1，这样这台设备就可以正常上网。</p>
+<p>但是这样有个问题，就是如果这个局域网的5台设备都要上网时，公网IP不够的问题还是没有被解决。于是，更节省的**NAPT（Network Address Port Translation）**就被提出。现今用的大部分NAT协议，其实就是NAPT协议，只是习惯上仍归类为NAT。</p>
+<h3 id="napt协议的工作原理"><a class="markdownIt-Anchor" href="#napt协议的工作原理"></a> NAPT协议的工作原理</h3>
+<p>NAT协议是建立起一个从私网IP到公网IP的映射，而NAPT如其名，将端口也进行了映射。当路由器收到一个从内网设备A1端口P1发出的数据报时，路由器会建立一个四元组（A1,P1,X1,P1’），其中X1为路由器的公网地址，P1‘为路由器未使用的端口号。这样，只要从（A1,P1)端口发出的数据报都会由路由器的（X1,P1’)，发向外网，反之亦然，于是A1就可以上网。由于一台上网设备可能需要使用多个端口，所以NAPT需要维护的映射表数量较大，但这有个好处，就是路由器只需要被分配一个公网IP可以令其局域网内的设备都可以上网，大大节省了IP资源。</p>
+<p><img src="/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/v2-625236e44506487bf716ce0d8c8c3db8_720w.webp" srcset="/img/loading.gif" lazyload alt="NAPT示意图"></p>
+<blockquote>
+<p>由于涉及到修改端口号，所以NAPT必须与更高层的协议如TCP配合，否则上层数据会出现问题，比如说修改端口号时，TCP头部校验和不对，需要由路由器修改。在一定程度上说，我认为NAPT协议破坏了OSI七层模型层间的独立性。</p>
+</blockquote>
+<h4 id="映射的分类"><a class="markdownIt-Anchor" href="#映射的分类"></a> 映射的分类</h4>
+<p>NA(P)T协议的映射方案分许两种种，其中包括<strong>对称型NAT，锥形NAT</strong>；锥形NAT又可以分为完全锥形、IP限制锥形、端口限制锥形。以上提到的完全锥形NAT、IP限制型NAT，端口限制型NAT，对称型NAT，映射要求逐次变严格。具体的可以看文章底部的B站链接。</p>
+<h3 id="大内网"><a class="markdownIt-Anchor" href="#大内网"></a> “大内网”</h3>
+<p>实际上，我国的运营商（专业上叫服务提供商ISP）为了更大程度地借阅公网IP资源，采用了”大内网“的策略，说白了就是套娃。将你的网关（路由器、光猫）再置于一个”大内网”，也就是说，看似你可以正常上网，但是你压根就没有属于自己的公网IP。</p>
+<h1 id="实践部分"><a class="markdownIt-Anchor" href="#实践部分"></a> 实践部分</h1>
+<p>NAT协议确实节省了IP地址资源，但是这也带来一个问题，就是现在的个人网络设备都没有公网IP，这就意味着个人设备无法直接被其他外网用户主动访问（虽然确实起到一定防火墙作用）。为了能够被其他公网用户访问，需要用一种叫做**端口映射（端口转发）**的技术。</p>
+<h2 id="端口映射"><a class="markdownIt-Anchor" href="#端口映射"></a> 端口映射</h2>
+<p>因为内网中的设备被网关所隐蔽，所以外网用户无法直接访问内网设备，但是我们可以事先在网关上维护好映射表，让外网发往路由器P2端口的数据报都被转发到A1的P1端口，这样就可以让内网设备的某个应用向外网提供服务了。</p>
+<p>请注意，我在这段文字中的都说的是“外网”而非“公网”，因为正如上文所说，大部分人都处于“大内网“下，也就是说数据报还要经过ISP的网关才能到达家中的网关。而普通人是没有ISP的网关的配置权限的，这就意味着简单的端口映射是行不通的。就算可以配置ISP网关，经过两层端口映射后延迟也会变得难以接受。</p>
+<h2 id="天无绝人之路"><a class="markdownIt-Anchor" href="#天无绝人之路"></a> 天无绝人之路</h2>
+<p>但是，我们是可以通过联系ISP客服来获得公网IP的，给家中网关分配公网IP后，我们的数据报就不需要进过运营商的网关了。但是，配置好我的路由器后，我发现还是不能上网，检查后发现我仍然不是用公网IP上网的，经过检查我家网络的拓扑结构后，我发现我家网络的拓扑结构如下图：</p>
+<p><img src="/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse1.png" srcset="/img/loading.gif" lazyload alt="myhouse1"></p>
+<p>由于我家的宽带拨号是在光猫上完成的，所以获得公网IP的实际上是我的光猫，而光猫下面一共连接了4个路由器，只设置一层的端口映射是不够的。经过思考后我想出来下面几种解决办法：</p>
+<p>1.在光猫上也设置一个端口映射，但是两层的端口映射可能会让延迟打折扣，所以这个方案不适合作为首选。</p>
+<p>2.将光猫配置为桥接模式。这种情况下光猫只负责光电信号的转化，拨号由路由器完成，于是路由器就可以获得公网IP。但是宽带拨号只能在一个设备上完成，我的路由器A拨号后，其他三台就无法联网。当然，可以配置其他三台路由器为有线中继或无线中继模式来实现上网，但这样会让路由器A负担过大，并且网络健壮性会下降。同时这种方案会让网络维护难度增大，一是光猫变桥接后，如果网络出问题ISP无法远程配置我家的光猫，需要安排师傅上门，二是我维护网络时需要同时配置四台路由器，过于麻烦。</p>
+<p>3.直接将我所用的路由器A设置为中继，中继光猫的信号，这样，我家的网络拓扑结构可以逻辑上表示为下图：</p>
+<p><img src="/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/myhouse2.png" srcset="/img/loading.gif" lazyload alt></p>
+<p>这种方式下，路由器只是作为一个信号中继器的作用，实际上的数据报都由光猫处理。我只需要在光猫上配置端口映射，就可以实现向公网提供服务了！</p>
+<blockquote>
+<p>为了配置光猫信息，需要获得光猫的超级管理员密码，这需要一定手段。并且运营商为了防止用户私自搭设服务器，（似乎）将光猫的80、8080等常用端口都封了，如果想要架设WEB服务器可能需要另外的端口。</p>
+</blockquote>
+<p><img src="/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/image-20221226155500696.png" srcset="/img/loading.gif" lazyload alt="image-20221226155500696"></p>
+<h2 id="化动为静"><a class="markdownIt-Anchor" href="#化动为静"></a> 化动为静</h2>
+<h3 id="内网-dhcp"><a class="markdownIt-Anchor" href="#内网-dhcp"></a> 内网-DHCP</h3>
+<p>为了免去因为DHCP租约到期后要重新配置端口映射的麻烦，需要在PC上将DHCP关闭，手动为其设置一个私有IP。</p>
+<h3 id="公网-ddns"><a class="markdownIt-Anchor" href="#公网-ddns"></a> 公网-dDNS</h3>
+<p>个人用户获得的公网IP是动态变化的，只要重启一次光猫就会改变（即使不手动重启，运营商也会隔段时间重启一次），这就给我们带来很大的不便利——每次要访问我们的主机时，都要确定一下公网IP是否改变。为了解决这一问题，可以使用<strong>dDNS（Dynamic Domain Name Server)</strong>，使用域名动态解析我们的公网IP，也就是当我们公网IP改变时，会更改DNS解析的内容，我这里使用花生壳（电信网关只支持花生壳）。</p>
+<h1 id="扩展"><a class="markdownIt-Anchor" href="#扩展"></a> 扩展</h1>
+<p>还有STUN、TURN等方法可以达到内网穿透的效果，其中STUN是通过服务器获取自己的公网IP和端口号，从而自行与公网上的目标建立连接；而TURN是通过一个中间的服务器来交换数据报，知名的樱花内网穿透就是利用这个原理来完成通信的。</p>
+<h1 id="结语"><a class="markdownIt-Anchor" href="#结语"></a> 结语</h1>
+<p>最后就是用这个办法与好基友成功联机，延迟比使用内网穿透降低了不少，几乎感受不到延迟。想到Minecraft开服我就回忆起初中那段玩MC的时光，当时没有钱，也没有支付宝、微信支付这种手段，只能和朋友买Q币卡，然后上淘宝用Q币卡租服务器。当时对计算机知识了解得太少了，被各种配置搞的晕头转向的，不过想想许多计算机知识或许都是MC带给我的。</p>
+<p>参考地址</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/31332694">知乎：NAT协议是怎样工作的</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6189209?spm_id_from=333.1007.0.0">BiliBili：B站最详细内网穿透原理，看了包懂，全是干货！</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/243540">阿里云：STUN, TURN, ICE介绍</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>学习NAT协议，在家中架设服务器</div>
+      <div>http://zhouhf.top/2022/12/26/网络/学习NAT协议，在家中架设服务器/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年12月26日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/29/%E9%9D%9E%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" title="2022年度总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2022年度总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/11/03/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/" title="基于LeNet的手写数字识别">
+                        <span class="hidden-mobile">基于LeNet的手写数字识别</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'd88dd7969baaa862e65e580d8465cb60'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,859 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一个容器（队列、栈、链表）只能存储指定类型的对象（当然，基类指针容器可以用于存放派生类的对象），这就给编程带来很大的不便。我们希望我们能够编写一个其存储对象可变的容器，此时类模板就派上了用场。  类模板的简单使用 声明语法如下： 12template &lt;class Type&gt; &#x2F;&#x2F; in older compilertemplate &lt;typename Type&gt; &#x2F;&#x2F; i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++类模板">
+<meta property="og:url" content="http://zhouhf.top/2023/11/13/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C-%E6%A8%A1%E6%9D%BF%E7%B1%BB/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="一个容器（队列、栈、链表）只能存储指定类型的对象（当然，基类指针容器可以用于存放派生类的对象），这就给编程带来很大的不便。我们希望我们能够编写一个其存储对象可变的容器，此时类模板就派上了用场。  类模板的简单使用 声明语法如下： 12template &lt;class Type&gt; &#x2F;&#x2F; in older compilertemplate &lt;typename Type&gt; &#x2F;&#x2F; i">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-13T06:59:47.000Z">
+<meta property="article:modified_time" content="2025-03-28T07:07:46.590Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="编程语言">
+<meta property="article:tag" content="Cpp">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C++类模板 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C++类模板"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-13 14:59" pubdate>
+          2023年11月13日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C++类模板</h1>
+            
+            <div class="markdown-body">
+              
+              <p>一个容器（队列、栈、链表）只能存储指定类型的对象（当然，基类指针容器可以用于存放派生类的对象），这就给编程带来很大的不便。我们希望我们能够编写一个其存储对象可变的容器，此时<strong>类模板</strong>就派上了用场。</p>
+<h1 id="类模板的简单使用"><a class="markdownIt-Anchor" href="#类模板的简单使用"></a> 类模板的简单使用</h1>
+<p>声明语法如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Type</span>&gt;</span> <span class="hljs-comment">// in older compiler</span><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Type&gt; <span class="hljs-comment">// in newer compiler</span><br></code></pre></td></tr></table></figure>
+<p>这里<code>Type</code>的名字是我们定义的，符合标识符的规范即可。</p>
+<p>类模板的使用相对来说容易理解，这里不再赘述，只给出一段示例的代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span>  &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Type</span>&gt;</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stack</span></span><br><span class="hljs-class">&#123;</span><br><span class="hljs-keyword">private</span>:<br>    Type items[<span class="hljs-number">100</span>];<br>    <span class="hljs-keyword">int</span> top;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Stack</span>();<br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isempty</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-comment">// ...</span><br>&#125;;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Type</span>&gt;</span> <span class="hljs-comment">// in implementation, don&#x27;t forget this</span><br>Stack&lt;Type&gt;::<span class="hljs-built_in">Stack</span>()<br>&#123;<br>	<span class="hljs-comment">// ...</span><br>&#125;<br><br><span class="hljs-comment">// ...</span><br><br>Stack&lt;<span class="hljs-keyword">int</span>&gt; kernels;<br>Stack&lt;string&gt; colonels;<br></code></pre></td></tr></table></figure>
+<p>需要注意的是，在声明时需要显式地提供类型，并且不同类型的<code>Stack</code>是不同的类，不可以相互赋值。</p>
+<h1 id="函数模板以及具体化"><a class="markdownIt-Anchor" href="#函数模板以及具体化"></a> 函数模板以及具体化</h1>
+<p>假如我们声明并定义了下面这个交换函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Swap</span><span class="hljs-params">(T &amp;a, T &amp;b)</span></span><br><span class="hljs-function"></span>&#123;<br>    T temp;<br>    temp = a;<br>    a = b;<br>	b = temp<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>于是在使用这个函数时，我们不需要为这个函数指定如何类型参数，直接将对应的参数传递给它即可。这样编译器会自动产生若干个<code>Swap</code>函数，分别对应我们每次调用的函数。在最终生成的可执行文件中不会包含函数模板，而是直接使用实际的参数替换我们的函数参数，于是会产生多份这个函数的定义。</p>
+<h2 id="局限以及解决方法"><a class="markdownIt-Anchor" href="#局限以及解决方法"></a> 局限，以及解决方法</h2>
+<p>函数模板会遇到一些问题，例如，在函数体中使用到<code>*</code>运算符，但是我们传入的模板参数<code>string</code>没有定义这个运算，那么就会出现问题。一种解决方案是通过重载运算符来实现，另一种解决方案是通过<strong>模板具体化</strong>来实现。具体化的意思是，提供一个具体的函数定义，当函数模板找到与函数调用匹配的函数是，就使用该定义，不再寻找模板。可以理解为通用的函数模板提供一个特例，这个特例不使用原来的函数模板。</p>
+<h3 id="第三代具体化"><a class="markdownIt-Anchor" href="#第三代具体化"></a> 第三代具体化</h3>
+<p>第三代具体化有以下特点：</p>
+<ul>
+<li>对于一个函数名，可以有非模板函数、模板函数和显式具体化函数模板以及它们的重载版本；</li>
+<li>显式具体化的原型和定义应以<code>template&lt;&gt;</code>打头，并通过名称来指出类型；</li>
+<li>具体化优先于常规模板，而非模板函数优先于具体化和常规模板。</li>
+</ul>
+<p>具体化的代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;&gt; <span class="hljs-keyword">void</span> Swap&lt;Job&gt;(Job &amp;, Job &amp;);<br><span class="hljs-keyword">template</span> &lt;&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Swap</span><span class="hljs-params">(Job&amp;, Job&amp;)</span></span>; <span class="hljs-comment">// simpler form</span><br></code></pre></td></tr></table></figure>
+<p>这样，当使用<code>job</code>对象作为参数调用<code>Swap</code>时，就会优先调用下面这个具体化的函数模板。</p>
+<blockquote>
+<p>具体化和再定义一个普通的函数有什么区别？在调用上，可以显式地写上尖括号来使得编译器调用具体化的函数模板，否则编译器优先选择非模板函数。</p>
+</blockquote>
+<h3 id="实例化和具体化"><a class="markdownIt-Anchor" href="#实例化和具体化"></a> 实例化和具体化</h3>
+<p>辨析一下这两个概念，实例化是指编译器生成函数模板的一个实例（真正的代码，而非函数模板），具体化指的是程序员手动为函数模板指定一个某模板参数对应的函数，不让编译器使用原来“广泛”定义的函数，也可以理解为“特别化。</p>
+<h4 id="1隐式实例化"><a class="markdownIt-Anchor" href="#1隐式实例化"></a> 1.隐式实例化</h4>
+<p>隐式实例化很好理解，就是我们为函数传递参数时，编译器自动判断传入模板参数的类型并实例化一个函数，这个过程是隐式的，我们感知不到，所以称为隐式实例化。</p>
+<h4 id="2显式实例化"><a class="markdownIt-Anchor" href="#2显式实例化"></a> 2.显式实例化</h4>
+<p>显示实例化是指我们手动地命令编译器实例化指定类型的函数定义，具体语法为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> <span class="hljs-keyword">void</span> Swap&lt;<span class="hljs-keyword">int</span>&gt;(<span class="hljs-keyword">int</span>,<span class="hljs-keyword">int</span>);<br></code></pre></td></tr></table></figure>
+<p>显式实例化可以更好地帮助编译器完成参数匹配：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>&gt;</span><br><span class="hljs-function">T <span class="hljs-title">add</span><span class="hljs-params">(T a, T b)</span></span>&#123; <span class="hljs-keyword">return</span> a+b&#125;<br><span class="hljs-comment">//...</span><br><span class="hljs-keyword">int</span> m = <span class="hljs-number">6</span>;<br><span class="hljs-keyword">double</span> x = <span class="hljs-number">10.2</span>;<br>Add&lt;<span class="hljs-keyword">double</span>&gt;(m,x);<br></code></pre></td></tr></table></figure>
+<p>这里虽然没有匹配的函数，但是我们显式实例化了一个函数，在调用时，就可以将<code>int</code>类型转化为<code>double</code>类型</p>
+<h4 id="3显式具体化"><a class="markdownIt-Anchor" href="#3显式具体化"></a> 3.显式具体化</h4>
+<p>显示具体化的概念上面已经提到过，就是形成一个函数模板的特殊版本，其语法上与显式实例化的区别就是显式具体化的声明多一对尖括号：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;&gt; <span class="hljs-keyword">void</span> Swap&lt;<span class="hljs-keyword">int</span>&gt;(<span class="hljs-keyword">int</span> &amp;,<span class="hljs-keyword">int</span> &amp;);<br></code></pre></td></tr></table></figure>
+<h2 id="函数调用的匹配"><a class="markdownIt-Anchor" href="#函数调用的匹配"></a> 函数调用的匹配</h2>
+<p>编译器如何为一个函数调用匹配相应的函数，这是一个非常复杂的过程，但是明确的是编译器是有一套标准的规则的，并且当存在两个可以调用的函数时，编译器会报二义性错误。在使用的原则上说，不要定义两个非常相似的函数，以防引起二义性错误。</p>
+<h2 id="decltype关键字"><a class="markdownIt-Anchor" href="#decltype关键字"></a> decltype关键字</h2>
+<p>decltype关键字在无法预知的值类型的情况下，可以声明一个变量，如下列代码所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T1</span>, <span class="hljs-keyword">class</span> <span class="hljs-title">T2</span>&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ft</span><span class="hljs-params">(T1 x,T2 y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">decltype</span>(x+y) xpy = x+y;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>decltype(<em>expression</em>)的含义为，表达式<em>expression</em>所代表的值的类型，这个表达式如果是一个函数调用，则类型会与函数的返回类型相同，注意：<strong>编译器并不会实际调用函数，而是通过查看其返回值来获得返回类型</strong>。</p>
+<blockquote>
+<p>在频繁用到这个类型时，可以将<code>typedef</code>关键字与<code>decltype</code>关键字一起使用，这样可以减少一点代码量。</p>
+</blockquote>
+<h3 id="decltype与函数返回值"><a class="markdownIt-Anchor" href="#decltype与函数返回值"></a> decltype与函数返回值</h3>
+<p>如果无法预知函数的返回值，则可以使用<strong>后置返回类型</strong>来完成这个操作，后置返回类型将返回值的声明置于已声明的参数后，使得返回类型较为可知。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T1</span>,<span class="hljs-keyword">class</span> <span class="hljs-title">T2</span>&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">auto</span> <span class="hljs-title">gt</span><span class="hljs-params">(T1 x, T2 x)</span> -&gt; <span class="hljs-title">decltype</span><span class="hljs-params">(x+y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// ...</span><br>    <span class="hljs-keyword">return</span> x+y;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="类模板的实例化"><a class="markdownIt-Anchor" href="#类模板的实例化"></a> 类模板的实例化</h1>
+<p>类模板的实例化和函数模板的实例化非常相似，在概念上也很相近。<strong>隐式实例化</strong>指的是在声明一个或多个对象时编译器自动根据模板所提供的处方来生成具体的类定义。<strong>显示实例化</strong>使用一个声明语句来让编译器显示地生成一个类：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ArrayTP</span>&lt;</span>string, <span class="hljs-number">100</span>&gt;;<br></code></pre></td></tr></table></figure>
+<h2 id="显式具体化"><a class="markdownIt-Anchor" href="#显式具体化"></a> 显式具体化</h2>
+<p>显式具体化也和函数模板的定义相似，就是为类模板提供一个特殊的模板参数，使得这个类模板在实例化的行为与普通模板不同。具体语法为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;&gt; <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Classname</span>&lt;</span><span class="hljs-keyword">int</span>&gt;&#123; <span class="hljs-comment">/*...*/</span> &#125;;<br></code></pre></td></tr></table></figure>
+<p>第一个尖括号内是暂时没有被指定的模板参数，后一个尖括号内是被指定的模板参数。如果所有的模板参数都被指定，那么就是显式具体化，如果有一个以上的模板参数没有被具体化，那么就是<strong>部分具体化</strong>。编译器在选择类模板时，会选择具体化程度最高的模板。</p>
+<h1 id="更高级的类型参数"><a class="markdownIt-Anchor" href="#更高级的类型参数"></a> 更高级的类型参数</h1>
+<p>类型参数中不止可以使用类，还可以使用像函数一样的参数来规定容器的大小，具体见代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">T</span>,<span class="hljs-title">int</span> <span class="hljs-title">n</span>&gt;</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ArrayTP</span></span><br><span class="hljs-class">&#123;</span><br><span class="hljs-keyword">private</span>:<br>    T ar[n];<br>	<span class="hljs-comment">// ...    </span><br>&#125;<br><br>ArrayTP&lt;<span class="hljs-keyword">double</span>, <span class="hljs-number">10</span>&gt; eggweights;<br></code></pre></td></tr></table></figure>
+<p>这样的参数称为<strong>非类型</strong>或<strong>表达式</strong>参数。</p>
+<p>这样的参数有一定的限制，例如，这里类中不能修改模板参数的值，所以<code>n</code>的值不能被修改，另外需要注意的是，<code>n</code>不同，所生成的<code>ArrayTP</code>对象也不应该被看成是同一个类型的对象。</p>
+<p>总的来说，不应该把这里的<code>n</code>看成一个参数，而是一个即将用于替换下文代码的值。</p>
+<h2 id="默认模板类型参数"><a class="markdownIt-Anchor" href="#默认模板类型参数"></a> 默认模板类型参数</h2>
+<p>望文生义即可知道，这个特性应该和函数的默认参数很像，如果不提供对应位置的参数就会使用声明时的类型参数来替代。这里也不再赘述。</p>
+<h2 id="将模板用作参数"><a class="markdownIt-Anchor" href="#将模板用作参数"></a> 将模板用作参数</h2>
+<p>模板除了可以包含类型参数和非类型参数，还可以包含本身就是模板的参数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Thing</span>&gt;</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Crab</span></span><br></code></pre></td></tr></table></figure>
+<p>这样的声明意味着，假如有以下的声明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++">Crab&lt;King&gt; legs;<br></code></pre></td></tr></table></figure>
+<p>那么<code>King</code>的值必须与模板参数的说明匹配，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">King</span>&#123;</span> <span class="hljs-comment">/*...*/</span>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这个使用方法可能比较难理解，我个人的理解是：目前已经有一个容器类（如栈、队列），然后现在我想声明一个新的类，其中包含了若干个容器，那么就可以用这个技巧，让我们的新类中包含这些容器。举个例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Thing</span>&gt;</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span></span><br><span class="hljs-class">&#123;</span><br><span class="hljs-keyword">private</span>:<br>    Thing&lt;<span class="hljs-keyword">int</span>&gt; s1;<br>    Thing&lt;<span class="hljs-keyword">double</span>&gt; s2;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    MyClass&lt;vector&gt; t1;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样就获得了一个新的类，这个类中包含两个成员变量，一个是<code>vector&lt;int&gt;</code>，一个是<code>vector&lt;double&gt;</code>。更高端的用法是混合使用模板和类型参数，这样新类的两个容器所存放的数据类型就可以由我们自己定义。</p>
+<blockquote>
+<p>网上看到一个很好地类比：将模板类作为模板参数就好像将一个函数指针作为另一个函数的参数，都是为了方便另一个类/函数来使用。</p>
+</blockquote>
+<h1 id="模板类与友元"><a class="markdownIt-Anchor" href="#模板类与友元"></a> 模板类与友元</h1>
+<p>如果在模板类中像之前那样使用友元，那么情况会是这样的：这个友元会成为所有实例化模板的友元。在某些情况下（例如我们希望读取一个类被实例化为几个对象时），就应该让友元所能访问的模板隔离开来，就需要将友元也实例化。</p>
+<h2 id="非模板友元"><a class="markdownIt-Anchor" href="#非模板友元"></a> 非模板友元</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-keyword">void</span> <span class="hljs-title">report</span><span class="hljs-params">(HasFriend&lt;T&gt; &amp;)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>通过这样的声明，可以使得各个实例化模板的友元隔离开。需要注意的是，这样的友元并不是函数模板，它只是将一个模板作为参数，所以只用前还需要提供显示具体化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">report</span><span class="hljs-params">(HasFriend&lt;<span class="hljs-keyword">int</span>&gt; &amp;hf)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// definitions</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="模板类的约束模板友元函数"><a class="markdownIt-Anchor" href="#模板类的约束模板友元函数"></a> 模板类的约束模板友元函数</h2>
+<p><strong>约束模板友元函数</strong>首先声明模板函数，然后再在类的声明中将模板函数本身成为模板（或者说，使得类的每一个具体化都获得与友元匹配的具体化）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">report</span><span class="hljs-params">(T &amp;)</span></span>;<br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> TT&gt;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HasFriendT</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">void</span> report&lt;&gt;(HasFriend&lt;TT&gt; &amp;);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="模板类的非约束模板友元函数"><a class="markdownIt-Anchor" href="#模板类的非约束模板友元函数"></a> 模板类的非约束模板友元函数</h2>
+<p>还可以在类内部声明模板，使得函数的所有具体化都是每个类具体化的友元，即这个友元可以访问哪些数据是由调用时的参数决定的：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ManyFriend</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> C, <span class="hljs-keyword">typename</span> D&gt; <span class="hljs-function"><span class="hljs-keyword">friend</span> <span class="hljs-keyword">void</span> <span class="hljs-title">show</span><span class="hljs-params">(C &amp;,D &amp;)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在调用<code>show</code>函数时，其就会根据参数类型推断出C和D的类，并可以访问其私有成员。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">#编程语言</a>
+      
+        <a href="/tags/Cpp/">#Cpp</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C++类模板</div>
+      <div>http://zhouhf.top/2023/11/13/编程语言/C-模板类/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月13日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/16/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C-%E8%AF%AD%E8%A8%80%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7/" title="C++语言高级特性">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++语言高级特性</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/05/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C-%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF/" title="C++类的继承">
+                        <span class="hidden-mobile">C++类的继承</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '69b3b8d1d1b8720f926f0b1a4bb5f35d'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

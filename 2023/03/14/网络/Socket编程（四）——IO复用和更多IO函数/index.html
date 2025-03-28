@@ -1,0 +1,851 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="select函数实现的IO复用 想要一次与多个客户端通信，可以使用之前提到过的多进程的方法。但是多个进程会各自占有独立的内存空间，每次CPU调度进程时切换上下文需要耗费很多时间。而IO复用技术可以减少需要使用的服务端进程数，使用尽量少的资源来争取尽量高的通信效率。  书中举的例子是学生向老师提问的例子，如果要回答10名学生的问题就需要分配10名教室，IO复用就是可以使用一位“超级教师”，他可以应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Socket编程（四）——IO复用和更多IO函数">
+<meta property="og:url" content="http://zhouhf.top/2023/03/14/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94IO%E5%A4%8D%E7%94%A8%E5%92%8C%E6%9B%B4%E5%A4%9AIO%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="select函数实现的IO复用 想要一次与多个客户端通信，可以使用之前提到过的多进程的方法。但是多个进程会各自占有独立的内存空间，每次CPU调度进程时切换上下文需要耗费很多时间。而IO复用技术可以减少需要使用的服务端进程数，使用尽量少的资源来争取尽量高的通信效率。  书中举的例子是学生向老师提问的例子，如果要回答10名学生的问题就需要分配10名教室，IO复用就是可以使用一位“超级教师”，他可以应">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-14T14:00:48.000Z">
+<meta property="article:modified_time" content="2023-03-19T08:08:16.638Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Socket编程（四）——IO复用和更多IO函数 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Socket编程（四）——IO复用和更多IO函数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-14 22:00" pubdate>
+          2023年3月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          45 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Socket编程（四）——IO复用和更多IO函数</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="select函数实现的io复用"><a class="markdownIt-Anchor" href="#select函数实现的io复用"></a> select函数实现的IO复用</h1>
+<p>想要一次与多个客户端通信，可以使用之前提到过的多进程的方法。但是多个进程会各自占有独立的内存空间，每次CPU调度进程时切换上下文需要耗费很多时间。而IO复用技术可以减少需要使用的服务端进程数，使用尽量少的资源来争取尽量高的通信效率。</p>
+<blockquote>
+<p>书中举的例子是学生向老师提问的例子，如果要回答10名学生的问题就需要分配10名教室，IO复用就是可以使用一位“超级教师”，他可以应对所有学生的提问，但代价是每次学生提问前都要举手。</p>
+</blockquote>
+<h2 id="理解select函数"><a class="markdownIt-Anchor" href="#理解select函数"></a> 理解select函数</h2>
+<p>select函数会监视被传递给它的一组文件描述符，这个文件描述符保存于<code>fd_set</code>中，按位来指示该文件描述符是否需要被监视。而<code>fd_set</code>变量的注册或更改操作都需要由以下的宏函数来完成：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C">FD_ZERO(fd_set * fdset); <span class="hljs-comment">// 将所有位置零</span><br>FD_SET(<span class="hljs-keyword">int</span> fd, fd_set * fdset); <span class="hljs-comment">// 注册文件描述符fd的信息（将第fd位设置为1）</span><br>FD_CLR(<span class="hljs-keyword">int</span> fd, fd_set * fdset);  <span class="hljs-comment">// 清除fd的信息（将第fd位设置为0）</span><br>FD_ISSET(<span class="hljs-keyword">int</span> fd, fd_set * fdset); <span class="hljs-comment">// 返回第fd位的真值</span><br></code></pre></td></tr></table></figure>
+<p>理解了<code>fd_set</code>的概念后，下面介绍select函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* maxfd: 监视的文件描述符的数量</span><br><span class="hljs-comment">* readset: 需要关注“有待读取数据”的文件描述符</span><br><span class="hljs-comment">* writeset: 需要关注“是否可传输无阻塞数据”的文件描述符</span><br><span class="hljs-comment">* exceptset: 关注的发生异常的文件描述符</span><br><span class="hljs-comment">* timeout: 等待时间的上限</span><br><span class="hljs-comment">* 返回值：错误返回-1，超时返回0。正常时返回发生事件的文件描述符数量。</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">select</span><span class="hljs-params">(<span class="hljs-keyword">int</span> maxfd, fd_set * readset, fd_set * writeset, fd_set * exceptset, <span class="hljs-keyword">const</span> struct timeval * timeout)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>select函数参数看似很复杂，实际上不难理解，第二、第三、第四个参数其实都可以看成是一维的布尔数组，而第一个参数就指定了数组的大小。注意，由于数组下标是连续的，所以即使只监视一个文件描述符为n，也要将<code>maxfd</code>设置为n+1。</p>
+<p>最后一个参数的一个定义如下的结构体：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timeval</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">long</span> tv_sec; <span class="hljs-comment">//seconds</span><br>    <span class="hljs-keyword">long</span> tv_usec; <span class="hljs-comment">//microseconds</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>select函数调用时会进入阻塞状态，只有当监视的文件描述符发生变化时才会返回，最后一个参数就是为了防止时间过久。</p>
+<h2 id="使用select函数"><a class="markdownIt-Anchor" href="#使用select函数"></a> 使用select函数</h2>
+<p>select函数设计的几个细节其实让人很摸不着头脑。注意到select函数除了第一个参数外都是传递指针，大多数情况下这意味着函数将要修改参数的值，select函数正是如此。传递给select函数的<code>fd_set</code>变量都会被初始化为0，待函数返回后，这些<code>fd_set</code>中发生变化（读取、可写、异常）的对应的位才会被置为1，所以<strong>每次传递给select的参数都要被复制一遍</strong>。同样，每次执行完后<code>timeout</code>函数都会被替换为超时的剩余时间。</p>
+<p>下面是调用select函数的大致流程，由于select函数的设计问题，调用较为复杂，之后会介绍更优的epoll函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs C">fd_set reads,cpy_reads;<br>FD_ZERO(&amp;reads);<br>FD_SET(serv_sock,&amp;reads);<br>fd_max = serv_sock;<br><br><span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)<br>&#123;<br>    cpy_reads=reads; <span class="hljs-comment">// 复制需要监听的描述符，否则会被清零</span><br>    timeout.tv_sec=<span class="hljs-number">5</span>;<br>    <span class="hljs-keyword">if</span>((fd_num=select(fd_max+<span class="hljs-number">1</span>,&amp;cpy_reads,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,&amp;timeout))==<span class="hljs-number">-1</span>)<br>        <span class="hljs-keyword">break</span>;<br>    <br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;fd_max+<span class="hljs-number">1</span>;i++)<br>    &#123;<br>        <span class="hljs-keyword">if</span>(FD_ISSET(i,&amp;cpy_reads)) <span class="hljs-comment">// 遍历数组，检查每一位是否发生变化</span><br>        &#123;<br>            <span class="hljs-keyword">if</span>(i==serv_sock) <span class="hljs-comment">// 服务端套接字发生变化，就是有新的连接请求</span><br>            &#123;<br>               clnt_sock=accept(...);<br>               FD_SET(clnt_sock,&amp;reads); <span class="hljs-comment">// 将客户端套接字纳入监听的范围</span><br>               fd_max=max(fd_max,clnt_sock);<br>           	&#125;<br>            <span class="hljs-keyword">else</span><br>            &#123;<br>             	str_len=read(i,buf,BUF_SIZE);<br>                <span class="hljs-keyword">if</span>(str_len==<span class="hljs-number">0</span>)<br>                &#123;<br>                    FD_CLR(i,&amp;reads); <span class="hljs-comment">// 关闭客户端套接字</span><br>                    close(i);<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>select函数虽然封装了一部分内容，但需要我们做的事还是很多的。这样看来，select的设计看起来也没有多高明，但是其思路确实非常令人有启发的。</p>
+<h2 id="基于windows平台的select"><a class="markdownIt-Anchor" href="#基于windows平台的select"></a> 基于Windows平台的select</h2>
+<p>除了包含的头文件不同外，select函数在Windows平台和Linux平台下是几乎完全相同的，只是<code>fd_set</code>结构体的声明有所不同。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">fd_set</span></span><br><span class="hljs-class">&#123;</span><br>    u_int fd_count;<br>    SOCKET fd_array[FD_SETSIZE];<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Windows的<code>fd_set</code>并非像Linux一样是按位操作的，这是因为Windows中句柄并非从零开始，且无规律可循，所以采用了这样的无符号整型数组。</p>
+<h1 id="比select更优的epoll函数"><a class="markdownIt-Anchor" href="#比select更优的epoll函数"></a> 比select更优的epoll函数</h1>
+<p>上面介绍的Linux下的select有以下两点不合理的地方：</p>
+<ul>
+<li>每次调用完select都要遍历所有文件描述符</li>
+<li>每次调用select前都要向该函数复制一份文件描述符对象</li>
+</ul>
+<p>epoll函数的特点正好弥补了这两个缺点,epoll使用如下结构体来将发生事件的文件描述符集合到一起：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">epoll_event</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">__uint32_t</span> events;<br>    <span class="hljs-keyword">epoll_data_t</span> data;<br>&#125;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">union</span> <span class="hljs-title">epoll_data</span></span><br><span class="hljs-class">&#123;</span><br>	<span class="hljs-keyword">void</span> * ptr;<br>    <span class="hljs-keyword">int</span> fd;<br>    <span class="hljs-keyword">__uint32_t</span> u32;<br>    <span class="hljs-keyword">__uint64_t</span> u64;<br>&#125;<span class="hljs-keyword">epoll_data_t</span>;<br></code></pre></td></tr></table></figure>
+<p>epoll函数的文件描述符集合的保存空间称为“epoll例程”，下面这个函数创建一个epoll例程：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">epoll_create</span><span class="hljs-params">(<span class="hljs-keyword">int</span> size)</span></span>;<br><span class="hljs-comment">// 成功时返回文件描述符，失败时返回-1</span><br></code></pre></td></tr></table></figure>
+<p>生成例程后，需要在其内部注册监视对象文件描述符，此时使用<code>epoll_ctl</code>函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* epfd:用于注册监视对象的例程的文件描述符</span><br><span class="hljs-comment">* op:用于指定操作</span><br><span class="hljs-comment">* fd: 需要注册的监视对象文件描述符</span><br><span class="hljs-comment">* event: 监视对象的事件类型</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">epoll_ctl</span><span class="hljs-params">(<span class="hljs-keyword">int</span> epfd, <span class="hljs-keyword">int</span> op, <span class="hljs-keyword">int</span> fd, struct epoll_event * event)</span></span>;<br><span class="hljs-comment">// 成功时返回0，失败时返回-1</span><br></code></pre></td></tr></table></figure>
+<p><code>epoll_ctl(A,EPOLL_ADD,B,C)</code>用于在“例程A中注册文件描述符B，主要目的是监视参数C中的时间”。第二个参数有以下三种常量：</p>
+<ul>
+<li>EPOLL_CTL_ADD：注册文件描述符</li>
+<li>EPOLL_CTL_DEL：删除文件描述符</li>
+<li>EPOLL_CTL_MOD：更改关注事件发生情况</li>
+</ul>
+<p>当希望在例程中删除文件描述时，应该向第四个参数传递<code>NULL</code>。</p>
+<p><code>epoll_event</code>结构体可以用于保存发生事件的文件描述符集合，也可以在epoll例程中注册文件描述符时用于注册关注的事件。下面语句可以说明这个用处：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">epoll_event</span> <span class="hljs-title">event</span>;</span><br>event.events = EPOLLIN;<br>event.data.fd = sockfd;<br>epoll_ctl(epfd, EPOLL_CTL_ADD, sockfd, &amp;event);<br></code></pre></td></tr></table></figure>
+<p>这段代码将<code>sockfd</code>注册到例程<code>epfd</code>中。下面是events中可以保存的常量：</p>
+<ul>
+<li>EPOLLIN: 需要读取数据的情况</li>
+<li>EPOLLOUT: 输出缓冲为空，可以立即发送数据的情况</li>
+<li>EPOLLPRI: 收到OOB数据的情况</li>
+<li>EPOLLRDHUP: 断开连接或半关闭的情况，这在边缘触发方式下非常有用</li>
+<li>EPOLLERR:发送错误的情况</li>
+<li>EPOLLET:以边缘触发的方式得到时间通知</li>
+<li>EPOLLONESHOT:发生一次事件后，相应的文件描述符不再收到事件通知，需要向<code>epoll_ctl</code>函数第二个参数传递<code>EPOLL_CTL_MOD</code>再次设置事件。</li>
+</ul>
+<p>最后是与select有着同等地位的<code>epoll_wait</code>函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* epfd:例程的文件描述符</span><br><span class="hljs-comment">* events:保存发生事件的文件描述符集合的结构体地址（可以看成一个数组）</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">epoll_wait</span><span class="hljs-params">(<span class="hljs-keyword">int</span> epfd, struct epoll_event * events, <span class="hljs-keyword">int</span> maxevents, <span class="hljs-keyword">int</span> timeout)</span></span>;<br><span class="hljs-comment">// 成功时返回保存的最大事件数，失败时返回-1</span><br></code></pre></td></tr></table></figure>
+<h2 id="条件触发和边缘触发"><a class="markdownIt-Anchor" href="#条件触发和边缘触发"></a> 条件触发和边缘触发</h2>
+<p>这两个名词似乎有些像数字电路中的每次，实际上这两个词的意思和数电中的意思相差不大。条件触发就是只要缓冲区有数据就会一直通知该事件，而边缘触发只有在有新数据到来时才会通知该事件。开启边缘触发有以下三个关键步骤：</p>
+<h3 id="1-读取errno变量验证错误原因"><a class="markdownIt-Anchor" href="#1-读取errno变量验证错误原因"></a> 1、读取errno变量验证错误原因</h3>
+<p>errno变量在头文件<code>error.h</code>中，当read函数发现输入缓冲没有数据可以读入时不仅会返回-1，还会在errno中保存EAGAIN变量。在读取完缓冲区内容后，如果errno的值为EAGAIN，则可以结束读取。</p>
+<h3 id="2-更改套接字属性为非阻塞"><a class="markdownIt-Anchor" href="#2-更改套接字属性为非阻塞"></a> 2、更改套接字属性为非阻塞</h3>
+<p>更改套接字属性需要先获得套接字原来的属性，然后将非阻塞的属性通过位运算添加：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">int</span> flag = fcntl(fd, F_GETFL,<span class="hljs-number">0</span>);<br>fcntl(fd, F_SETFL, flag|O_NONBLOCK);<br></code></pre></td></tr></table></figure>
+<h3 id="3-将文件描述符改为边缘触发"><a class="markdownIt-Anchor" href="#3-将文件描述符改为边缘触发"></a> 3、将文件描述符改为边缘触发</h3>
+<p>正如上文所描述的，将<code>epoll_event</code>结构体中的<code>events</code>设置为对应的值即可，注意，这里仍需要位运算操作：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C">event.events = EPOLLIN|EPOLLET;<br></code></pre></td></tr></table></figure>
+<p>由于边缘触发只会在数据到来时通知一次，所以需要使用一个while循环在每次有新数据到来时读完缓冲区中的所有数据，这是与条件触发不一样的另一个地方。详细代码可以参考书本。</p>
+<h1 id="更多io函数"><a class="markdownIt-Anchor" href="#更多io函数"></a> 更多IO函数</h1>
+<h2 id="linux中的send和recv"><a class="markdownIt-Anchor" href="#linux中的send和recv"></a> Linux中的send和recv</h2>
+<p>Linux平台下其实也有send和recv这两个函数，与Windows平台下并无区别。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">send</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sockfd, <span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> * buf, <span class="hljs-keyword">size_t</span> nbytes, <span class="hljs-keyword">int</span> flags)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">recv</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sockfd, <span class="hljs-keyword">void</span> * buf, <span class="hljs-keyword">size_t</span> nbytes, <span class="hljs-keyword">int</span> flags)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>最后一个参数是可选项，下面是可选项的种类以及含义:</p>
+<ul>
+<li>MSG_OOB:传送带外数据</li>
+<li>MSG_PEEK：验证输入缓冲中是否存在接收的数据</li>
+<li>MSG_DONTROUTE：数据传输过程中不参照路由表</li>
+<li>MSG_DONTWAIT：调用IO函数时不阻塞</li>
+<li>MSG_WAITALL：防止函数返回，直到接收全部请求的字节数</li>
+</ul>
+<h2 id="msg_oob说明"><a class="markdownIt-Anchor" href="#msg_oob说明"></a> MSG_OOB说明</h2>
+<p>OOB数据译为紧急数据，但是实际上并不会比普通数据快，只是在TCP的报头会有一个URG指针用于表示“紧急”的数据。“紧急”的数据会在到来时给进程发送一个<code>SIGURG</code>信号，如果进程为该信号注册了对应的处理函数，就可以通过这个处理函数来完成一些内容。</p>
+<p>换言之，紧急数据并不是在网络传输时更优先的数据（但是紧急数据经过的通信路径可能确实不同），而是告诉程序员需要优先处理的数据。</p>
+<h2 id="检查输入缓冲"><a class="markdownIt-Anchor" href="#检查输入缓冲"></a> 检查输入缓冲</h2>
+<p>同时设置<code>MSG_PEEK</code>和<code>MSG_DONTWAIT</code>选项可以验证输入缓冲中是否存在接收的数据。前者使得调用的recv函数不会删除缓冲区的内容，后者使得recv使用非阻塞式IO。</p>
+<h1 id="readv和writev函数"><a class="markdownIt-Anchor" href="#readv和writev函数"></a> readv和writev函数</h1>
+<p>这两个函数的功能是对数据进行整合，可以理解为将原来散开的数据聚合到一起发送。下面是函数的原型：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;sys/uio.h&gt;</span></span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">* filedes: 发送的文件描述符</span><br><span class="hljs-comment">* iov: 结构体数组的地址，结构体iovec中包含待发送数据的位置和大小信息</span><br><span class="hljs-comment">* invcnt: 数组长度</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">writev</span><span class="hljs-params">(<span class="hljs-keyword">int</span> filedes, <span class="hljs-keyword">const</span> struct iovec* iov, <span class="hljs-keyword">int</span> iovcnt)</span></span>;<br><span class="hljs-comment">// 成功时返回发送的字节数，失败时返回-1</span><br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iovec</span></span><br><span class="hljs-class">&#123;</span><br>	<span class="hljs-keyword">void</span> * iov base; <span class="hljs-comment">// buffer adress</span><br>    <span class="hljs-keyword">size_t</span> iov_len; <span class="hljs-comment">// buffer size</span><br>&#125;<br><br><span class="hljs-comment">// 与writev相似</span><br><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">readv</span><span class="hljs-params">(<span class="hljs-keyword">int</span> filedes, <span class="hljs-keyword">const</span> struct iovec * iov, <span class="hljs-keyword">int</span> iovcnt)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>其实这两个函数没有什么特别的地方（至少暂时我还没发现），也许就是改成用for循环来发送或读取数据罢了。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Socket编程（四）——IO复用和更多IO函数</div>
+      <div>http://zhouhf.top/2023/03/14/网络/Socket编程（四）——IO复用和更多IO函数/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月14日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/02/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/" title="Socket编程（五）——多线程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Socket编程（五）——多线程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/13/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E8%BF%9B%E7%A8%8B/" title="Socket编程（三）——多进程">
+                        <span class="hidden-mobile">Socket编程（三）——多进程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '5d0d8f1175e1610127e232d90bd05f55'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -239,12 +239,134 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/01/15/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/" target="_self">
+        <a href="/2023/03/12/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BB%86%E8%8A%82%E5%92%8C%E9%80%89%E9%A1%B9/" target="_self">
+          Socket编程（二）——协议的细节和选项
+        </a>
+      </h1>
+
+      <a class="index-excerpt" href="/2023/03/12/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BB%86%E8%8A%82%E5%92%8C%E9%80%89%E9%A1%B9/" target="_self">
+        <div>
+          
+          接上一篇，主要介绍一下Socket编程中如何体现TCP&#x2F;IP族协议的一些细节，包括流量控制、半关闭等。  TCP连接过程 由于TCP协议是面向连接的，所以在进行数据传输前必须建立连接。  服务端方面 服务端首先需要创建自己的套接字，这个套接字并不是真正用于收发数据的，而是起到类似“门卫”的作用。服务端套接字绑定一个端口号后，便可以调用listen函数等待来自客户端的连接。当收到来自客户端的连接请求
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-03-12 13:27" pubdate>
+              2023-03-12
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BD%91%E7%BB%9C/">#网络</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/03/10/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E5%87%BD%E6%95%B0/" target="_self">
+          Socket编程（一）——基础函数
+        </a>
+      </h1>
+
+      <a class="index-excerpt" href="/2023/03/10/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E5%87%BD%E6%95%B0/" target="_self">
+        <div>
+          
+          本篇笔记基于尹圣雨的《TCP&#x2F;IP编程》，主要记录Socket编程中比较关键的一些知识点和C函数。本笔记会像书中一样同时介绍Windows和Linux两个操作系统下的Socket函数，特别是两个操作系统下操作不同的地方。  套接字通信基本流程  套接字概念 套接字（socket）实际上就是网络数据传输用的软件设备，与其他用户通信的数据都需要通过这个软件接口进行传输。在代码中，它以整型变量的形式存在
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-03-10 14:31" pubdate>
+              2023-03-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/01/15/%E7%BD%91%E7%BB%9C/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/" target="_self">
           TCP协议通信原理
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2023/01/15/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/" target="_self">
+      <a class="index-excerpt" href="/2023/01/15/%E7%BD%91%E7%BB%9C/TCP%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/" target="_self">
         <div>
           
           概述 TCP协议是计算机网络中非常重要的一个协议，其工作在OSI模型的传输层。由于网络层的IP协议并不提供差错控制等服务，只保证尽力交付，所以需要使用更高一层的TCP协议来提供差错控制、流量控制、拥塞控制等服务，保证传输无误。 TCP协议有以下特点：   面向字节流。TCP协议的数据单位是字节。   面向连接，提供全双工通信。在通信前需要建立连接，且双方都可以进行数据传输和接收。   提供可靠交
@@ -302,12 +424,12 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/12/29/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" target="_self">
+        <a href="/2022/12/29/%E9%9D%9E%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" target="_self">
           2022年度总结
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2022/12/29/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" target="_self">
+      <a class="index-excerpt" href="/2022/12/29/%E9%9D%9E%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" target="_self">
         <div>
           
           还有两天就是元旦，不知不觉一年就这样过去了。正如《潜伏》中的吴敬中说的：”时间就像一头野驴，跑起来就不会停下“。特别是上了大学之后，更有这种感觉，一学期只有十八周，感觉一学期什么事都没有做就结束了。  永远忘不了的疫情 回想去年的元旦，我是在宿舍里度过的，当时西安的正在经历很严重的疫情，学校开始实行封宿舍，每天只能由一个人出门带饭，我们吃饭的方式就是把塑料袋套到塑料碗里吃。记得去年的12月31号，
@@ -351,6 +473,8 @@
             
               <a href="/tags/%E9%9A%8F%E7%AC%94/">#随笔</a>
             
+              <a href="/tags/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/">#年度总结</a>
+            
           </div>
         
       </div>
@@ -363,12 +487,12 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_self">
+        <a href="/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_self">
           学习NAT协议，在家中架设服务器
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2022/12/26/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_self">
+      <a class="index-excerpt" href="/2022/12/26/%E7%BD%91%E7%BB%9C/%E5%AD%A6%E4%B9%A0NAT%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%9C%A8%E5%AE%B6%E4%B8%AD%E6%9E%B6%E8%AE%BE%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_self">
         <div>
           
           背景 好久没写博客了，也许是因为前段时间大作业写的报告内容太多，有点厌倦了，坚持果然是件难事。 寒假放假在家想和朋友联机玩《Minecraft》，但苦于没有服务器可以用，于是便尝试自己开一个私服。因为学过计算机网络的知识，我知道自己的PC在路由器LAN口的内网下，于是便考虑了很多种方法来使自己能被公网的其他用户发现。顺便还研究了一下组网的原理。  理论部分  NAT协议 全称Network Ad
@@ -424,12 +548,12 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/" target="_self">
+        <a href="/2022/11/03/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/" target="_self">
           基于LeNet的手写数字识别
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2022/11/03/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/" target="_self">
+      <a class="index-excerpt" href="/2022/11/03/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%9F%BA%E4%BA%8ELeNet%E7%9A%84%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/" target="_self">
         <div>
           
           基于LeNet的手写数字识别 作者：周洪锋 学号：20009200766 [TOC]  0、环境配置 需要用到的Python包有matplotlib、pytorch、torchvision，其中pytorch可以使用GPU版本的，但需要按照好CUDA。  1、数据集下载 使用torchvision封装的数据集类来下载MNIST数据集，保存在工作文件夹下。 12345678down_path &#x3D;
@@ -487,12 +611,12 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/10/17/%E3%80%8A%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6%EF%BC%88%E4%BA%8C%EF%BC%89%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
+        <a href="/2022/10/17/%E6%95%B0%E5%AD%A6/%E3%80%8A%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6%EF%BC%88%E4%BA%8C%EF%BC%89%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
           《离散数学（二）》学习笔记
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2022/10/17/%E3%80%8A%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6%EF%BC%88%E4%BA%8C%EF%BC%89%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
+      <a class="index-excerpt" href="/2022/10/17/%E6%95%B0%E5%AD%A6/%E3%80%8A%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6%EF%BC%88%E4%BA%8C%EF%BC%89%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
         <div>
           
           过了快一年半，又再次接触到了《离散数学》这门课。与之前学习《线性代数》、《概率论》时那种“过了就行”的心态相比，现在我对数学慢慢开始有了敬畏的心理，可能是最近搞深度学习被各种数学公式折磨够了吧。而且，从主观感受上来说，《离散数学》这门课是最“返璞归真”的数学课，它用数学符号把世界上各种事物抽象成数学符号，用一种“理想的形式”来研究世界。我记得《离散数学（一）》的老师说过，世界是连续的，但是计算机底
@@ -550,12 +674,12 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/10/12/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
+        <a href="/2022/10/12/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
           数据库作业答案（转载自解凯华）
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2022/10/12/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
+      <a class="index-excerpt" href="/2022/10/12/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
         <div>
           
           2   2.1 已知关系R、W、D如下所示：   RRR    P Q T Y     2 b c d   9 a e f   2 b e f   9 a d e   7 g e f   7 g c d      WWW    T Y B     c d m   c d n   d f n      DDD    T Y     c d   e f      给出下列运算的结果：  R1&#x3D;πY,
@@ -582,7 +706,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AF%BE%E5%86%85/" class="category-chain-item">课内</a>
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
   
   
 
@@ -599,9 +723,9 @@
             
               <a href="/tags/%E8%AF%BE%E5%86%85/">#课内</a>
             
-              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
-            
               <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
+            
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
             
           </div>
         
@@ -615,12 +739,12 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/10/12/%E3%80%8A%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90%E3%80%8B%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88-%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
+        <a href="/2022/10/12/%E7%AE%97%E6%B3%95/%E3%80%8A%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90%E3%80%8B%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88-%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
           《算法设计与分析》作业答案(转载自解凯华）
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2022/10/12/%E3%80%8A%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90%E3%80%8B%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88-%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
+      <a class="index-excerpt" href="/2022/10/12/%E7%AE%97%E6%B3%95/%E3%80%8A%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90%E3%80%8B%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88-%E8%BD%AC%E8%BD%BD%E8%87%AA%E8%A7%A3%E5%87%AF%E5%8D%8E%EF%BC%89/" target="_self">
         <div>
           
           本文版权为原作者（解凯华）所有。  1.4  1.4.2   Description: Modify ThreeSum to work properly even when the int values are so large that adding two of them might cause overflow.   Solution: 123456789101112131415161718
@@ -664,9 +788,9 @@
             
               <a href="/tags/%E8%AF%BE%E5%86%85/">#课内</a>
             
-              <a href="/tags/%E7%AD%94%E6%A1%88/">#答案</a>
-            
               <a href="/tags/%E8%BD%AC%E8%BD%BD/">#转载</a>
+            
+              <a href="/tags/%E7%AD%94%E6%A1%88/">#答案</a>
             
           </div>
         
@@ -680,12 +804,12 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/10/11/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89/" target="_self">
+        <a href="/2022/10/11/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89/" target="_self">
           数据库作业答案（更新中）
         </a>
       </h1>
 
-      <a class="index-excerpt" href="/2022/10/11/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89/" target="_self">
+      <a class="index-excerpt" href="/2022/10/11/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%9C%E4%B8%9A%E7%AD%94%E6%A1%88%EF%BC%88%E6%9B%B4%E6%96%B0%E4%B8%AD%EF%BC%89/" target="_self">
         <div>
           
           第一章  第二章  1、 Q：试述关系模型的完整性规则。在参照完整性中，什么情况下外码属性的值可以为空值？ A：  实体完整性规则：关系R的主属性不能是空或未知。 参照完整性规则：关系R的外码F要么是空值，要么是被参照关系的某个码值。 用户定义的完整性：某一具体应用的数据必须满足语义要求  在尚未给该关系设置参照时，此时外码F的值可以全部为空。  2、  A： （1) R1&#x3D;TYcdefdeR_
@@ -712,7 +836,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AC%94%E8%AE%B0/" class="category-chain-item">笔记</a>
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
   
   
 
@@ -730,132 +854,6 @@
               <a href="/tags/%E8%AF%BE%E5%86%85/">#课内</a>
             
               <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">#数据库</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/10/10/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0/" target="_self">
-          循环神经网络笔记
-        </a>
-      </h1>
-
-      <a class="index-excerpt" href="/2022/10/10/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0/" target="_self">
-        <div>
-          
-          最近忙着队里招新的事情，太忙了，将近一个月没有更新博客。今天突然想起来，写点博客来记录一下*《动手学深度学习》*的学习过程，这篇主要记录一下循环神经网络（RNN）。  回顾 其实**卷积神经网络（CNN）**的分量也不轻，毕竟在图像处理领域CNN是十分重要，但是没什么时间写了，只能委屈把CNN的内容写到RNN里，权当作为一个回顾和比较了。  线性神经网络 在书中，先是介绍了线性神经网络，利用线性神
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-10-10 16:12" pubdate>
-              2022-10-10
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
-            
-              <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">#神经网络</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/09/12/%E3%80%8A%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E3%80%8B%E4%B9%8B%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" target="_self">
-          《动手学深度学习》之线性神经网络
-        </a>
-      </h1>
-
-      <a class="index-excerpt" href="/2022/09/12/%E3%80%8A%E5%8A%A8%E6%89%8B%E5%AD%A6%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E3%80%8B%E4%B9%8B%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" target="_self">
-        <div>
-          
-          零、数据对象的操作 在pytorch中，数据对象基本都可以用张量（实际上就是一个n维矩阵）来表达。  常见函数&#x2F;方法： X.shape：返回一个列表，表示张量每个维度的长度 X.numel：返回张量中元素个数 X.reshape:重新设置张量各个维度大小，可以通过指定某个维度大小为-1来自动计算 torch.zeros or torch.ones：创建一个全零张量or创建一个全1张量 torch
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-09-12 16:12" pubdate>
-              2022-09-12
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
-            
-              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
             
           </div>
         

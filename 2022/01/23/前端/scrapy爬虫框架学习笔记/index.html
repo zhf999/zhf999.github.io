@@ -1,0 +1,951 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Scrapy入门  一.基础指令 使用命令提示符，cd到想要操作的目录  scrapy startproject name 在该目录下创建项目  scrapy genspider name domain 使用前需要先cd到下一级目录  domain参数不需要带http或者https的头，也不需要引号   scrapy crawl name 启动名字为name的爬虫   二.开始  在name.p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scrapy爬虫框架学习笔记">
+<meta property="og:url" content="http://zhouhf.top/2022/01/23/%E5%89%8D%E7%AB%AF/scrapy%E7%88%AC%E8%99%AB%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="Scrapy入门  一.基础指令 使用命令提示符，cd到想要操作的目录  scrapy startproject name 在该目录下创建项目  scrapy genspider name domain 使用前需要先cd到下一级目录  domain参数不需要带http或者https的头，也不需要引号   scrapy crawl name 启动名字为name的爬虫   二.开始  在name.p">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-23T12:38:51.000Z">
+<meta property="article:modified_time" content="2024-11-19T11:11:58.668Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>scrapy爬虫框架学习笔记 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="scrapy爬虫框架学习笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-01-23 20:38" pubdate>
+          2022年1月23日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">scrapy爬虫框架学习笔记</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="scrapy入门"><a class="markdownIt-Anchor" href="#scrapy入门"></a> Scrapy入门</h1>
+<h2 id="一基础指令"><a class="markdownIt-Anchor" href="#一基础指令"></a> 一.基础指令</h2>
+<p><strong>使用命令提示符，cd到想要操作的目录</strong></p>
+<h3 id="scrapy-startproject-name"><a class="markdownIt-Anchor" href="#scrapy-startproject-name"></a> scrapy startproject name</h3>
+<p>在该目录下创建项目</p>
+<h3 id="scrapy-genspider-name-domain"><a class="markdownIt-Anchor" href="#scrapy-genspider-name-domain"></a> scrapy genspider name domain</h3>
+<p><strong>使用前需要先cd到下一级目录</strong></p>
+<blockquote>
+<p>domain参数不需要带http或者https的头，也不需要引号</p>
+</blockquote>
+<h3 id="scrapy-crawl-name"><a class="markdownIt-Anchor" href="#scrapy-crawl-name"></a> scrapy crawl name</h3>
+<p>启动名字为name的爬虫</p>
+<hr>
+<h2 id="二开始"><a class="markdownIt-Anchor" href="#二开始"></a> 二.开始</h2>
+<h3 id="在namepy中进行编辑"><a class="markdownIt-Anchor" href="#在namepy中进行编辑"></a> 在name.py中进行编辑</h3>
+<p>爬虫开启后会把html传到name.py中的parse方法，可以在parse中进行网页解析。<br>
+解析可以使用scrapy自带的方法，也可以脱离框架使用BeautifulSoup、XPath、CSS等。</p>
+<h3 id="日志信息的屏蔽"><a class="markdownIt-Anchor" href="#日志信息的屏蔽"></a> 日志信息的屏蔽</h3>
+<p>如果没有对日志信息屏蔽，会产生大量信息，影响调试。可以在settings.py中加入以下代码，将等级warning以下的日志信息全部屏蔽</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">LOG_LEVEL = <span class="hljs-string">&quot;WARNING&quot;</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="三将数据传输到pipe中"><a class="markdownIt-Anchor" href="#三将数据传输到pipe中"></a> 三.将数据传输到pipe中</h2>
+<p><strong>使用yield关键字</strong><br>
+yield可以将数据逐个转入，可以使用的数据类型是Request,BaseItem,dict或者None。（不可以直接返回列表！！）</p>
+<h3 id="在此之前"><a class="markdownIt-Anchor" href="#在此之前"></a> 在此之前</h3>
+<p>使用pipe需要先在设置中开启pipeline，在setting.py中取消列代码的注释：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">ITEM_PIPELINES = &#123;<br>   <span class="hljs-string">&#x27;firstscrapy.pipelines.FirstscrapyPipeline&#x27;</span>: <span class="hljs-number">300</span>,<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>字典中的键表示pipeline的名字，值表示这个pipeline的权重，数据会先结果权重小的pipeline再经过权重大的。</p>
+<h3 id="为什么要有多个pipeline"><a class="markdownIt-Anchor" href="#为什么要有多个pipeline"></a> 为什么要有多个pipeline</h3>
+<ul>
+<li>一个项目可能有多个爬虫，爬取不同的网站产生不同的数据，所以需要多个pipeline对数据进行处理。</li>
+<li>当然也可以使用一个pipeline，通过对item加一个<strong>come_from</strong>的键来判断该是数据的来源</li>
+</ul>
+<h3 id="pipelineprocess_item方法的第三个参数spider"><a class="markdownIt-Anchor" href="#pipelineprocess_item方法的第三个参数spider"></a> pipeline.process_item方法的第三个参数spider</h3>
+<p>spider参数即为创建的爬虫中的类，其有name属性（<a target="_blank" rel="noopener" href="http://xn--myspider-8q7m267h5d8cri7b52f.py">详见创建的myspider.py</a>），可以通过name来判断数据的来源，从而对不同数据进行处理。</p>
+<hr>
+<h2 id="四logging的使用"><a class="markdownIt-Anchor" href="#四logging的使用"></a> 四.logging的使用</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging<br>logging.warning(item)<br></code></pre></td></tr></table></figure>
+<p>将item以warning的方式打印出来。与print不同的地方是，logging可以以更高的等级打印，而且可以将打印的内容保存到本地，方便后续的调试，为开发提供了方便。<br>
+这里使用warning是因为之前在settings.py中设置了打印的等级为warning，只有warning级别的日志才能被打印在命令提示符里。</p>
+<h3 id="指明输出日志的来源"><a class="markdownIt-Anchor" href="#指明输出日志的来源"></a> 指明输出日志的来源</h3>
+<hr>
+<hr>
+<h1 id="组装request对象"><a class="markdownIt-Anchor" href="#组装request对象"></a> 组装Request对象</h1>
+<p><strong>语法</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">yield</span> scrapy.Rquest(next_page_url, call_back=self.parse)<br></code></pre></td></tr></table></figure>
+<p><strong>在settings中设置User-Agent：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">USER-AGENT = <span class="hljs-string">&#x27;Mozilla/5.0&#x27;</span><br></code></pre></td></tr></table></figure>
+<h2 id="完整的scrapyrequest对象"><a class="markdownIt-Anchor" href="#完整的scrapyrequest对象"></a> 完整的scrapy.Request()对象</h2>
+<p>scrapy.Request(url[,callback,method=‘GET’,headers,body,cookies,meta,dont_filter=False])</p>
+<ul>
+<li>注意事项
+<ul>
+<li>callback：制定传入的url参数交给哪个解析函数去处理</li>
+<li>meta：实现在不同解析函数中传递数据，meta默认会携带部分信息，如下载延迟，请求深度等等。<strong>meta以字典形式定义</strong>，存取数据均与字典操作相同。</li>
+<li>dont_filter：让scrapy不再对url去重，即一个url地址可能访问多次。</li>
+<li>cookies只能储存在函数的参数中，将cookies用字符串形式放在headers中传入将不起作用。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<hr>
+<p>直接使用上面的语句，输出的日志前面总是带有一个[root]标识，这表示了日志的来源，实际上，我们希望每一句日志都能体现出其来源，所以要使用下面的语句。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">logger = logging.getlogger(__name__)<br></code></pre></td></tr></table></figure>
+<p>该函数实例化一个logging，就可以使用下面的语句输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">logger.warning(item)<br></code></pre></td></tr></table></figure>
+<p>就可以在输出的日志前面加上[项目.spiders.爬虫名]的提示信息</p>
+<h3 id="日志的保存"><a class="markdownIt-Anchor" href="#日志的保存"></a> 日志的保存</h3>
+<p>在settings.py中设置</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">LOG_FILE = <span class="hljs-string">&quot;./log.log&quot;</span><br></code></pre></td></tr></table></figure>
+<p>第一个.号表示当前目录，储存后的文件为log.log。<br>
+修改设置后日志不会在命令提示符中输出。</p>
+<hr>
+<hr>
+<h1 id="选择器html解析器"><a class="markdownIt-Anchor" href="#选择器html解析器"></a> 选择器（html解析器）</h1>
+<blockquote>
+<p>scrapy拥有自己的一套数据提取机制，成为选择器（selector），因为它们通过特定的xpath或者css表达式来选择HTML文件中的某个部分。scrapy选择器构建于lxml库之上，这意味着它们在速度和解析准确性上非常相似，用法也和之前讲的lxml解析基本相似。当然也可以脱离这些体系，使用bs4库进行解析。</p>
+</blockquote>
+<hr>
+<h2 id="selector的用法"><a class="markdownIt-Anchor" href="#selector的用法"></a> selector的用法</h2>
+<h3 id="1xpath"><a class="markdownIt-Anchor" href="#1xpath"></a> 1.xpath()：</h3>
+<p>传入Xpath表达式，返回该表达式所对应的所有节点的selector list<strong>列表</strong></p>
+<h3 id="2css"><a class="markdownIt-Anchor" href="#2css"></a> 2.css()</h3>
+<p>传入css表达式，返回该表达式所对应的所有节点的selector list<strong>列表</strong></p>
+<h3 id="3extract"><a class="markdownIt-Anchor" href="#3extract"></a> 3.extract()</h3>
+<p>序列化该节点为Unicode字符串并返回list<strong>列表</strong></p>
+<h3 id="re"><a class="markdownIt-Anchor" href="#re"></a> re()</h3>
+<p>根据传入的正则表达式对数据进行提取，返回Unicode字符串列表，regex可以是一个已经编译的正则表达式，也可以是一个即将被编译的正则表达式字符串</p>
+<hr>
+<h2 id="更好地配对"><a class="markdownIt-Anchor" href="#更好地配对"></a> 更好地配对</h2>
+<p>方法的调用很简单，更多的时间是花在Xpath和css表达式的构造。scrapy提供了一种简便的方法来查看表达式是否正确、是否真的起作用。<br>
+另起一个命令行窗口，在其中输入</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">scrapy </span><span class="hljs-keyword">shell </span><span class="hljs-string">&quot;/爬取网站的网址&quot;</span><br></code></pre></td></tr></table></figure>
+<h2 id="记得要加双引号然后输入responsexpath或者responsecss就可以抽取出当前网站的标签返回的是unicode格式"><a class="markdownIt-Anchor" href="#记得要加双引号然后输入responsexpath或者responsecss就可以抽取出当前网站的标签返回的是unicode格式"></a> <strong>记得要加双引号</strong><br>
+然后输入response.xpath(“…”)或者response.css(“…”)就可以抽取出当前网站的标签（返回的是Unicode格式）。</h2>
+<hr>
+<h1 id="通过post请求登录"><a class="markdownIt-Anchor" href="#通过post请求登录"></a> 通过POST请求登录</h1>
+<h2 id="一-通过formrequest类来发送请求类似request"><a class="markdownIt-Anchor" href="#一-通过formrequest类来发送请求类似request"></a> 一、通过FormRequest类来发送请求（类似Request）</h2>
+<p>首先查看network中发送请求的请求头，获取请求头中的类似用户名、密码的键值对<br>
+特别要注意cookie、token等值，要在源代码中找到对应的值，在python的字典中填入。</p>
+<h2 id="二-更方便的方法"><a class="markdownIt-Anchor" href="#二-更方便的方法"></a> 二、更方便的方法</h2>
+<p>FormRequest类有一个from_request的方法，可以自动寻找网页中的表单。</p>
+<h3 id="参数"><a class="markdownIt-Anchor" href="#参数"></a> 参数：</h3>
+<ul>
+<li>response</li>
+<li>formdata 字典</li>
+<li>callback</li>
+</ul>
+<h2 id="如果response中有两个表单怎么办"><a class="markdownIt-Anchor" href="#如果response中有两个表单怎么办"></a> #如果response中有两个表单怎么办？</h2>
+<p>可以查看该方法的源代码，通过给其传入xpath、css等参数来定位表单。</p>
+<h2 id="三-直接通过request类来发送请求不过要将其中的method参数改为post"><a class="markdownIt-Anchor" href="#三-直接通过request类来发送请求不过要将其中的method参数改为post"></a> 三、直接通过Request类来发送请求，不过要将其中的method参数改为POST</h2>
+<hr>
+<hr>
+<h1 id="中间件"><a class="markdownIt-Anchor" href="#中间件"></a> 中间件</h1>
+<h2 id="下载中间件"><a class="markdownIt-Anchor" href="#下载中间件"></a> 下载中间件</h2>
+<h3 id="使用方法和pipeline类似在文件中定义一个类然后在setting中开启"><a class="markdownIt-Anchor" href="#使用方法和pipeline类似在文件中定义一个类然后在setting中开启"></a> 使用方法和pipeline类似，在文件中定义一个类，然后在setting中开启</h3>
+<h3 id="默认方法"><a class="markdownIt-Anchor" href="#默认方法"></a> 默认方法</h3>
+<p><strong>process_request(self,request,spider)</strong><br>
+当每个request通过下载中间件时，该方法被调用，可以用来修改请求头等信息（请求时调用）。该方法只能返回None。<br>
+返回值：</p>
+<ul>
+<li>若返回None，Scrapy将继续处理该Request，执行其他的中间件的相应方法，直到合适的下载器处理函数被调用，该Request被执行</li>
+<li>若返回Response对象，Scrapy不会调用其他的方法，而直接返回该response。</li>
+<li>若返回Request对象，Scrapy将停止调用其他中间件的process_request，并重新调度返回的Request。</li>
+</ul>
+<p><strong>process_response(self,request,response,spider)</strong><br>
+当下载器完成http请求，传递响应给引擎时调用（获得请求时调用）。该方法必须return request或者response。<br>
+返回值：</p>
+<ul>
+<li>当返回Response对象时，会将该response交给其他中间件的proce_response处理</li>
+<li>当返回Request对象是，则中间件链停止，返回的Request会被重新调度并下载。</li>
+</ul>
+<h3 id="process_request还可以用于添加代理"><a class="markdownIt-Anchor" href="#process_request还可以用于添加代理"></a> process_request还可以用于添加代理</h3>
+<p>用法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">request.meta[<span class="hljs-string">&quot;proxy&quot;</span>] = <span class="hljs-string">&quot;http://124.115.126.76:808&quot;</span><br><span class="hljs-comment">#代理的形式为：协议+ip地址+端口</span><br></code></pre></td></tr></table></figure>
+<hr>
+<hr>
+<h1 id="定义item"><a class="markdownIt-Anchor" href="#定义item"></a> 定义Item</h1>
+<h2 id="在文件itemspy中编辑"><a class="markdownIt-Anchor" href="#在文件itemspy中编辑"></a> 在文件items.py中编辑</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FirstscrapyItem</span>(<span class="hljs-params">scrapy.Item</span>):</span><br>    <span class="hljs-comment"># define the fields for your item here like:</span><br>    <span class="hljs-comment"># name = scrapy.Field()</span><br>    <span class="hljs-keyword">pass</span><br></code></pre></td></tr></table></figure>
+<p>该类继承自scrapy.Item类，实际上，该类的操作方法和字典一样，不同之处在于，该类使用时需要在items.py中使用<code>scrapy.Field()</code>“声明”一个键值对，再在解析函数中实例化对象来使用。<br>
+<strong>这么做的好处</strong></p>
+<ul>
+<li>目前已知的好处就是防止手抖将键的名字写错，因为当解析函数中键的名字写错时函数会引发异常。</li>
+<li>把数据交给pipeline时，可以用<code>isinstance()</code>来判断数据属于哪个Item，以便进行不同的处理</li>
+</ul>
+<h2 id="在mongdodb中使用item时的注意事项"><a class="markdownIt-Anchor" href="#在mongdodb中使用item时的注意事项"></a> 在mongdoDB中使用Item时的注意事项</h2>
+<p>由于mongdoDB只支持字典操作，所以要使用dict()函数将Item对象转化为字典类型再储存入数据库中</p>
+<hr>
+<hr>
+<h1 id="scrapy中的crawlspider类"><a class="markdownIt-Anchor" href="#scrapy中的crawlspider类"></a> Scrapy中的CrawlSpider类</h1>
+<h2 id="创建crawlspider爬虫"><a class="markdownIt-Anchor" href="#创建crawlspider爬虫"></a> 创建CrawlSpider爬虫</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">scrapy genspider -t crawl name domain<br></code></pre></td></tr></table></figure>
+<p>创建后会发现新建爬虫的父类变成了CrawlSpider，并且出现了一个rules的元组，即为规则。<br>
+rules元组冲包含了Rule类，包含以下参数</p>
+<ul>
+<li>LinkExtractor，即为链接提取器
+<ul>
+<li>allow 一个正则表达式</li>
+</ul>
+</li>
+<li>callback 提取出的url地址会交给callback处理</li>
+<li>follow 当前url地址的响应是否重新经过rules来提取（开启后相当于一个递归，通常在翻页时使用）</li>
+</ul>
+<p><strong>当然，也可以不使用rules规则，而在parse_item中yield出一个Request类，并定义一个解析方法来对网页进行解析。</strong></p>
+<h2 id="优缺点"><a class="markdownIt-Anchor" href="#优缺点"></a> 优缺点：</h2>
+<p>该类为程序员提供了一个创建爬虫的更简便的方式，可以用更少的代码量完成同样的操作，但缺点是无法在解析方法之间传递数据（没有meta参数用于传递）</p>
+<p>LinkExtractor参数补充：</p>
+<ul>
+<li>allow 满足正则表达式的url会被提取</li>
+<li>deny 满足正则表达式的url都不会被提取（优先级高于allow）</li>
+<li>allow_domains 会被提取的链接的domain</li>
+<li>deny_domains 不会被提取的链接的domain</li>
+<li>restrict_xpaths 使用xpath表达式，和allow共同作用过滤链接，该xpath满足的url地址都会被提取</li>
+</ul>
+<p>spider.Rule常见参数</p>
+<ul>
+<li>Link_extractor：</li>
+<li>callback：</li>
+<li>follow:</li>
+<li>process_link:为一个函数对象，当从Link_extractor中过滤出一个url时会调用这个函数来处理url（一般用于过滤url）</li>
+<li>process_request:一个函数对象，当提取到一个request时会调用该函数（一般用于过滤request）</li>
+</ul>
+<hr>
+<hr>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%89%8D%E7%AB%AF/" class="category-chain-item">前端</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%89%8D%E7%AB%AF/">#前端</a>
+      
+        <a href="/tags/%E7%88%AC%E8%99%AB/">#爬虫</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>scrapy爬虫框架学习笔记</div>
+      <div>http://zhouhf.top/2022/01/23/前端/scrapy爬虫框架学习笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年1月23日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/" title="计算机中的数据编码">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计算机中的数据编码</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/17/%E5%89%8D%E7%AB%AF/HTML%E8%A7%A3%E6%9E%90%E5%A4%A7%E6%B3%95/" title="HTML解析大法">
+                        <span class="hidden-mobile">HTML解析大法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '3334590a7116a607e56a15e05b5d6464'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

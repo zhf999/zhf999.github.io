@@ -1,0 +1,818 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="接上一篇，主要介绍一下Socket编程中如何体现TCP&#x2F;IP族协议的一些细节，包括流量控制、半关闭等。  TCP连接过程 由于TCP协议是面向连接的，所以在进行数据传输前必须建立连接。  服务端方面 服务端首先需要创建自己的套接字，这个套接字并不是真正用于收发数据的，而是起到类似“门卫”的作用。服务端套接字绑定一个端口号后，便可以调用listen函数等待来自客户端的连接。当收到来自客户端的连接请求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Socket编程（二）——协议的细节和选项">
+<meta property="og:url" content="http://zhouhf.top/2023/03/12/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BB%86%E8%8A%82%E5%92%8C%E9%80%89%E9%A1%B9/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="接上一篇，主要介绍一下Socket编程中如何体现TCP&#x2F;IP族协议的一些细节，包括流量控制、半关闭等。  TCP连接过程 由于TCP协议是面向连接的，所以在进行数据传输前必须建立连接。  服务端方面 服务端首先需要创建自己的套接字，这个套接字并不是真正用于收发数据的，而是起到类似“门卫”的作用。服务端套接字绑定一个端口号后，便可以调用listen函数等待来自客户端的连接。当收到来自客户端的连接请求">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zhouhf.top/2023/03/12/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BB%86%E8%8A%82%E5%92%8C%E9%80%89%E9%A1%B9/resize,m_fixed,w_1184.webp">
+<meta property="article:published_time" content="2023-03-12T05:27:52.000Z">
+<meta property="article:modified_time" content="2023-03-12T06:53:45.250Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zhouhf.top/2023/03/12/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BB%86%E8%8A%82%E5%92%8C%E9%80%89%E9%A1%B9/resize,m_fixed,w_1184.webp">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Socket编程（二）——协议的细节和选项 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Socket编程（二）——协议的细节和选项"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-12 13:27" pubdate>
+          2023年3月12日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Socket编程（二）——协议的细节和选项</h1>
+            
+            <div class="markdown-body">
+              
+              <p>接上一篇，主要介绍一下Socket编程中如何体现TCP/IP族协议的一些细节，包括流量控制、半关闭等。</p>
+<h1 id="tcp连接过程"><a class="markdownIt-Anchor" href="#tcp连接过程"></a> TCP连接过程</h1>
+<p>由于TCP协议是面向连接的，所以在进行数据传输前必须建立连接。</p>
+<h2 id="服务端方面"><a class="markdownIt-Anchor" href="#服务端方面"></a> 服务端方面</h2>
+<p>服务端首先需要创建自己的套接字，这个套接字并不是真正用于收发数据的，而是起到类似“门卫”的作用。服务端套接字绑定一个端口号后，便可以调用<code>listen</code>函数等待来自客户端的连接。当收到来自客户端的连接请求时，服务端就应该调用<code>accept</code>函数接受连接请求。回顾上一篇blog，该函数会返回一个套接字，这个套接字才是真实用于与客户端进行数据传输的。完成连接后就可以进数据传输了。</p>
+<h2 id="客户端方面"><a class="markdownIt-Anchor" href="#客户端方面"></a> 客户端方面</h2>
+<p>客户端方面的连接较为简单，只需要调用<code>connect</code>函数对服务端的指定端口发起连接请求即可。需要注意的是，客户端不需要指定端口号，而是由操作系统分配一个临时端口号。</p>
+<h2 id="无数据边界"><a class="markdownIt-Anchor" href="#无数据边界"></a> “无数据边界”</h2>
+<p>之前提到过，TCP这类<strong>面向连接</strong>的协议是不存在数据边界的。考虑书本上的例子——回声服务端：即服务端会将客户端发送的内容原样发送回去。这样的功能看似很简单，但是如果使用面向连接的协议来实现，就需要考虑许多问题。例如：</p>
+<ul>
+<li>客户端发送的内容会先放在缓冲区，有可能会被分成多次发送。</li>
+<li>服务端接收数据的数据有可能也被分成多段，无法确定字符串的结尾。（服务端只调用一次<code>read</code>的话会导致读取内容不全）</li>
+<li>服务端发送的内容有可能在缓冲区被分成多次发送。</li>
+</ul>
+<p>简而言之就是双方都不知道到底如何定义一个字符串的结束，这就要我们<strong>在应用层设计好协议来</strong>方便双方的数据传输。在传输层、网络层的协议都定义了固定格式的协议头，这就是为了保证数据传输过程中双方都能够理解，不会产生歧义。</p>
+<p>在这个例子中，可以约定用数据的前4个字节作为字符串长度，接下来的若干个字节就是字符串的内容。在读数据时，使用循环来保证读取的内容达到规定的长度。当然，也可以规定某个字符作为结束符，实现方法不同，协议的特点也不同。</p>
+<blockquote>
+<p>&quot;无数据边界&quot;意味着“数据传输过程中调用IO函数的次数不具有任何意义”。</p>
+</blockquote>
+<h1 id="udp消息发送"><a class="markdownIt-Anchor" href="#udp消息发送"></a> UDP消息发送</h1>
+<p>惯例上，人们习惯以”数据报（包）“作为面向连接的数据单位，以”消息“作为不面向连接的数据单位。与TCP协议不同，由于不需要建立连接，客户端和服务端双方都只需要一个套接字，就像是“信箱”一样，而且一个套接字可以同时与多个主机通信。</p>
+<h2 id="io函数"><a class="markdownIt-Anchor" href="#io函数"></a> IO函数</h2>
+<p>基于UDP的IO函数与TCP有所不同，毕竟实现原理都不同。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/socket.h&gt;</span></span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">* 前4个参数与TCP的函数类似，后两个参数用于指定发送的地址。</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">sendto</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sock, <span class="hljs-keyword">void</span> *buff, <span class="hljs-keyword">size_t</span> nbytes, <span class="hljs-keyword">int</span> flags, struct sockaddr *to, <span class="hljs-keyword">socklen_t</span> addrlen)</span></span>;<br><br><span class="hljs-function"><span class="hljs-keyword">ssize_t</span> <span class="hljs-title">recvfrom</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sock, <span class="hljs-keyword">void</span> *buff, <span class="hljs-keyword">size_t</span> nbytes, <span class="hljs-keyword">int</span> flags, struct sockaddr *from, <span class="hljs-keyword">socklen_t</span> addrlen)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>上面函数与TCP的IO函数最大的区别就是直接在函数中指定了接收和发送数据的地址，也不需要使用<code>bind</code>函数来绑定端口号，而是调用<code>sendto</code>和<code>recvfrom</code>自动分配一个端口，这点比TCP更直接，也能够直接体现出UDP这类面向消息的协议的特点。</p>
+<h2 id="已连接connectedudp套接字"><a class="markdownIt-Anchor" href="#已连接connectedudp套接字"></a> 已连接(connected)UDP套接字</h2>
+<p>UDP的IO函数传输过程分为3个步骤：注册IP和端口、传输数据、删除IP和端口。如果通信的对象较为固定，频繁调用IO函数可能会花费较多时间在注册和删除IP端口上，所以可以创建<strong>已连接UDP套接字</strong>来提高性能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C">sock = socket(PF_INET, SOCK_DGRAM, <span class="hljs-number">0</span>);<br>connect(sock, (struct sockaddr*)&amp;adr, <span class="hljs-keyword">sizeof</span>(adr))<br></code></pre></td></tr></table></figure>
+<p>上述代码创建了一个UDP类型的套接字，但调用了 <code>connect</code>函数，但这并不意味着使用这个套接字来建立连接，而是向目标套接字注册IP和端口信息。</p>
+<h1 id="优雅地断开套接字连接"><a class="markdownIt-Anchor" href="#优雅地断开套接字连接"></a> 优雅地断开套接字连接</h1>
+<p>TCP协议在通信结束后还会经历四次挥手来断开TCP连接，四次挥手中的前两次通信完成后的状态称为半关闭，即一方表明自己没有数据需要发送，但仍可以接受数据，待对方数据发送完后再完全断开连接。Socket编程中用于完成半关闭的函数为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* howto是传递断开的方式，有：SHUT_RD：断开输入流、SHUT_WR：断开输出流，SHUT_RDWR：同时断开输入输出流。</span><br><span class="hljs-comment">* 成功返回0，失败返回-1</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">shutdown</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sock, <span class="hljs-keyword">int</span> howto)</span></span>;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>上述三个常量在Windows平台下为SD_RECEIVE,SD_SEND,SD_BOTH</p>
+</blockquote>
+<h1 id="dns域名服务"><a class="markdownIt-Anchor" href="#dns域名服务"></a> DNS域名服务</h1>
+<p>DNS的概念不难，主要介绍一下库中关于DNS的函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;netdb.h&gt;</span></span><br><span class="hljs-function">struct hostent * <span class="hljs-title">gethostbyname</span><span class="hljs-params">(<span class="hljs-keyword">const</span> cahr * hostname)</span></span>;<br><br><span class="hljs-comment">//</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">hostent</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-keyword">char</span> * h_name; <span class="hljs-comment">// official name</span><br>    <span class="hljs-keyword">char</span> ** h_aliases; <span class="hljs-comment">// alias list</span><br>    <span class="hljs-keyword">int</span> h_addrtype; <span class="hljs-comment">// host address type</span><br>    <span class="hljs-keyword">int</span> h_length; <span class="hljs-comment">// address length</span><br>    <span class="hljs-keyword">char</span> ** h_addr_list <span class="hljs-comment">// address list</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>比较值得注意的是<code>h_addr_list</code>参数，是一个链表，保存整数形式的域名链表。</p>
+<p>相反的函数为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-function">struct hostent * <span class="hljs-title">gethostbyaddr</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> * addr, <span class="hljs-keyword">socklen_t</span> len, <span class="hljs-keyword">int</span> family)</span></span>;<br></code></pre></td></tr></table></figure>
+<h1 id="套接字的可选项"><a class="markdownIt-Anchor" href="#套接字的可选项"></a> 套接字的可选项</h1>
+<p>进行套接字编程时可以根据需求对套接字的传输特性进行设置。下面两个是对可选项进行操作的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* level:可选项的协议层 optname:要查看的可选项名 optval:保存查看结果的缓冲区地址</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">getsockopt</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sock, <span class="hljs-keyword">int</span> level, <span class="hljs-keyword">int</span> optname, <span class="hljs-keyword">void</span> *optval, <span class="hljs-keyword">socklen_t</span> *optlen)</span></span>;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setsockopt</span><span class="hljs-params">(<span class="hljs-keyword">int</span> sock, <span class="hljs-keyword">int</span> level, <span class="hljs-keyword">int</span> optname, <span class="hljs-keyword">void</span> *optval, <span class="hljs-keyword">socklen_t</span> *optlen)</span></span>;<br></code></pre></td></tr></table></figure>
+<h2 id="so_reuseaddr重用地址"><a class="markdownIt-Anchor" href="#so_reuseaddr重用地址"></a> SO_REUSEADDR（重用地址）</h2>
+<p>在最初进行编程时，很经常发现服务端主动关闭后需要过一段时间（几分钟）才能再次在同样的端口上再次运行服务端。其原因就在于TCP断开连接的Time-wait状态。服务端主动关闭后，在四次挥手后还需要等待一个来回时间的Time-wait阶段来保证对方收到了自己上一个ACK报文，在这个过程中服务端原先绑定的端口不会被释放。所以短时间内再次运行客户端会出现bind error。</p>
+<p>通过将<code>SO_REUSEADDR</code>这个可选项设置为true可以解决这个问题。</p>
+<h2 id="tcp_nodelay"><a class="markdownIt-Anchor" href="#tcp_nodelay"></a> TCP_NODELAY</h2>
+<p>将这个可选项设置为true可以禁用Nagle算法，从而在传输较大数据时提高传输效率（但是可能会增加网络流量，影响传输）。</p>
+<blockquote>
+<p>Nagle算法即在收到上段数据的ACK报文后再发送下一个段，在传输时间较长时Nagle算法会导致传输效率低下。</p>
+</blockquote>
+<p><img src="/2023/03/12/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BB%86%E8%8A%82%E5%92%8C%E9%80%89%E9%A1%B9/resize,m_fixed,w_1184.webp" srcset="/img/loading.gif" lazyload alt="套接字的部分可选项"></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C/">#网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Socket编程（二）——协议的细节和选项</div>
+      <div>http://zhouhf.top/2023/03/12/网络/Socket编程（二）——协议的细节和选项/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月12日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/03/13/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E8%BF%9B%E7%A8%8B/" title="Socket编程（三）——多进程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Socket编程（三）——多进程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/10/%E7%BD%91%E7%BB%9C/Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E5%87%BD%E6%95%B0/" title="Socket编程（一）——基础函数">
+                        <span class="hidden-mobile">Socket编程（一）——基础函数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '1fe3f1401b91c68edc6e08b1cfe318f1'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
