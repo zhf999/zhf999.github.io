@@ -1,0 +1,789 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本篇博客简单复习一下，线程之间的锁机制，主要包括自旋锁、互斥锁、条件变量、读写锁。  自旋锁 自旋锁用于保护临界区，其原理就是反复地进行 Test and Set 的忙等待。这种方法会一直占用CPU资源，不让出时间片，导致其他线程无法执行。但是，在临界区代码执行时间短的情况下，自旋锁可以避免线程的上下文切换。 1234567891011121314151617181920#include &lt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程之间的同步锁">
+<meta property="og:url" content="http://zhouhf.top/2025/04/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/thread-lock/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="本篇博客简单复习一下，线程之间的锁机制，主要包括自旋锁、互斥锁、条件变量、读写锁。  自旋锁 自旋锁用于保护临界区，其原理就是反复地进行 Test and Set 的忙等待。这种方法会一直占用CPU资源，不让出时间片，导致其他线程无法执行。但是，在临界区代码执行时间短的情况下，自旋锁可以避免线程的上下文切换。 1234567891011121314151617181920#include &lt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-05T05:49:20.000Z">
+<meta property="article:modified_time" content="2025-04-05T07:06:52.248Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="锁">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>线程之间的同步锁 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="线程之间的同步锁"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-05 13:49" pubdate>
+          2025年4月5日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">线程之间的同步锁</h1>
+            
+            <div class="markdown-body">
+              
+              <p>本篇博客简单复习一下，线程之间的锁机制，主要包括<strong>自旋锁、互斥锁、条件变量、读写锁</strong>。</p>
+<h1 id="自旋锁"><a class="markdownIt-Anchor" href="#自旋锁"></a> 自旋锁</h1>
+<p>自旋锁用于保护临界区，其原理就是反复地进行 <code>Test and Set</code> 的忙等待。这种方法会一直占用CPU资源，不让出时间片，导致其他线程无法执行。但是，在临界区代码执行时间短的情况下，自旋锁可以避免线程的上下文切换。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;time.h&gt;</span></span><br><span class="hljs-comment">// 初始化一个自旋锁。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_spin_init</span><span class="hljs-params">(<span class="hljs-keyword">pthread_spin_t</span> *spin, </span></span><br><span class="hljs-params"><span class="hljs-function">						<span class="hljs-keyword">const</span> <span class="hljs-keyword">pthread_spinattr_t</span> *attr)</span></span>;<br><span class="hljs-comment">// 对自旋锁上锁，若自旋锁已经上锁，则调用者一直阻塞，</span><br><span class="hljs-comment">// 直到自旋锁解锁后再上锁。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_spin_lock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_spin_t</span> *spin)</span></span>;<br><span class="hljs-comment">// 调用该函数时，若自旋锁未加锁，则上锁，返回 0；</span><br><span class="hljs-comment">// 若自旋锁已加锁，则函数直接返回失败，即 EBUSY。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_spin_trylock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_spin_t</span> *spin)</span></span>;<br><span class="hljs-comment">// 当线程试图获取一个已加锁的自旋量时，pthread_spin_timedlock 自旋量</span><br><span class="hljs-comment">// 原语允许绑定线程阻塞时间。即非阻塞加锁自旋量。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_spin_timedlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_spin_t</span> *<span class="hljs-keyword">restrict</span> spin,</span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-keyword">const</span> struct timespec *<span class="hljs-keyword">restrict</span> abs_timeout)</span></span>;<br><span class="hljs-comment">// 对指定的自旋锁解锁。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_spin_unlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_spin_t</span> *spin)</span></span>;<br><span class="hljs-comment">// 销毁指定的一个自旋锁。自旋锁在使用完毕后，</span><br><span class="hljs-comment">// 必须要对自旋锁进行销毁，以释放资源。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_spin_destroy</span><span class="hljs-params">(<span class="hljs-keyword">pthread_spin_t</span> *spin)</span></span>;<br></code></pre></td></tr></table></figure>
+<h1 id="互斥锁"><a class="markdownIt-Anchor" href="#互斥锁"></a> 互斥锁</h1>
+<p>互斥锁也是用于保护临界区的，用法上和自旋锁是一样的，但是底层实现原理不一样。互斥锁的底层是靠操作系统的调度，当试图访问一个上锁的资源时，线程会被操作系统阻塞，直到资源被释放。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;time.h&gt;</span></span><br><span class="hljs-comment">// 初始化一个互斥锁。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_init</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> *mutex, </span></span><br><span class="hljs-params"><span class="hljs-function">						<span class="hljs-keyword">const</span> <span class="hljs-keyword">pthread_mutexattr_t</span> *attr)</span></span>;<br><span class="hljs-comment">// 对互斥锁上锁，若互斥锁已经上锁，则调用者一直阻塞，</span><br><span class="hljs-comment">// 直到互斥锁解锁后再上锁。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_lock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> *mutex)</span></span>;<br><span class="hljs-comment">// 调用该函数时，若互斥锁未加锁，则上锁，返回 0；</span><br><span class="hljs-comment">// 若互斥锁已加锁，则函数直接返回失败，即 EBUSY。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_trylock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> *mutex)</span></span>;<br><span class="hljs-comment">// 当线程试图获取一个已加锁的互斥量时，pthread_mutex_timedlock 互斥量</span><br><span class="hljs-comment">// 原语允许绑定线程阻塞时间。即非阻塞加锁互斥量。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_timedlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> *<span class="hljs-keyword">restrict</span> mutex,</span></span><br><span class="hljs-params"><span class="hljs-function"><span class="hljs-keyword">const</span> struct timespec *<span class="hljs-keyword">restrict</span> abs_timeout)</span></span>;<br><span class="hljs-comment">// 对指定的互斥锁解锁。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_unlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> *mutex)</span></span>;<br><span class="hljs-comment">// 销毁指定的一个互斥锁。互斥锁在使用完毕后，</span><br><span class="hljs-comment">// 必须要对互斥锁进行销毁，以释放资源。</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_mutex_destroy</span><span class="hljs-params">(<span class="hljs-keyword">pthread_mutex_t</span> *mutex)</span></span>;<br></code></pre></td></tr></table></figure>
+<h1 id="读写锁"><a class="markdownIt-Anchor" href="#读写锁"></a> 读写锁</h1>
+<p>读写锁和互斥量很相似，也是通过操作系统的调度来实现等待的。不同的是，读写锁将对资源的访问分为了读和写两种情况，从而实现对资源的更高细粒度的访问。具体的读写锁特性为：</p>
+<ul>
+<li>当有线程在读数据时，允许其他线程读，不允许写；</li>
+<li>当有线程在写数据时，其他线程既不能读也不能写。<br>
+适用于对数据的读次数比写次数多的多的场景。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span> </span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">phtread_rwlock_init</span><span class="hljs-params">(<span class="hljs-keyword">pthread_rwlock_t</span> *<span class="hljs-keyword">restrict</span> rwlock, <span class="hljs-keyword">const</span> <span class="hljs-keyword">pthread_rwlockattr_t</span> *<span class="hljs-keyword">restrict</span> attr)</span></span>; <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_rwlock_destroy</span><span class="hljs-params">(<span class="hljs-keyword">pthread_rwlock_t</span> *rwlock)</span></span>;<br><span class="hljs-comment">/** 加读锁 */</span> <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_rwlock_rdlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_rwlock_t</span> *rwlock)</span></span>; <br><span class="hljs-comment">/** 加写锁 */</span> <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_rwlock_wrlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_rwlock_t</span> *rwlock)</span></span>; <br><span class="hljs-comment">/** 释放锁 */</span> <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_rwlock_unlock</span><span class="hljs-params">(<span class="hljs-keyword">pthread_rwlock_t</span> *rwlock)</span></span>;<br></code></pre></td></tr></table></figure>
+<h1 id="条件变量"><a class="markdownIt-Anchor" href="#条件变量"></a> 条件变量</h1>
+<p>条件变量与其他几个锁相比较为复杂。举一个实际的场景：在生产者消费者模型中，我们希望在生产者生产出100个产品后，通知消费者执行下一步。<br>
+如果只使用互斥锁来完成这个需求，那么消费者在每次被调度时都要检查产品数量是否达到需求，那么被调度的这个过程就会占用比较多的资源，我们希望的效果是这样的：当生产者生成出100个产品时，主动通知消费者，这个时候条件变量就派上用场了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-comment">// 初始化条件变量</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_cond_init</span><span class="hljs-params">(<span class="hljs-keyword">pthread_cond_t</span> *cond,</span></span><br><span class="hljs-params"><span class="hljs-function">						<span class="hljs-keyword">pthread_condattr_t</span> *cond_attr)</span></span>;<br><span class="hljs-comment">// 阻塞等待</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_cond_wait</span><span class="hljs-params">(<span class="hljs-keyword">pthread_cond_t</span> *cond,<span class="hljs-keyword">pthread_mutex_t</span> *mutex)</span></span>;<br><span class="hljs-comment">// 超时等待</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_cond_timewait</span><span class="hljs-params">(<span class="hljs-keyword">pthread_cond_t</span> *cond,pthread_mutex *mutex,</span></span><br><span class="hljs-params"><span class="hljs-function">						<span class="hljs-keyword">const</span> timespec *abstime)</span></span>;<br><span class="hljs-comment">// 解除所有线程的阻塞</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_cond_destroy</span><span class="hljs-params">(<span class="hljs-keyword">pthread_cond_t</span> *cond)</span></span>;<br><span class="hljs-comment">// 至少唤醒一个等待该条件的线程</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_cond_signal</span><span class="hljs-params">(<span class="hljs-keyword">pthread_cond_t</span> *cond)</span></span>;<br><span class="hljs-comment">// 唤醒等待该条件的所有线程</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">pthread_cond_broadcast</span><span class="hljs-params">(<span class="hljs-keyword">pthread_cond_t</span> *cond)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>一个使用的例子如下所示（略去了锁的初始化和销毁）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> value = <span class="hljs-number">0</span>;  <br><span class="hljs-keyword">static</span> <span class="hljs-keyword">pthread_mutex_t</span> mutex;  <br><span class="hljs-keyword">static</span> <span class="hljs-keyword">pthread_cond_t</span> condition;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">waitCondition</span><span class="hljs-params">()</span>  </span><br><span class="hljs-function"></span>&#123;  <br>    <span class="hljs-built_in">pthread_mutex_lock</span>(&amp;mutex);  <br>    <span class="hljs-keyword">while</span> (value == <span class="hljs-number">0</span>) &#123;  <br>        <span class="hljs-built_in">pthread_cond_wait</span>(&amp;condition, &amp;mutex); <span class="hljs-comment">// 开始等待，并立即解锁 mutex  </span><br>    &#125;  <br>    <span class="hljs-built_in">pthread_mutex_unlock</span>(&amp;mutex);  <br>&#125;  <br>  <br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">triggerCondition</span><span class="hljs-params">()</span>  </span><br><span class="hljs-function"></span>&#123;  <br>    <span class="hljs-built_in">pthread_mutex_lock</span>(&amp;mutex);  <br>  <br>    value = <span class="hljs-number">1</span>;  <br>  <br>    <span class="hljs-built_in">pthread_mutex_unlock</span>(&amp;mutex);  <br>    <span class="hljs-built_in">pthread_cond_broadcast</span>(&amp;condition);     <span class="hljs-comment">// 广播  </span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意 <code>pthread_cond_wait</code> 函数，有两个参数，所以可以知道条件变量必须配合互斥锁使用，其语义为：“<strong>暂时释放互斥锁mutex并阻塞，直到condition发生；当condition发生时，唤醒代码并重新获得mutex</strong>”。</p>
+<h2 id="条件变量的注意事项"><a class="markdownIt-Anchor" href="#条件变量的注意事项"></a> 条件变量的注意事项</h2>
+<ul>
+<li><strong>考虑解锁和唤醒的顺序</strong>：在触发条件时，应该注意是先触发，还是先释放锁。建议的方式是先释放锁，再触发条件，否则有可能导致触发了条件，等待方却得不到锁。</li>
+<li><strong>要使用while而不是if</strong>：在等待方被唤醒时，有可能条件实际上是不成立的，导致虚假唤醒。</li>
+</ul>
+<h1 id="信号量"><a class="markdownIt-Anchor" href="#信号量"></a> 信号量</h1>
+<p>信号量本质是一个非负的整数计算器，可以用于实现同步和互斥，当其最大值为1时，可以被当做互斥锁使用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;semaphore.h&gt;</span></span><br><span class="hljs-comment">// 初始化信号量</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_init</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem, <span class="hljs-keyword">int</span> pshared, <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> value)</span></span>;<br><span class="hljs-comment">// 信号量 P 操作（减 1）</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_wait</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem)</span></span>;<br><span class="hljs-comment">// 以非阻塞的方式来对信号量进行减 1 操作</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_trywait</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem)</span></span>;<br><span class="hljs-comment">// 信号量 V 操作（加 1）</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_post</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem)</span></span>;<br><span class="hljs-comment">// 获取信号量的值</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_getvalue</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem, <span class="hljs-keyword">int</span> *sval)</span></span>;<br><span class="hljs-comment">// 销毁信号量</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">sem_destroy</span><span class="hljs-params">(<span class="hljs-keyword">sem_t</span> *sem)</span></span>;<br></code></pre></td></tr></table></figure><link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+      
+        <a href="/tags/%E9%94%81/">#锁</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>线程之间的同步锁</div>
+      <div>http://zhouhf.top/2025/04/05/操作系统/thread-lock/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月5日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/04/%E7%AE%97%E6%B3%95/B-tree-B-tree-and-RBTree/" title="B树、B+树、红黑树">
+                        <span class="hidden-mobile">B树、B+树、红黑树</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '02fb2af1a9636c819ba943a373c37721'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
