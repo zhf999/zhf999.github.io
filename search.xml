@@ -2066,88 +2066,6 @@ G/\ker f \cong \textrm{im}\ f
       </tags>
   </entry>
   <entry>
-    <title>计算机中的数据编码</title>
-    <url>/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/</url>
-    <content><![CDATA[<h1 id="计算机中的数据编码"><a class="markdownIt-Anchor" href="#计算机中的数据编码"></a> 计算机中的数据编码</h1>
-<h2 id="一-进制及其转化"><a class="markdownIt-Anchor" href="#一-进制及其转化"></a> 一、进制及其转化</h2>
-<p>冯诺依曼计算机体系中，为了在物理上表示方便，采用了二进制编码的形式。由于进制等内容较为简单，中学、大学知识中有均提及，此处不再赘述。<strong>本文只讨论纯整数编码</strong></p>
-<h2 id="二-原码"><a class="markdownIt-Anchor" href="#二-原码"></a> 二、原码</h2>
-<p>原码是最简单的一种编码形式，由1位符号位和n-1位数据位构成。以<strong>4位</strong>码位为例，第一位是符号位，0表示正数，1表示负数，其余位由于表示该数值的绝对值。<br>
-可以用以下数学公式来表示<br>
-<s>暂时还没学会lateX，先上个手写的</s></p>
-<p><img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/yuanma_fml.PNG" alt="yuanma_fml"></p>
-<p>这是数学上的公式表示，显然不够直观，接下来在数轴（仍然是码位为4的情况）上表示数值与编码的关系。<br>
-<strong>其中数轴下方是编码（为直观起见，转化成十进制），数轴上方是在计算机中代表的实际数值</strong></p>
-<p><img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/yuanma_line.PNG" alt="yuanma_line"><br>
-可以看到，如果将数轴平分为两部分[0,7]与[8,15]，则左半轴均为正数，右半轴均为负数。这便是原码区分正负数的方法。</p>
-<h1 id="三-反码"><a class="markdownIt-Anchor" href="#三-反码"></a> 三、反码</h1>
-<p>反码在数学上的定义为：<br>
-<img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/fanma_fml.PNG" alt="fanma_fml"><br>
-易从公式中看出，当X的值小于等于0时2的n次方-1实际上就是一串全1的编码，而一串全1的编码按位减去X即为对X按位求非。<br>
-由以上可以得出一个反码的更直观定义，即：</p>
-<blockquote>
-<p>当X为正数时X的反码即为它本身，X为负数时X的反码为X的原码的<strong>非符号位</strong>按位求非。</p>
-</blockquote>
-<p>这便是“反码”中“反”字的来源。</p>
-<p>下面是反码在数轴上的分布：<br>
-<img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/fanma_line.PNG" alt="fanma_line"><br>
-不难发现，反码与原码的区别就是反码在右半轴的分布与原码恰好对称。</p>
-<p>在《计算机组成与系统结构[裘雪红]》一书中，对反码有如下描述：</p>
-<blockquote>
-<p>反码通常用来作为由原码求补码或者由补码求原码的中间过渡。</p>
-</blockquote>
-<p>可见，反码在计算机中实际的使用场景应该很少。</p>
-<h1 id="四-补码"><a class="markdownIt-Anchor" href="#四-补码"></a> 四、补码</h1>
-<p>补码在数学上的定义为：<br>
-<img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/buma_fml.PNG" alt="buma_fml"><br>
-不难发现，负数与其自身的补码相加后就等于2的n次方，这种关系可以与角度中的互补类比，如30°与150°互补，这便是“补码”中“补”字的来源。<br>
-值得一提的是，由于编码位数为n位，所以该编码是<strong>mod 2的n次方</strong>意义下的，所以负数与其自身补码相加实际上发生了溢出，实际上的值变为了0。<br>
-补码也可以有如下的定义：</p>
-<blockquote>
-<p>正数的补码即为其原码本身，负数的补码为其反码+1</p>
-</blockquote>
-<p>补码在数轴上的分布如下图所示<br>
-<img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/buma_line.PNG" alt="buma_line"><br>
-可以看出，补码在右半轴的分布相对于反码右移了一个单位。</p>
-<h2 id="1求补运算"><a class="markdownIt-Anchor" href="#1求补运算"></a> 1.求补运算</h2>
-<p>计算机中还存在一中与补码的求法十分相似的运算，称为求补运算，十分容易和“求补码”混淆。其运算过程如下：</p>
-<blockquote>
-<p>将编码按位取反（包括符号位），然后+1</p>
-</blockquote>
-<p>求补运算与“求补码”的区别如下：</p>
-<ul>
-<li>求补运算将符号位也取反，而“求补码”只需要将数据位取反</li>
-<li>求补运算对正负数都有效，而整数求补码后仍是它本身</li>
-<li>任何数求补后都会变成其相反数</li>
-</ul>
-<p><strong>求补运算在计算机的数值计算中十分常用</strong></p>
-<h2 id="2补码的特性"><a class="markdownIt-Anchor" href="#2补码的特性"></a> 2.补码的特性</h2>
-<ul>
-<li>与原码和反码不同，补码不存在“正零”和“负零”的区别。</li>
-<li>[X-Y]补=[X]补+[-Y]补=[X]补+（[Y]补）求补，这一特性使得补码在计算机的运算中非常常用。</li>
-</ul>
-<p><img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/buma_cal.PNG" alt="buma_cal"></p>
-<h2 id="3变形补码双符号位补码"><a class="markdownIt-Anchor" href="#3变形补码双符号位补码"></a> 3.变形补码（双符号位补码）</h2>
-<p>在实际计算中，为了判断加减的结果是否溢出，常常设置两个符号位。若加减结果的两个符号位不相等（01或10），则发生了溢出；如果符号相等，则不发生溢出。</p>
-<h3 id="变形补码的实质"><a class="markdownIt-Anchor" href="#变形补码的实质"></a> 变形补码的实质</h3>
-<p>不难发现，由于多出来的一位符号位，n位变形补码的数据范围只有补码的一半，将其在数轴上画出后：<br>
-<img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/bxbm_cal-1743137405978-20.PNG" alt="bxbm_cal"><br>
-从图中可以看出，符号位为01和10的情况在数轴上是存在的，我们或许可以强行将其看成补码，则可以获取其代表的值。但变形补码的意义在于判断计算结果的溢出，所以我们将变形补码的范围压缩到数轴最左边和最右边分别1/4部分，将中间一部分视为“禁区”，当计算结果进入中间时，计算机就抛出“溢出”的计算结果。<br>
-<strong>可见，变形补码是舍弃一部分数据范围以保证数据没有发生溢出</strong></p>
-<p>这也是在《计组》后续的章节中，恢复余数法中间步骤出现了01的符号位而不影响计算的原因<br>
-<img src="/2022/03/04/%E6%95%B0%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81/bxbm_cal.PNG" alt="bxbm_cal"><br>
-<strong>这里的变形补码是中间的计算结果，可以将其看成有效的数值参与下一步计算，但是若结果出现了01或10的符号位，则是不符合规范的，发生了溢出。</strong></p>
-<h1 id="四-移码"><a class="markdownIt-Anchor" href="#四-移码"></a> 四、移码</h1>
-<p>移码是数值在模2的n次方意义下平移后的结果。如上图数轴所示，想要比较以上三种编码的数值的大小，均无法通过编码来比较。而移码有着“单调”的特点，即随着编码的增大，编码所代表的数值也增大。<br>
-移码的定义：2的n次方+X<br>
-可以证明，移码与补码之间存在关系：<strong>移码和补码的符号位是相反的</strong></p>
-<h2 id="移码的使用场景举例"><a class="markdownIt-Anchor" href="#移码的使用场景举例"></a> 移码的使用场景举例</h2>
-<p>在IEEE754标准中，其指数使用的是移码。不过这里的移码有所不同<br>
-，移动的位数是127（单精度）/1023（双精度），这里为什么是127/1023而不是128/1024？很多人可能没有深究这里的原因。<br>
-其实原因很简单，IEEE754标准中对尾数要求规格化，即小数点后第一位必须为1，且规定把这个1给省略。这里移码比正常少位移一位，就是考虑到这里的这个1。如果位移128位，尾数的表达就是0.1xxxx，如果位移127位，尾数的表达就是1.xxxxx，<strong>这样一来，增大了浮点数可以表达的范围</strong>。</p>
-<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
-  </entry>
-  <entry>
     <title>数论基础</title>
     <url>/2022/03/18/%E6%95%B0%E5%AD%A6/%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="零-概述"><a class="markdownIt-Anchor" href="#零-概述"></a> 零、概述</h1>
@@ -8433,7 +8351,7 @@ Max Retransmission Count = ceiling\left(\frac{Data Packet Aging}{Retransmission 
 <figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">epoll_create</span><span class="hljs-params">(<span class="hljs-keyword">int</span> size)</span></span>;<br><span class="hljs-comment">// 成功时返回文件描述符，失败时返回-1</span><br></code></pre></td></tr></table></figure>
 <p>生成例程后，需要在其内部注册监视对象文件描述符，此时使用<code>epoll_ctl</code>函数。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* epfd:用于注册监视对象的例程的文件描述符</span><br><span class="hljs-comment">* op:用于指定操作</span><br><span class="hljs-comment">* fd: 需要注册的监视对象文件描述符</span><br><span class="hljs-comment">* event: 监视对象的事件类型</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">epoll_ctl</span><span class="hljs-params">(<span class="hljs-keyword">int</span> epfd, <span class="hljs-keyword">int</span> op, <span class="hljs-keyword">int</span> fd, struct epoll_event * event)</span></span>;<br><span class="hljs-comment">// 成功时返回0，失败时返回-1</span><br></code></pre></td></tr></table></figure>
-<p><code>epoll_ctl(A,EPOLL_ADD,B,C)</code>用于在“例程A中注册文件描述符B，主要目的是监视参数C中的时间”。第二个参数有以下三种常量：</p>
+<p><code>epoll_ctl(A,EPOLL_ADD,B,C)</code> 用于在“例程A中注册文件描述符B，主要目的是监视参数C中的事件”。第二个参数有以下三种常量：</p>
 <ul>
 <li>EPOLL_CTL_ADD：注册文件描述符</li>
 <li>EPOLL_CTL_DEL：删除文件描述符</li>
@@ -8455,7 +8373,7 @@ Max Retransmission Count = ceiling\left(\frac{Data Packet Aging}{Retransmission 
 <p>最后是与select有着同等地位的<code>epoll_wait</code>函数：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">* epfd:例程的文件描述符</span><br><span class="hljs-comment">* events:保存发生事件的文件描述符集合的结构体地址（可以看成一个数组）</span><br><span class="hljs-comment">*/</span><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">epoll_wait</span><span class="hljs-params">(<span class="hljs-keyword">int</span> epfd, struct epoll_event * events, <span class="hljs-keyword">int</span> maxevents, <span class="hljs-keyword">int</span> timeout)</span></span>;<br><span class="hljs-comment">// 成功时返回保存的最大事件数，失败时返回-1</span><br></code></pre></td></tr></table></figure>
 <h2 id="条件触发和边缘触发"><a class="markdownIt-Anchor" href="#条件触发和边缘触发"></a> 条件触发和边缘触发</h2>
-<p>这两个名词似乎有些像数字电路中的每次，实际上这两个词的意思和数电中的意思相差不大。条件触发就是只要缓冲区有数据就会一直通知该事件，而边缘触发只有在有新数据到来时才会通知该事件。开启边缘触发有以下三个关键步骤：</p>
+<p>这两个概念似乎有些像数字电路中的，实际上这两个词的意思和数电中的意思相差不大。条件触发就是只要缓冲区有数据就会一直通知该事件，而边缘触发只有在有新数据到来时才会通知该事件。开启边缘触发有以下三个关键步骤：</p>
 <h3 id="1-读取errno变量验证错误原因"><a class="markdownIt-Anchor" href="#1-读取errno变量验证错误原因"></a> 1、读取errno变量验证错误原因</h3>
 <p>errno变量在头文件<code>error.h</code>中，当read函数发现输入缓冲没有数据可以读入时不仅会返回-1，还会在errno中保存EAGAIN变量。在读取完缓冲区内容后，如果errno的值为EAGAIN，则可以结束读取。</p>
 <h3 id="2-更改套接字属性为非阻塞"><a class="markdownIt-Anchor" href="#2-更改套接字属性为非阻塞"></a> 2、更改套接字属性为非阻塞</h3>
@@ -9599,6 +9517,68 @@ RL调整后<br>
       <tags>
         <tag>实验</tag>
         <tag>操作系统</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>socket网络编程的五种IO模型</title>
+    <url>/2025/04/06/%E7%BD%91%E7%BB%9C/socket-io-pattern/</url>
+    <content><![CDATA[<p>之前写过 <a href="Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E8%BF%9B%E7%A8%8B.md">Socket编程（三）——多进程</a>、<a href="Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94IO%E5%A4%8D%E7%94%A8%E5%92%8C%E6%9B%B4%E5%A4%9AIO%E5%87%BD%E6%95%B0.md">Socket编程（四）——IO复用和更多IO函数</a>、<a href="Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B.md">Socket编程（五）——多线程</a>这几篇与Socket编程有关的博客，然而当时是按照理解难度由浅到深编写的，总的来说还是不够系统。本篇博客就系统性地介绍一下Socket编程中的5种IO模型，并介绍如何使用这些模型实现高并发。它们分别为：</p>
+<ul>
+<li>阻塞IO模型；</li>
+<li>非阻塞IO模型；</li>
+<li>多路复用IO模型；</li>
+<li>信号驱动IO模型；</li>
+<li>异步IO模型；<br>
+<img src="/2025/04/06/%E7%BD%91%E7%BB%9C/socket-io-pattern/file-20250406161144432.png" alt="五种IO模型之间的关系"></li>
+</ul>
+<h1 id="阻塞io模型"><a class="markdownIt-Anchor" href="#阻塞io模型"></a> 阻塞IO模型</h1>
+<p>阻塞IO，顾名思义，在读写操作时，当且进程会陷入阻塞，直到相关的资源就绪。以 <code>read</code> 为例，当缓冲区中没有数据时，进程会阻塞直至有新的数据到来。<br>
+<img src="/2025/04/06/%E7%BD%91%E7%BB%9C/socket-io-pattern/file-20250406144752784.png" alt="阻塞IO模型示意图"><br>
+在单个进程（单个线程）中，阻塞式的IO模型是非常底效的，因为当前进程只能服务一个请求，在服务期间其他请求都会被搁置。想要在阻塞IO模型下实现高并发，可以使用<a href="Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E8%BF%9B%E7%A8%8B.md">多进程</a>、<a href="Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B.md">多线程</a>的方式来完成。然而，使用多进程和多线程模型都存在一定的缺陷：</p>
+<ul>
+<li>多进程意味着需要为每一个服务对象提供一个进程，这会给服务器带来巨大的进程切换开销；</li>
+<li>虽然多线程的系统开销比多进程小，但是线程的创建和销毁同样会带来系统开销。此时可能会考虑使用<strong>线程池</strong>来复用已有的连接，减少创建和关闭连接的频率。</li>
+</ul>
+<h1 id="非阻塞io"><a class="markdownIt-Anchor" href="#非阻塞io"></a> 非阻塞IO</h1>
+<p>非阻塞IO和阻塞IO是对应的。还是以系统调用 <code>read</code> 为例，在进程中调用 <code>read</code> 后，当缓冲区中没有数据时，会立即返回一个 <code>EWOULDBLOCK</code> 或 <code>EAGAIN</code> 错误，表示缓冲区中没有数据。此时进程就不会阻塞，从而可以执行其他计算。<strong>通常来说，非阻塞IO会与 <code>while</code> 循环共同使用，重复检查资源是否就绪</strong>。<br>
+<img src="/2025/04/06/%E7%BD%91%E7%BB%9C/socket-io-pattern/file-20250406145842492.png" alt="非阻塞IO的示意图"></p>
+<h1 id="io复用模型"><a class="markdownIt-Anchor" href="#io复用模型"></a> IO复用模型</h1>
+<blockquote>
+<p>严格来说，IO复用模型可以是阻塞的，也可以是非阻塞的。</p>
+</blockquote>
+<p>IO复用算是解决高并发问题的一个非常有效的手段了。在Unix编程中，实现IO复用的系统调用主要是 <code>select</code> 和 <code>epoll</code>，前者可以理解为使用一个数组或集合来实现，后者可以理解为使用一个链表+红黑树实现，这里主要介绍更高效的 <code>epoll</code>。<br>
+前面说过IO复用模型可以是阻塞的，也可以是非阻塞的。“可以是阻塞的”主要是体现在对IO端口的监听上，但是这并不会影响 <code>epoll</code> 的效率，因为它可以同时对多个端口进行监听。<br>
+下面是一段 <code>epoll</code> 使用的示例代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/epoll.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;fcntl.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MAX_EVENTS 10</span><br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> sock = <span class="hljs-built_in">socket</span>(AF_INET, SOCK_STREAM, <span class="hljs-number">0</span>);  <span class="hljs-comment">// 创建TCP Socket</span><br>    <span class="hljs-comment">// 绑定和监听代码省略（假设sock已绑定到端口并处于监听状态）</span><br><br>    <span class="hljs-keyword">int</span> epoll_fd = <span class="hljs-built_in">epoll_create1</span>(<span class="hljs-number">0</span>);  <span class="hljs-comment">// 创建epoll实例</span><br>    <span class="hljs-keyword">if</span> (epoll_fd &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;epoll_create1&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">epoll_event</span> <span class="hljs-title">event</span>;</span><br>    event.events = EPOLLIN;        <span class="hljs-comment">// 监控可读事件</span><br>    event.data.fd = sock;          <span class="hljs-comment">// 关联监听Socket</span><br>    <span class="hljs-built_in">epoll_ctl</span>(epoll_fd, EPOLL_CTL_ADD, sock, &amp;event);  <span class="hljs-comment">// 注册到epoll实例</span><br><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">epoll_event</span> <span class="hljs-title">events</span>[<span class="hljs-title">MAX_EVENTS</span>];</span>  <span class="hljs-comment">// 存储就绪事件</span><br><br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-comment">// 等待事件（阻塞直到有事件发生）</span><br>        <span class="hljs-keyword">int</span> n_ready = <span class="hljs-built_in">epoll_wait</span>(epoll_fd, events, MAX_EVENTS, <span class="hljs-number">-1</span>);<br>        <span class="hljs-keyword">if</span> (n_ready &lt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;epoll_wait&quot;</span>);<br>            <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>        &#125;<br><br>        <span class="hljs-comment">// 处理所有就绪事件（无需遍历所有fd）</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; n_ready; i++) &#123;<br>            <span class="hljs-keyword">int</span> fd = events[i].data.fd;<br>            <span class="hljs-keyword">if</span> (fd == sock) &#123;<br>                <span class="hljs-comment">// 接受新连接</span><br>                <span class="hljs-keyword">int</span> client_fd = <span class="hljs-built_in">accept</span>(sock, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>);<br>                <span class="hljs-built_in">fcntl</span>(client_fd, F_SETFL, O_NONBLOCK);  <span class="hljs-comment">// 设置为非阻塞模式</span><br><br>                event.events = EPOLLIN | EPOLLET;  <span class="hljs-comment">// 边缘触发模式（需非阻塞）</span><br>                event.data.fd = client_fd;<br>                <span class="hljs-built_in">epoll_ctl</span>(epoll_fd, EPOLL_CTL_ADD, client_fd, &amp;event);  <span class="hljs-comment">// 注册新连接</span><br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">// 处理客户端数据（边缘触发需循环读取）</span><br>                <span class="hljs-keyword">char</span> buffer[<span class="hljs-number">1024</span>];<br>                <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;  <span class="hljs-comment">// 非阻塞循环读取，避免遗漏数据</span><br>                    <span class="hljs-keyword">ssize_t</span> n = <span class="hljs-built_in">read</span>(fd, buffer, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(buffer));<br>                    <span class="hljs-keyword">if</span> (n &gt; <span class="hljs-number">0</span>) &#123;<br>                        <span class="hljs-built_in">write</span>(fd, buffer, n);  <span class="hljs-comment">// 回显数据</span><br>                    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span> || (n &lt; <span class="hljs-number">0</span> &amp;&amp; errno != EAGAIN)) &#123;<br>                        <span class="hljs-built_in">close</span>(fd);             <span class="hljs-comment">// 关闭连接</span><br>                        <span class="hljs-built_in">epoll_ctl</span>(epoll_fd, EPOLL_CTL_DEL, fd, <span class="hljs-literal">NULL</span>);  <span class="hljs-comment">// 移除监控</span><br>                        <span class="hljs-keyword">break</span>;<br>                    &#125; <span class="hljs-keyword">else</span> &#123;<br>                        <span class="hljs-keyword">break</span>;  <span class="hljs-comment">// 无更多数据（EAGAIN）</span><br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>每次重新看 <code>epoll</code> 时都会非常地迷惑，搞不清楚这个系统调用到底在做什么，这里还是举一个之前博客中的例子，也是《TCP/IP》编程中的例子</p>
+<blockquote>
+<p>把代码中的 <code>events</code> 看班级，我们的服务端socket是班主任，客户端socket是同学。但是同学想要被服务，需要先加入我们这个班级，所以班级里既有班主任也有学生。这就是为什么遍历处理所有就绪事件时，需要判断到底是服务端的sock还是客户端的sock的原因。<br>
+当班主任触发事件时，说明有新同学要进来，我们就把新同学加入到 <code>events</code> 中；<br>
+当班里同学触发事件时，说明班里的同学要提问题了，就由我们来解决问题并答复。</p>
+</blockquote>
+<p>这样解释，<code>epoll</code> 存在的意义似乎就说得通了。</p>
+<h2 id="触发模式"><a class="markdownIt-Anchor" href="#触发模式"></a> 触发模式</h2>
+<p>需要注意，<code>epoll</code> 还支持设置触发模式，包含边缘触发和水平触发。具体可以看 <a href="Socket%E7%BC%96%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89%E2%80%94%E2%80%94IO%E5%A4%8D%E7%94%A8%E5%92%8C%E6%9B%B4%E5%A4%9AIO%E5%87%BD%E6%95%B0.md">IO复用</a> 这篇博客。</p>
+<h1 id="信号驱动io"><a class="markdownIt-Anchor" href="#信号驱动io"></a> 信号驱动IO</h1>
+<p>信号IO理解起来也很简单，就是提前告诉操作系统，当某个事件触发时，向进程发送 <code>SIGIO</code> 信号。进程需要注册这个信号的处理函数，触发异步处理。信号驱动IO的一个很大缺点就是，只能得知有事件发生，但无法得知是哪个事件。所以对于TCP这种触发事件较多的协议，信号驱动IO很难派的上用场。相反，<strong>信号驱动IO更多用于UDP套接字</strong>。<br>
+下面的一段信号驱动IO的实例代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs CPp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;signal.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sys/socket.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;arpa/inet.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;errno.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-keyword">int</span> sock;  <span class="hljs-comment">// 全局变量，信号处理函数中需访问</span><br><br><span class="hljs-comment">// 信号处理函数：当SIGIO触发时执行</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">sigio_handler</span><span class="hljs-params">(<span class="hljs-keyword">int</span> signo)</span> </span>&#123;<br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">client_addr</span>;</span><br>    <span class="hljs-keyword">socklen_t</span> addr_len = <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(client_addr);<br>    <span class="hljs-keyword">char</span> buffer[<span class="hljs-number">1024</span>];<br><br>    <span class="hljs-comment">// 非阻塞接收数据（因Socket已设置为非阻塞）</span><br>    <span class="hljs-keyword">ssize_t</span> n = <span class="hljs-built_in">recvfrom</span>(sock, buffer, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(buffer), <span class="hljs-number">0</span>, <br>                        (struct sockaddr*)&amp;client_addr, &amp;addr_len);<br>    <span class="hljs-keyword">if</span> (n &gt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Received %zd bytes from %s:%d\n&quot;</span>, n,<br>               <span class="hljs-built_in">inet_ntoa</span>(client_addr.sin_addr), <span class="hljs-built_in">ntohs</span>(client_addr.sin_port));<br>        <span class="hljs-built_in">sendto</span>(sock, buffer, n, <span class="hljs-number">0</span>, (struct sockaddr*)&amp;client_addr, addr_len); <span class="hljs-comment">// 回显数据</span><br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (n &lt; <span class="hljs-number">0</span> &amp;&amp; errno != EAGAIN) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;recvfrom error&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 创建UDP Socket（信号驱动I/O更常用于UDP）</span><br>    sock = <span class="hljs-built_in">socket</span>(AF_INET, SOCK_DGRAM, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">if</span> (sock &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;socket error&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-comment">// 绑定地址和端口</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">addr</span>;</span><br>    <span class="hljs-built_in">memset</span>(&amp;addr, <span class="hljs-number">0</span>, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(addr));<br>    addr.sin_family = AF_INET;<br>    addr.sin_addr.s_addr = <span class="hljs-built_in">htonl</span>(INADDR_ANY);<br>    addr.sin_port = <span class="hljs-built_in">htons</span>(<span class="hljs-number">8080</span>);<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">bind</span>(sock, (struct sockaddr*)&amp;addr, <span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(addr)) &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">perror</span>(<span class="hljs-string">&quot;bind error&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-comment">// 设置信号处理函数</span><br>    <span class="hljs-built_in">signal</span>(SIGIO, sigio_handler);<br><br>    <span class="hljs-comment">// 将Socket设置为非阻塞模式</span><br>    <span class="hljs-keyword">int</span> flags = <span class="hljs-built_in">fcntl</span>(sock, F_GETFL, <span class="hljs-number">0</span>);<br>    <span class="hljs-built_in">fcntl</span>(sock, F_SETFL, flags | O_NONBLOCK | O_ASYNC); <span class="hljs-comment">// O_ASYNC启用信号驱动</span><br><br>    <span class="hljs-comment">// 指定当前进程接收SIGIO信号</span><br>    <span class="hljs-built_in">fcntl</span>(sock, F_SETOWN, <span class="hljs-built_in">getpid</span>());<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Waiting for data...\n&quot;</span>);<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-comment">// 主线程可执行其他任务（如定时器、日志等）</span><br>        <span class="hljs-built_in">sleep</span>(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-built_in">close</span>(sock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>信号驱动式IO的并发性很差，并且编程复杂性高，但是实时性很强，比较适合低频率的实时控制。</p>
+<h1 id="异步io"><a class="markdownIt-Anchor" href="#异步io"></a> 异步IO</h1>
+<p>异步IO是一种并发性更高的IO模型，其原理主要是：应用程序发起IO操作后立即返回，内核在整个IO操作完成后通知应用，无须应用主动读写。遗憾的是Linux原生的异步IO机制<strong>io_uring</strong>较为复杂，学习曲线比较陡峭。现代开发者对异步IO的实现，更多依赖的事语言和框架的异步抽象（如Python、Go、Csharp等）。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p><img src="/2025/04/06/%E7%BD%91%E7%BB%9C/socket-io-pattern/file-20250406161222118.png" alt="IO模型之间的比较"><br>
+现代服务端对高并发的要求越来越高，为满足这样的需求，使用更多的还是IO复用模型。当然，具体使用哪个IO模型，还是需要结合具体的应用场景。</p>
+<h1 id="参考链接"><a class="markdownIt-Anchor" href="#参考链接"></a> 参考链接</h1>
+<p><a href="https://realdaiwei.github.io/2021/09/15/socket-and-io/#IO%E6%A8%A1%E5%9E%8B">网络编程 — Socket编程与IO模型</a><br>
+《TCP/IP编程》尹圣雨</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>socket</tag>
       </tags>
   </entry>
 </search>
