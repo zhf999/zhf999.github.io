@@ -274,6 +274,69 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2025/04/07/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Cpp-multithreading2-data-sharing/" target="_self">
+          C++并发编程（2）——线程间共享数据
+        </a>
+      </h1>
+
+      <a class="index-excerpt" href="/2025/04/07/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Cpp-multithreading2-data-sharing/" target="_self">
+        <div>
+          
+          本篇博客讲述如何在多个线程之间共享数据，并且在各种情况下使用互斥量来防止线程之间对数据竞争访问。  互斥量 互斥量的使用很简单，所见即所得： 123std::mutex some_mutex;some_mutex.lock();some_mutex.unlock(); 但是通过这样的方法使用互斥量有点麻烦，因为这意味着需要在函数的每个出口，包括异常处理中调用 unlock()。一个更加 RAII
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-04-07 16:38" pubdate>
+              2025-04-07
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Cpp/">#Cpp</a>
+            
+              <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">#多线程</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2025/04/07/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Cpp-multithreading/" target="_self">
           C++并发编程（1）——基本线程管理
         </a>
@@ -282,7 +345,7 @@
       <a class="index-excerpt" href="/2025/04/07/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Cpp-multithreading/" target="_self">
         <div>
           
-          基本线程管理 本小节主要介绍如何启动线程、等待一个线程结束、如何给已启动的线程传递参数、线程的所有权转交。 在一切的一切开始之前，需要先 #include&lt;thread&gt;。  启动线程 Cpp的多线程需要靠 std::thread 对象来实现，构造该类，只需要一个可调用（callable）类型： 12345678910111213141516171819202122232425262
+          本篇博客主要介绍C++原生的多线程操作，包括启动线程、等待一个线程结束、如何给已启动的线程传递参数、线程的所有权转交。 在一切的一切开始之前，需要先 #include&lt;thread&gt;。  启动线程 Cpp的多线程需要靠 std::thread 对象来实现，构造该类，只需要一个可调用（callable）类型： 123456789101112131415161718192021222324
         </div>
       </a>
 
@@ -772,74 +835,11 @@
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2024/12/25/%E7%AE%97%E6%B3%95/algo-design-and-analyze/" target="_self">
-          《算法设计与分析》复习笔记
-        </a>
-      </h1>
-
-      <a class="index-excerpt" href="/2024/12/25/%E7%AE%97%E6%B3%95/algo-design-and-analyze/" target="_self">
-        <div>
-          
-          计算复杂度 T(n)∈O(f(n))  ⟺  lim⁡n→∞T(n)f(n)≤c  ⟺  ∀n≥n0 T(n)≤f(n)O(f(n))+O(g(n))&#x3D;O(max⁡{f(n),g(n)})O(f(n))+O(g(n))&#x3D;O(f(n)+g(n))O(f(n)∗g(n))&#x3D;O(f(n)∗g(n))O(cf(n))&#x3D;O(f(n))T(n)\in O(f(n)) \iff \lim_{n\rarr \i
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-25 19:47" pubdate>
-              2024-12-25
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#board">7</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/#board">8</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

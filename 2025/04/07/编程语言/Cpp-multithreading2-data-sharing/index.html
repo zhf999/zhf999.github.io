@@ -1,0 +1,820 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/awesomeface.png">
+  <link rel="icon" href="/img/awesomeface.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="周洪锋">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本篇博客讲述如何在多个线程之间共享数据，并且在各种情况下使用互斥量来防止线程之间对数据竞争访问。  互斥量 互斥量的使用很简单，所见即所得： 123std::mutex some_mutex;some_mutex.lock();some_mutex.unlock(); 但是通过这样的方法使用互斥量有点麻烦，因为这意味着需要在函数的每个出口，包括异常处理中调用 unlock()。一个更加 RAII">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++并发编程（2）——线程间共享数据">
+<meta property="og:url" content="http://zhouhf.top/2025/04/07/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Cpp-multithreading2-data-sharing/index.html">
+<meta property="og:site_name" content="周洪锋的博客">
+<meta property="og:description" content="本篇博客讲述如何在多个线程之间共享数据，并且在各种情况下使用互斥量来防止线程之间对数据竞争访问。  互斥量 互斥量的使用很简单，所见即所得： 123std::mutex some_mutex;some_mutex.lock();some_mutex.unlock(); 但是通过这样的方法使用互斥量有点麻烦，因为这意味着需要在函数的每个出口，包括异常处理中调用 unlock()。一个更加 RAII">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-07T08:38:11.000Z">
+<meta property="article:modified_time" content="2025-04-07T12:19:32.112Z">
+<meta property="article:author" content="周洪锋">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="多线程">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>C++并发编程（2）——线程间共享数据 - 周洪锋的博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zhouhf.top","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>周洪锋的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="C++并发编程（2）——线程间共享数据"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        周洪锋
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-07 16:38" pubdate>
+          2025年4月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          44 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">C++并发编程（2）——线程间共享数据</h1>
+            
+            <div class="markdown-body">
+              
+              <p>本篇博客讲述如何在多个线程之间共享数据，并且在各种情况下使用互斥量来防止线程之间对数据竞争访问。</p>
+<h1 id="互斥量"><a class="markdownIt-Anchor" href="#互斥量"></a> 互斥量</h1>
+<p>互斥量的使用很简单，所见即所得：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">std::mutex some_mutex;<br>some_mutex.<span class="hljs-built_in">lock</span>();<br>some_mutex.<span class="hljs-built_in">unlock</span>();<br></code></pre></td></tr></table></figure>
+<p>但是通过这样的方法使用互斥量有点麻烦，因为这意味着需要在函数的每个出口，包括异常处理中调用 <code>unlock()</code>。一个更加 <code>RAII</code> 的方法是使用模板类 <code>std::lock——guard</code>，它就像智能指针一样，在自己的生存期结束时自动释放锁。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadSafeList</span> &#123;</span><br><span class="hljs-keyword">private</span>:<br>    std::list&lt;<span class="hljs-keyword">int</span>&gt; data_list;  <span class="hljs-comment">// 需要保护的数据</span><br>    std::mutex data_mutex;      <span class="hljs-comment">// 关联的互斥量</span><br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 向列表中添加数据（线程安全）</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-keyword">int</span> value)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(data_mutex)</span></span>;<br>        data_list.<span class="hljs-built_in">push_back</span>(value);<br>    &#125;<br>    <span class="hljs-comment">// 检查列表中是否存在某值（线程安全）</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">contains</span><span class="hljs-params">(<span class="hljs-keyword">int</span> value)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(data_mutex)</span></span>;<br>        <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">find</span>(data_list.<span class="hljs-built_in">begin</span>(), data_list.<span class="hljs-built_in">end</span>(), value) != data_list.<span class="hljs-built_in">end</span>();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="数据引用的传递"><a class="markdownIt-Anchor" href="#数据引用的传递"></a> 数据引用的传递</h2>
+<p>但是一定要注意<strong>一个潜在的陷阱</strong>，不应该在使用 <code>lock_guard</code> 加锁的函数中奖数据的引用传递给其他函数，导致未知的后果。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Function&gt;</span><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">process_data</span><span class="hljs-params">(Function func)</span></span><br><span class="hljs-function"></span>&#123;<br>  <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">l</span><span class="hljs-params">(m)</span></span>;<br>  <span class="hljs-built_in">func</span>(data);    <span class="hljs-comment">// 1 传递“保护”数据给用户函数</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="设计线程安全的类"><a class="markdownIt-Anchor" href="#设计线程安全的类"></a> 设计线程安全的类</h1>
+<p>在多线程环境中，哪怕很细微的操作都需要注意线程安全。这一小节以<strong>设计一个线程安全的栈</strong>为例子讲解线程安全的设计模式。<br>
+在设计之前，首先需要明确哪些接口会引发竞争条件。在栈这个例子中，最主要的竞争场景就是 <code>top</code> 和 <code>pop</code> 方法对栈上数据访问的竞争。<br>
+面对这一挑战，首先需要考虑的是<strong>削减接口</strong>，以获得最大程度的安全；其次，针对栈这个场景，必须保证在读取栈上数据的同时弹出数据。下面是三个可行的编程实践：</p>
+<h2 id="方法1传入一个引用"><a class="markdownIt-Anchor" href="#方法1传入一个引用"></a> 方法1：传入一个引用</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;memory&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;mutex&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stack&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;exception&gt;</span></span><br><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadSafeStack</span> &#123;</span><br><span class="hljs-keyword">private</span>:<br>    std::stack&lt;T&gt; data_stack;<br>    <span class="hljs-keyword">mutable</span> std::mutex mtx;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 压入元素（线程安全）</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">push</span><span class="hljs-params">(T value)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mtx)</span></span>;<br>        data_stack.<span class="hljs-built_in">push</span>(std::<span class="hljs-built_in">move</span>(value));<br>    &#125;<br>    <span class="hljs-comment">// 弹出元素到引用参数（避免拷贝）</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pop</span><span class="hljs-params">(T&amp; value)</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mtx)</span></span>;<br>        <span class="hljs-keyword">if</span> (data_stack.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> std::<span class="hljs-built_in">runtime_error</span>(<span class="hljs-string">&quot;Stack is empty!&quot;</span>);<br>        value = data_stack.<span class="hljs-built_in">top</span>();<br>        data_stack.<span class="hljs-built_in">pop</span>();<br>    &#125;<br>    <span class="hljs-comment">// 判断栈是否为空（线程安全）</span><br>    <span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>&#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mtx)</span></span>;<br>        <span class="hljs-keyword">return</span> data_stack.<span class="hljs-built_in">empty</span>();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="方法2使用智能指针"><a class="markdownIt-Anchor" href="#方法2使用智能指针"></a> 方法2：使用智能指针</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::shared_ptr&lt;T&gt; <span class="hljs-title">pop</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mtx)</span></span>;<br>    <span class="hljs-keyword">if</span> (data_stack.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;  <span class="hljs-comment">// 栈空返回空指针</span><br>    <span class="hljs-comment">// 在弹出前创建返回对象的副本（异常安全）</span><br>    <span class="hljs-keyword">auto</span> res = std::make_shared&lt;T&gt;(data_stack.<span class="hljs-built_in">top</span>());<br>    data_stack.<span class="hljs-built_in">pop</span>();<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="方法3采用移动语义"><a class="markdownIt-Anchor" href="#方法3采用移动语义"></a> 方法3：采用移动语义</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">T <span class="hljs-title">pop</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(mtx)</span></span>;<br>    <span class="hljs-keyword">if</span> (data_stack.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">throw</span> std::<span class="hljs-built_in">runtime_error</span>(<span class="hljs-string">&quot;Stack is empty!&quot;</span>);<br>    T value = std::<span class="hljs-built_in">move</span>(data_stack.<span class="hljs-built_in">top</span>());  <span class="hljs-comment">// 移动语义减少拷贝</span><br>    data_stack.<span class="hljs-built_in">pop</span>();<br>    <span class="hljs-keyword">return</span> value;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>大前提是对象的拷贝构造函数或移动构造函数不抛出异常，否则 <code>pop</code> 方法不执行，将导致数据不同步。另一个前提是栈中储存的对象支持移动语义，否则仍需要进行内存的复制，性能低下。</p>
+<h1 id="避免死锁的方法"><a class="markdownIt-Anchor" href="#避免死锁的方法"></a> 避免死锁的方法</h1>
+<p>避免死锁的方法有很多，例如按顺序获取锁等等，这些都是“道”，这一节主要讲避免死锁的两种编程“法”。两种方法的思路都是一样的，就是一次性锁定所有的互斥量。</p>
+<h2 id="采用-stdadopt_lock"><a class="markdownIt-Anchor" href="#采用-stdadopt_lock"></a> 采用 <code>std::adopt_lock </code></h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">std::mutex mtx1, mtx2;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">thread_work</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 一次性锁定多个互斥量</span><br>    std::<span class="hljs-built_in">lock</span>(mtx1, mtx2);<br><br>    <span class="hljs-comment">// 使用 adopt_lock 表示锁已被当前线程持有</span><br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock1</span><span class="hljs-params">(mtx1, std::adopt_lock)</span></span>;<br>    <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock2</span><span class="hljs-params">(mtx2, std::adopt_lock)</span></span>;<br><br>    <span class="hljs-comment">// 临界区操作</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>std::lock_guard</code> 的第二个参数 <code>std::adopt_lock</code> 主要是用于表面，当前的这个锁已经被获得了，此次调用不需要再次上锁，只需要在生命周期结束时释放就行。</p>
+<h2 id="采用-stdunique_lock-stddefer_lock"><a class="markdownIt-Anchor" href="#采用-stdunique_lock-stddefer_lock"></a> 采用 <code>std::unique_lock</code> + <code>std::defer_lock</code></h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">std::mutex mtx1, mtx2;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">thread_work</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 创建 unique_lock 但不立即锁定（defer_lock）</span><br>    <span class="hljs-comment">// defer_lock表示延迟加锁</span><br>    <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">lock1</span><span class="hljs-params">(mtx1, std::defer_lock)</span></span>;<br>    <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">lock2</span><span class="hljs-params">(mtx2, std::defer_lock)</span></span>;<br><br>    <span class="hljs-comment">// 一次性锁定所有互斥量</span><br>    std::<span class="hljs-built_in">lock</span>(lock1, lock2);<br><br>    <span class="hljs-comment">// 临界区操作</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>lock_guard</code> 和 <code>unique_lock</code> 的区别就是，后者控制起来更灵活，可以在生命期内多次加锁和解锁，但是相应的，所需要的存储空间更大，时间也更多。<br>
+也可以把 <code>unique_lock</code> 和 <code>unique_ptr</code> 类比起来，它们也支持移动语义，可以将锁的所有权转移。</p>
+<h1 id="初始化保护"><a class="markdownIt-Anchor" href="#初始化保护"></a> 初始化保护</h1>
+<p>当数据初始化的成本很高（如数据库连接）时，使用互斥量会导致不必要的性能开销。可以使用 <code>std::call_once</code> 和 <code>std::once_flag</code> 来安全高效地实现一次性初始化。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;mutex&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;memory&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExpensiveResource</span> &#123;</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">/* 初始化数据库连接等操作 */</span> &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">use</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">/* 使用资源 */</span> &#125;<br>&#125;;<br><br>std::shared_ptr&lt;ExpensiveResource&gt; resource_ptr;<br>std::once_flag resource_flag;  <span class="hljs-comment">// 用于控制初始化的一次性执行</span><br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init_resource</span><span class="hljs-params">()</span> </span>&#123;<br>    resource_ptr = std::make_shared&lt;ExpensiveResource&gt;();<br>    resource_ptr-&gt;<span class="hljs-built_in">init</span>();<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">thread_safe_use</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 无论多少线程调用，init_resource 只会执行一次</span><br>    std::<span class="hljs-built_in">call_once</span>(resource_flag, init_resource);<br>    resource_ptr-&gt;<span class="hljs-built_in">use</span>();  <span class="hljs-comment">// 安全使用已初始化的资源</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个也非常好理解，就像是使用了一个 <code>bool</code> 变量来判断连接是否已经被初始化了一样，但是使用 <code>std::call_once</code> 和 <code>std::once_flag</code> 是线程安全的，不会产生竞争。这个编程技巧或许不止适用于多线程编程的场景，在一些单例模式下也可以适用。</p>
+<h1 id="读写锁"><a class="markdownIt-Anchor" href="#读写锁"></a> 读写锁</h1>
+<p>读写锁在<a href="../%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/thread-lock.md">线程之间的同步锁</a>介绍过，这里主要讲Cpp中相关类的用法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;map&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;shared_mutex&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DNSCache</span> &#123;</span><br><span class="hljs-keyword">private</span>:<br>    std::map&lt;std::string, std::string&gt; entries;<br>    <span class="hljs-keyword">mutable</span> std::shared_mutex entry_mutex;  <span class="hljs-comment">// 读者-写者锁</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 读取操作：使用共享锁（允许多线程并发读取）</span><br>    <span class="hljs-function">std::string <span class="hljs-title">find_entry</span><span class="hljs-params">(<span class="hljs-keyword">const</span> std::string&amp; domain)</span> <span class="hljs-keyword">const</span> </span>&#123;<br>        <span class="hljs-function">std::shared_lock&lt;std::shared_mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(entry_mutex)</span></span>;  <span class="hljs-comment">// 共享锁</span><br>        <span class="hljs-keyword">auto</span> it = entries.<span class="hljs-built_in">find</span>(domain);<br>        <span class="hljs-keyword">return</span> (it != entries.<span class="hljs-built_in">end</span>()) ? it-&gt;second : <span class="hljs-string">&quot;&quot;</span>;<br>    &#125;<br>    <span class="hljs-comment">// 写入操作：使用独占锁（确保写入时无其他读写）</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">update_entry</span><span class="hljs-params">(<span class="hljs-keyword">const</span> std::string&amp; domain, <span class="hljs-keyword">const</span> std::string&amp; ip)</span> </span>&#123;<br>        <span class="hljs-function">std::unique_lock&lt;std::shared_mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(entry_mutex)</span></span>;  <span class="hljs-comment">// 独占锁</span><br>        entries[domain] = ip;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>如上述代码所示，Cpp中的读写锁使用 <code>shared_mutex</code> 来实现，在读取时，可以允许像 <code>shared_ptr</code> 一样被多个读者（指针）指着，而 <code>unique_lock</code> 就像 <code>unique_ptr</code> 一样，只能允许一个写者（指针），否则会等待直到没有其他线程占用。</p>
+<blockquote>
+<p><strong>这里的 <code>entry_mutex</code> 为什么要声明为 <code>mutable</code>？</strong><br>
+因为 <code>find_entry</code> 方法被声明为 <code>const</code>，意味着该方法在逻辑上不能修改对象内的数据（用户可见的数据，这个例子中就是DNS缓存），而 <code>mutable</code> 标识符可以认为这个成员变量是个例外，可以在 <code>const</code> 方法中被修改（即这个锁在逻辑上并不是用户可以访问的）。</p>
+</blockquote>
+<h1 id="锁管理器"><a class="markdownIt-Anchor" href="#锁管理器"></a> 锁管理器</h1>
+<p>三种锁管理器，其实上面以及有提到过了，分别是 <code>lock_guard</code> 、<code>unique_lock</code> 以及 <code>shared_lock</code>。它们就像智能指针一样，对互斥量进行封装，自动管理锁的获得与释放，防止忘记解锁的情况存在。</p>
+<h2 id="lock_guard"><a class="markdownIt-Anchor" href="#lock_guard"></a> <code>lock_guard</code></h2>
+<ul>
+<li>最简单的锁管理器，构造时加锁，析构时解锁；</li>
+<li>不支持手动控制（如中途加锁和延迟加锁）；</li>
+<li>占用资源少，速度快。</li>
+</ul>
+<h2 id="unique_lock"><a class="markdownIt-Anchor" href="#unique_lock"></a> <code>unique_lock</code></h2>
+<ul>
+<li>支持延迟加锁、手动加锁、多次加锁；</li>
+<li>可以转移所有权，适合跨作用域传递锁。</li>
+</ul>
+<h2 id="shared_lock"><a class="markdownIt-Anchor" href="#shared_lock"></a> <code>shared_lock</code></h2>
+<ul>
+<li>也允许多次加解锁，专为读写锁设计，允许多线程并发读取；</li>
+<li>需要与 <code>shared_mutex</code> 配合使用；</li>
+<li>写入时仍需独占锁。</li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="category-chain-item">编程语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Cpp/">#Cpp</a>
+      
+        <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">#多线程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>C++并发编程（2）——线程间共享数据</div>
+      <div>http://zhouhf.top/2025/04/07/编程语言/Cpp-multithreading2-data-sharing/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>周洪锋</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月7日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/07/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Cpp-multithreading/" title="C++并发编程（1）——基本线程管理">
+                        <span class="hidden-mobile">C++并发编程（1）——基本线程管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liudPNomhUyrQIaq","clientSecret":"a9de1582a206aabfd5adb8a409d1689a5d447856","repo":"zhf999.github.io","owner":"zhf999","admin":["zhf999"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'e8d60560016ef2b68144fdd82c27364e'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
