@@ -1,0 +1,164 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2">
+  <diagram name="第 1 页" id="a1a6hhgVfrjnmrkS2OXK">
+    <mxGraphModel dx="1428" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mhvhvXt9RhcVXVYBytna-1" value="EventLoop" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="60" y="100" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-2" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="mhvhvXt9RhcVXVYBytna-6" target="mhvhvXt9RhcVXVYBytna-1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="640" as="sourcePoint" />
+            <mxPoint x="180" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-3" value="Poller" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="239" y="100" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-4" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="mhvhvXt9RhcVXVYBytna-7" target="mhvhvXt9RhcVXVYBytna-3" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="299" y="640" as="sourcePoint" />
+            <mxPoint x="359" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-5" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="mhvhvXt9RhcVXVYBytna-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="720" as="sourcePoint" />
+            <mxPoint x="120" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="115" y="180" width="10" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-8" value="Poller::poll()" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;" parent="1" target="mhvhvXt9RhcVXVYBytna-7" edge="1">
+          <mxGeometry x="-0.0009" relative="1" as="geometry">
+            <mxPoint x="130" y="195" as="sourcePoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-9" value="获得activeChannels" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" parent="1" source="mhvhvXt9RhcVXVYBytna-7" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="130" y="235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-10" value="Channel" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="421" y="100" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-11" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="mhvhvXt9RhcVXVYBytna-10" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="481" y="641.1428571428571" as="sourcePoint" />
+            <mxPoint x="461" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-12" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="476" y="260" width="10" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-13" value="Channel::handleEvent" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;" parent="1" target="mhvhvXt9RhcVXVYBytna-12" edge="1">
+          <mxGeometry x="0.0004" relative="1" as="geometry">
+            <mxPoint x="130" y="265" as="sourcePoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-14" value="return" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" parent="1" source="mhvhvXt9RhcVXVYBytna-12" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="130" y="535" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-15" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="mhvhvXt9RhcVXVYBytna-7" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="299" y="640" as="sourcePoint" />
+            <mxPoint x="299" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-7" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="294" y="190" width="10" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-16" value="TcpConnection" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="580" y="100" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-17" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="mhvhvXt9RhcVXVYBytna-16" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="640" y="640.6896551724138" as="sourcePoint" />
+            <mxPoint x="680" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-18" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="635" y="280" width="10" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-19" value="&lt;span&gt;writeCallback&lt;/span&gt;&lt;div&gt;&lt;span&gt;实际为TcpConnection::handleWrite&lt;/span&gt;&lt;/div&gt;" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;labelBackgroundColor=none;" parent="1" target="mhvhvXt9RhcVXVYBytna-18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="285" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-20" value="return" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" parent="1" source="mhvhvXt9RhcVXVYBytna-18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="490" y="515" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-25" value="Buffer" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="740" y="100" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-26" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="mhvhvXt9RhcVXVYBytna-25" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="800" y="640.6896551724138" as="sourcePoint" />
+            <mxPoint x="780" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-27" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="795" y="300" width="10" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-28" value="将数据从Buffer写到Fd" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;" parent="1" target="mhvhvXt9RhcVXVYBytna-27" edge="1">
+          <mxGeometry x="0.0049" relative="1" as="geometry">
+            <mxPoint x="650" y="305" as="sourcePoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-29" value="return" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" parent="1" source="mhvhvXt9RhcVXVYBytna-27" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="355" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-30" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="645" y="400" width="10" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-31" value="如果写完则调度&lt;div&gt;writeCompleteCallback&lt;/div&gt;" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;labelBackgroundColor=none;" parent="1" target="mhvhvXt9RhcVXVYBytna-30" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="380" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="680" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-34" value="TcpServer" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="900" y="100" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-35" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" target="mhvhvXt9RhcVXVYBytna-34" edge="1" source="mhvhvXt9RhcVXVYBytna-36">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="960" y="640" as="sourcePoint" />
+            <mxPoint x="970" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-37" value="writeCompleteCallback&lt;div&gt;实际调用用户传入的回调&lt;/div&gt;" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" parent="1" target="mhvhvXt9RhcVXVYBytna-36" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="120" y="570" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-38" value="return" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;" parent="1" source="mhvhvXt9RhcVXVYBytna-36" edge="1" target="mhvhvXt9RhcVXVYBytna-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="120" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oevMqP-UHKdB7_K_x_Io-1" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="mhvhvXt9RhcVXVYBytna-36">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="960" y="640" as="sourcePoint" />
+            <mxPoint x="960" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mhvhvXt9RhcVXVYBytna-36" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="955" y="570" width="10" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

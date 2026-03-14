@@ -1,0 +1,71 @@
+{
+  "edges": [
+    {
+      "fromNode": "8038dc32c940af49",
+      "fromSide": "right",
+      "id": "2f90a96374879259",
+      "toNode": "2440922780321621",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "2440922780321621",
+      "fromSide": "bottom",
+      "id": "f1efb9eb3326d35c",
+      "toNode": "0d1455feba99e04b",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "2440922780321621",
+      "fromSide": "bottom",
+      "id": "6f0f54ac80edef8d",
+      "toNode": "c303ea7abf72c7f4",
+      "toSide": "top"
+    }
+  ],
+  "nodes": [
+    {
+      "height": 160,
+      "id": "8038dc32c940af49",
+      "styleAttributes": {
+      },
+      "text": "EventLoopThreadPool：管理多个EventLoopThread\n- setThreadNum()：设置线程数量\n- start ()：开启n个线程",
+      "type": "text",
+      "width": 390,
+      "x": -520,
+      "y": 110
+    },
+    {
+      "height": 220,
+      "id": "2440922780321621",
+      "styleAttributes": {
+      },
+      "text": "EventLoopThread：\n- thread_：线程实例，在该线程中会调用threadFunc方法\n- threadFunc ：在新线程中执行的函数\n- startLoop ()：调用该方法开启新线程的运行，并返回Loop的指针",
+      "type": "text",
+      "width": 350,
+      "x": 170,
+      "y": 110
+    },
+    {
+      "height": 280,
+      "id": "0d1455feba99e04b",
+      "styleAttributes": {
+      },
+      "text": "EventLoop：事件循环\n- poller：（封装epoll实例）监听感兴趣的fd上发生的事件\n- activeChannels：发生事件的Channel\n- pendingFunctors：待调用的回调（主要是跨线程的回调）\n\nEventLoop调用poller->poll，获取活跃的Channel，并调用相应的回调。此过程会陷入阻塞，当其他线程需要在当前线程中调用某个回调时，会通过runInLoop唤醒这个阻塞状态并处理。\n\n",
+      "type": "text",
+      "width": 520,
+      "x": -420,
+      "y": 440
+    },
+    {
+      "height": 60,
+      "id": "c303ea7abf72c7f4",
+      "styleAttributes": {
+      },
+      "text": "Thread：用于包装Cpp的std::thread对象。",
+      "type": "text",
+      "width": 250,
+      "x": 200,
+      "y": 550
+    }
+  ]
+}

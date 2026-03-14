@@ -1,0 +1,270 @@
+{
+  "edges": [
+    {
+      "fromNode": "b38377f98c3f3164",
+      "fromSide": "right",
+      "id": "3655f8875ec5a906",
+      "styleAttributes": {
+        "pathfindingMethod": "direct"
+      },
+      "toNode": "ed827ef71e2542e2",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "ed827ef71e2542e2",
+      "fromSide": "right",
+      "id": "f7710bfbf974003d",
+      "toNode": "063b23422fe437f1",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "38ee571d2d32dc7d",
+      "fromSide": "right",
+      "id": "7dd95cbcc0cc8ab4",
+      "styleAttributes": {
+      },
+      "toNode": "125df3b5dcfe4a37",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "125df3b5dcfe4a37",
+      "fromSide": "right",
+      "id": "fd0e6bb33318272c",
+      "styleAttributes": {
+      },
+      "toNode": "d9e4945311646349",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "e237efe2933ccb8a",
+      "fromSide": "right",
+      "id": "287b15dc5e4e2449",
+      "styleAttributes": {
+      },
+      "toNode": "6f758bd99157bbac",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "a62144afa72e176f",
+      "fromSide": "right",
+      "id": "24f2dcca1fd8766e",
+      "styleAttributes": {
+      },
+      "toNode": "10efd66fe2ee8a6a",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "ed827ef71e2542e2",
+      "fromSide": "bottom",
+      "id": "2b246a1f248c8892",
+      "styleAttributes": {
+        "pathfindingMethod": "direct"
+      },
+      "toNode": "6562838d3fb74b18",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "6562838d3fb74b18",
+      "fromSide": "bottom",
+      "id": "e5109a0584a19a25",
+      "styleAttributes": {
+        "pathfindingMethod": "direct"
+      },
+      "toNode": "919f27d6f198a44d",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "063b23422fe437f1",
+      "fromSide": "bottom",
+      "id": "f4f315df9e533f57",
+      "styleAttributes": {
+      },
+      "toNode": "83ca6d4c7954abe3",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "125df3b5dcfe4a37",
+      "fromSide": "bottom",
+      "id": "b8635f3a12d677a2",
+      "styleAttributes": {
+      },
+      "toNode": "e237efe2933ccb8a",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "6f758bd99157bbac",
+      "fromSide": "bottom",
+      "id": "cc9d49d95a1e5483",
+      "styleAttributes": {
+      },
+      "toNode": "1096ded055e06419",
+      "toSide": "top"
+    },
+    {
+      "color": "4",
+      "fromNode": "83ca6d4c7954abe3",
+      "fromSide": "left",
+      "id": "db87519ee54b93dc",
+      "styleAttributes": {
+      },
+      "toNode": "ed827ef71e2542e2",
+      "toSide": "right"
+    }
+  ],
+  "nodes": [
+    {
+      "height": 60,
+      "id": "ed827ef71e2542e2",
+      "styleAttributes": {
+      },
+      "text": "Acceptor构造",
+      "type": "text",
+      "width": 250,
+      "x": 105,
+      "y": 120
+    },
+    {
+      "height": 60,
+      "id": "6562838d3fb74b18",
+      "styleAttributes": {
+      },
+      "text": "ThreadPool",
+      "type": "text",
+      "width": 250,
+      "x": 105,
+      "y": 300
+    },
+    {
+      "file": "canvas/mymuduo总结/线程池.canvas",
+      "height": 400,
+      "id": "d9e4945311646349",
+      "styleAttributes": {
+      },
+      "type": "file",
+      "width": 400,
+      "x": 780,
+      "y": 460
+    },
+    {
+      "height": 60,
+      "id": "38ee571d2d32dc7d",
+      "styleAttributes": {
+      },
+      "text": "TcpServer. start ()",
+      "type": "text",
+      "width": 195,
+      "x": -190,
+      "y": 630
+    },
+    {
+      "height": 100,
+      "id": "919f27d6f198a44d",
+      "styleAttributes": {
+      },
+      "text": "Acceptor注册新连接回调\nAcceptor->newConnectionCallacbk =  TcpServer->onConnection",
+      "type": "text",
+      "width": 540,
+      "x": -40,
+      "y": 410
+    },
+    {
+      "height": 50,
+      "id": "b38377f98c3f3164",
+      "styleAttributes": {
+      },
+      "text": "TcpServer构造\n",
+      "type": "text",
+      "width": 165,
+      "x": -160,
+      "y": 125
+    },
+    {
+      "height": 60,
+      "id": "063b23422fe437f1",
+      "styleAttributes": {
+      },
+      "text": "AcceptorSocket构造",
+      "type": "text",
+      "width": 250,
+      "x": 500,
+      "y": 120
+    },
+    {
+      "height": 60,
+      "id": "83ca6d4c7954abe3",
+      "styleAttributes": {
+      },
+      "text": "AcceptorChannel构造并注册回调",
+      "type": "text",
+      "width": 250,
+      "x": 500,
+      "y": 270
+    },
+    {
+      "height": 260,
+      "id": "10efd66fe2ee8a6a",
+      "styleAttributes": {
+      },
+      "text": "```Cpp\nquit = false;\nwhile(!quit)\n{\n// 监听AcceptorChannel感兴趣的连接请求\nactiveChannels = poller->poll();\nactiveChannels->handleEvent();\n// 被唤醒时，处理待调用的回调\ndoPendingFunctors(); \n}\n```",
+      "type": "text",
+      "width": 400,
+      "x": 0,
+      "y": 1040
+    },
+    {
+      "height": 90,
+      "id": "125df3b5dcfe4a37",
+      "styleAttributes": {
+      },
+      "text": "ThreadPool->start ()\n带有回调**ThreadInitCallback（由用户设置）**，当新线程建立时会调用",
+      "type": "text",
+      "width": 320,
+      "x": 105,
+      "y": 615
+    },
+    {
+      "height": 60,
+      "id": "e237efe2933ccb8a",
+      "styleAttributes": {
+      },
+      "text": "Acceptor->listen",
+      "type": "text",
+      "width": 260,
+      "x": 135,
+      "y": 760
+    },
+    {
+      "height": 100,
+      "id": "6f758bd99157bbac",
+      "styleAttributes": {
+      },
+      "text": "AcceptSocket->listen\n实际上就是调用Socket的listen",
+      "type": "text",
+      "width": 260,
+      "x": 900,
+      "y": 990
+    },
+    {
+      "height": 60,
+      "id": "1096ded055e06419",
+      "styleAttributes": {
+      },
+      "text": "acceptorChannel设为可读",
+      "type": "text",
+      "width": 260,
+      "x": 900,
+      "y": 1170
+    },
+    {
+      "height": 60,
+      "id": "a62144afa72e176f",
+      "styleAttributes": {
+      },
+      "text": "Loop. loop",
+      "type": "text",
+      "width": 140,
+      "x": -240,
+      "y": 1140
+    }
+  ]
+}

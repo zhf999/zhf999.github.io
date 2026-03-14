@@ -1,0 +1,90 @@
+{
+  "edges": [
+    {
+      "fromNode": "983e909c57ebc599",
+      "fromSide": "bottom",
+      "id": "e5d1ddd1ff89bcc3",
+      "label": "客户端主动关闭/服务器完全关闭",
+      "styleAttributes": {
+      },
+      "toNode": "9f9e826d6ce3de29",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "983e909c57ebc599",
+      "fromSide": "right",
+      "id": "e83e616e84b275ac",
+      "label": "服务端主动关闭",
+      "styleAttributes": {
+      },
+      "toNode": "f01edfb827eef205",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "caa57b062c4ddb18",
+      "fromSide": "top",
+      "id": "01cce8c0b36819ce",
+      "label": "连接成功",
+      "styleAttributes": {
+      },
+      "toNode": "983e909c57ebc599",
+      "toSide": "left"
+    },
+    {
+      "fromNode": "f01edfb827eef205",
+      "fromSide": "bottom",
+      "id": "7c2105e347a2df0f",
+      "label": "客户端主动关闭",
+      "styleAttributes": {
+      },
+      "toNode": "9f9e826d6ce3de29",
+      "toSide": "right"
+    }
+  ],
+  "nodes": [
+    {
+      "height": 60,
+      "id": "9f9e826d6ce3de29",
+      "styleAttributes": {
+      },
+      "text": "DisConnected",
+      "type": "text",
+      "width": 260,
+      "x": -200,
+      "y": 220
+    },
+    {
+      "height": 60,
+      "id": "983e909c57ebc599",
+      "styleAttributes": {
+      },
+      "text": "Connected",
+      "type": "text",
+      "width": 260,
+      "x": -220,
+      "y": -120
+    },
+    {
+      "height": 60,
+      "id": "caa57b062c4ddb18",
+      "styleAttributes": {
+      },
+      "text": "Connecting",
+      "type": "text",
+      "width": 160,
+      "x": -600,
+      "y": 40
+    },
+    {
+      "height": 60,
+      "id": "f01edfb827eef205",
+      "styleAttributes": {
+      },
+      "text": "DisConnecting",
+      "type": "text",
+      "width": 260,
+      "x": 200,
+      "y": 40
+    }
+  ]
+}
